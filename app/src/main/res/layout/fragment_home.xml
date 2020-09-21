@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/bar_search"/>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical|start"
+        android:padding="@dimen/frame_four_distance">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/ic_logo_19"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/start_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/frame_photo_icon_big_size"
+            android:textColor="@color/text_black_color"
+            android:textSize="@dimen/frame_text_smaller_size"
+            android:padding="@dimen/frame_four_distance"
+            android:hint="@string/start_date_hint"
+            android:elevation="1dp"
+            android:layout_margin="@dimen/frame_four_distance"
+            android:background="@drawable/wh_white_input_bg"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/frame_photo_icon_big_size"
+            android:textColor="@color/text_black_color"
+            android:textSize="@dimen/frame_text_smaller_size"
+            android:padding="@dimen/frame_four_distance"
+            android:hint="@string/end_date_hint"
+            android:elevation="1dp"
+            android:layout_margin="@dimen/frame_four_distance"
+            android:background="@drawable/wh_white_input_bg"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/show_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</androidx.appcompat.widget.LinearLayoutCompat>

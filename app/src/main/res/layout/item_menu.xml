@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical|start"
+    android:background="@drawable/menu_bg_selecor"
+    android:padding="@dimen/frame_eight_distance"
+    android:id="@+id/item_layout">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/menu_item_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_logo_16"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/menu_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/menu_text_color_acc2gray_selector"
+        android:textSize="@dimen/frame_text_normal_size"
+        android:paddingStart="@dimen/frame_eight_distance"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/menu_item_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/frame_text_smaller_size"
+        android:textColor="@color/text_white_color"
+        android:padding="@dimen/frame_four_distance"
+        android:background="@drawable/number_circle_bg"
+        android:layout_marginStart="@dimen/frame_eight_distance"
+        android:text="1"/>
+</androidx.appcompat.widget.LinearLayoutCompat>

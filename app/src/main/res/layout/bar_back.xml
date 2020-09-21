@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:background="@mipmap/title_bar_bg"
+    android:padding="@dimen/frame_eight_distance">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bar_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_logo_08"
+        android:adjustViewBounds="true"
+        android:layout_margin="@dimen/frame_eight_distance"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bar_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/text_white_color"
+        android:textSize="@dimen/frame_text_small_size"
+        android:singleLine="true"
+        android:gravity="start"
+        android:padding="@dimen/frame_eight_distance"/>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bar_notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_logo_25"
+        android:adjustViewBounds="true"
+        android:layout_margin="@dimen/frame_eight_distance"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bar_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/frame_eight_distance"
+        android:textSize="@dimen/frame_text_small_size"
+        android:textColor="@color/text_white_color"
+        android:hint="@string/nick_name_hint"
+        android:textColorHint="@color/text_white_color"/>
+</androidx.appcompat.widget.LinearLayoutCompat>
