@@ -1,5 +1,6 @@
 package cn.allen.warehouse.home;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import allen.frame.AllenManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
@@ -20,10 +22,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
 import cn.allen.warehouse.adapter.ShowOrderAdapter;
 import cn.allen.warehouse.entry.ShowOrder;
+import cn.allen.warehouse.utils.Constants;
 
 public class SaleHomeFragment extends Fragment {
 
@@ -42,11 +44,17 @@ public class SaleHomeFragment extends Fragment {
     RecyclerView showRv;
     private ShowOrderAdapter adapter;
     private List<ShowOrder> showOrders;
+    private SharedPreferences shared;
+
+    public static SaleHomeFragment init(){
+        SaleHomeFragment fragment = new SaleHomeFragment();
+        return fragment;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_sale_home, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -65,6 +73,8 @@ public class SaleHomeFragment extends Fragment {
     }
 
     private void initUi(View view) {
+        shared = AllenManager.getInstance().getStoragePreference();
+        barName.setText(shared.getString(Constants.UserName,"用户昵称"));
         adapter = new ShowOrderAdapter();
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
         showRv.setLayoutManager(manager);

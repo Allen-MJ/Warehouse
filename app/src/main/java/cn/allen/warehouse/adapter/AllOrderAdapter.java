@@ -4,26 +4,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import allen.frame.entry.Type;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 import cn.allen.warehouse.R;
-import cn.allen.warehouse.entry.ShowOrder;
+import cn.allen.warehouse.entry.Order;
+import cn.allen.warehouse.utils.Constants;
 
-public class ShowOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AllOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<ShowOrder> list;
+    private List<Order> list;
 
-    public ShowOrderAdapter(){
+    public AllOrderAdapter(){
     }
 
-    public void setList(List<ShowOrder> list){
+    public void setList(List<Order> list){
         this.list = list;
         notifyDataSetChanged();
     }
@@ -32,7 +30,7 @@ public class ShowOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_showorder, parent, false);
+                .inflate(R.layout.item_all_order, parent, false);
         v.setLayoutParams(new ViewGroup
                 .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -52,23 +50,31 @@ public class ShowOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class ObjectHolder extends RecyclerView.ViewHolder{
 
-        private AppCompatTextView name,num;
-        private AppCompatImageView icon;
+        private AppCompatTextView name,no,status,address,ch,hs,person;
+        private AppCompatImageView work;
         private View view;
         public ObjectHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.show_item_name);
-            num = itemView.findViewById(R.id.show_item_count);
-            icon = itemView.findViewById(R.id.show_item_icon);
+            no = itemView.findViewById(R.id.order_item_number);
+            work = itemView.findViewById(R.id.order_item_work);
+            status = itemView.findViewById(R.id.order_item_status);
+            name = itemView.findViewById(R.id.order_item_name);
+            address = itemView.findViewById(R.id.order_item_address);
+            ch = itemView.findViewById(R.id.order_item_chdate);
+            hs = itemView.findViewById(R.id.order_item_hsdate);
+            person = itemView.findViewById(R.id.order_item_whperson);
             view = itemView.findViewById(R.id.item_layout);
         }
-        public void bind(final ShowOrder entry){
+        public void bind(final Order entry){
             if(entry!=null){
-                name.setText(entry.getName());
-                num.setText(String.valueOf(entry.getCount()));
-                icon.setImageResource(entry.getRedId());
-                name.setTextColor(entry.getColor());
-                num.setTextColor(entry.getColor());
+                no.setText(entry.getOrder_number());
+                name.setText(entry.getCustomer_name());
+                address.setText(entry.getHotel_address());
+                ch.setText("出库时间:"+entry.getDelivery_time());
+                hs.setText("回收时间:"+entry.getRecovery_date());
+                address.setText(entry.getHotel_address());
+                status.setText(Constants.getStatusName(entry.getOrder_process()));
+                status.setCompoundDrawablesRelativeWithIntrinsicBounds(Constants.getStatusResId(entry.getOrder_process()),0,0,0);
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -87,6 +93,6 @@ public class ShowOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.listener = listener;
     }
     public interface OnItemClickListener{
-        void itemClick(View v, ShowOrder entry);
+        void itemClick(View v, Order entry);
     }
 }
