@@ -19,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.allen.warehouse.adapter.MenuAdapter;
-import cn.allen.warehouse.home.HomeFragment;
+import cn.allen.warehouse.home.SaleHomeFragment;
 
 public class MainActivity extends AllenBaseActivity {
     @BindView(R.id.menu_rv)
@@ -92,19 +92,19 @@ public class MainActivity extends AllenBaseActivity {
         Fragment fragment = null;
         switch (id){
             case "0":
-                fragment = new HomeFragment();
+                fragment = new SaleHomeFragment();
             break;
             case "1":
-                fragment = new HomeFragment();
+                fragment = new SaleHomeFragment();
             break;
             case "2":
-                fragment = new HomeFragment();
+                fragment = new SaleHomeFragment();
             break;
             case "3":
-                fragment = new HomeFragment();
+                fragment = new SaleHomeFragment();
             break;
             case "4":
-                fragment = new HomeFragment();
+                fragment = new SaleHomeFragment();
             break;
         }
         return fragment;

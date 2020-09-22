@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -24,7 +25,7 @@ import cn.allen.warehouse.R;
 import cn.allen.warehouse.adapter.ShowOrderAdapter;
 import cn.allen.warehouse.entry.ShowOrder;
 
-public class HomeFragment extends BaseFragment {
+public class SaleHomeFragment extends Fragment {
 
     Unbinder unbinder;
     @BindView(R.id.bar_search)
