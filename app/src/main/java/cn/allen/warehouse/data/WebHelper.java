@@ -15,6 +15,7 @@ import java.util.List;
 
 import allen.frame.AllenManager;
 import allen.frame.tools.Logger;
+import cn.allen.warehouse.entry.Order;
 import cn.allen.warehouse.entry.Response;
 import cn.allen.warehouse.entry.User;
 import cn.allen.warehouse.utils.Constants;
@@ -77,5 +78,24 @@ public class WebHelper {
             msg.obj = response.getMessage();
         }
         handler.sendMessage(msg);
+    }
+
+    /**
+     * 获取所有订单
+     * @param uid
+     * @param page
+     * @param pagesize
+     * @return
+     */
+    public List<Order> getAllOrder(int uid,int page,int pagesize){
+        Object[] objects = new Object[]{
+                "uid",uid,"page",page,"pagesize",pagesize
+        };
+        List<Order> list = new ArrayList<>();
+        Response response = service.getWebservice(Api.GetAllOrder,objects,WebService.Get);
+        if(response.isSuccess("200")){
+            list = gson.fromJson(response.getData(), new TypeToken<List<Order>>(){}.getType());
+        }
+        return list;
     }
 }

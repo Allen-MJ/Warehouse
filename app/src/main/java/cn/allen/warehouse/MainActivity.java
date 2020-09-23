@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.allen.warehouse.adapter.MenuAdapter;
+import cn.allen.warehouse.flower.FlowerFragment;
 import cn.allen.warehouse.home.SaleHomeFragment;
 import cn.allen.warehouse.home.WHHomeFragment;
 import cn.allen.warehouse.utils.Constants;
@@ -75,13 +76,13 @@ public class MainActivity extends AllenBaseActivity {
         list = new ArrayList<>();
         list.add(new Type("0","主页        ",R.drawable.menu_home_selecor));
         if(type==1){
-            list.add(new Type("1","花材目录",R.drawable.menu_flower_selecor));
+            list.add(new Type("-1","花材目录",R.drawable.menu_flower_selecor));
         }
-        list.add(new Type("2","待配货    ",R.drawable.menu_dph_selecor));
-        list.add(new Type("3","待出库    ",R.drawable.menu_dck_selecor));
-        list.add(new Type("4","待回收    ",R.drawable.menu_dhk_selecor));
-        list.add(new Type("5","已回收    ",R.drawable.menu_yhk_selecor));
-        list.add(new Type("6","完成清点",R.drawable.menu_wcqd_selecor));
+        list.add(new Type("1","待配货    ",R.drawable.menu_dph_selecor));
+        list.add(new Type("2","待出库    ",R.drawable.menu_dck_selecor));
+        list.add(new Type("3","待回收    ",R.drawable.menu_dhk_selecor));
+        list.add(new Type("4","已回收    ",R.drawable.menu_yhk_selecor));
+        list.add(new Type("5","完成清点",R.drawable.menu_wcqd_selecor));
         adapter.setList(list);
     }
 
@@ -100,6 +101,9 @@ public class MainActivity extends AllenBaseActivity {
                 }else{
                     startFragmentAdd(WHHomeFragment.init());
                 }
+                break;
+            case "-1":
+                startFragmentAdd(FlowerFragment.init());
                 break;
             case "1":
                 break;

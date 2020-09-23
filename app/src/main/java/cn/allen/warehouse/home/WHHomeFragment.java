@@ -52,8 +52,9 @@ public class WHHomeFragment extends Fragment {
     private ActivityHelper actHelper;
     private List<Order> list, sublist;
     private boolean isRefresh = false;
-    private int page = 0;
+    private int page = 1;
     private int pagesize = 10;
+    private int uid;
 
     public static WHHomeFragment init() {
         WHHomeFragment fragment = new WHHomeFragment();
@@ -84,6 +85,7 @@ public class WHHomeFragment extends Fragment {
 
     private void initUi(View view) {
         shared = AllenManager.getInstance().getStoragePreference();
+        uid = shared.getInt(Constants.UserId,-1);
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
         adapter = new AllOrderAdapter();
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
@@ -102,7 +104,7 @@ public class WHHomeFragment extends Fragment {
         @Override
         public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
             isRefresh = true;
-            page = 0;
+            page = 1;
             loadData();
         }
 
@@ -124,7 +126,7 @@ public class WHHomeFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-//                sublist = WebHelper.init().getMerchantOrder(page++, pagesize, mcity).getList();
+                sublist = WebHelper.init().getAllOrder(uid,page++, pagesize);
                 handler.sendEmptyMessage(0);
             }
         }).start();
@@ -141,7 +143,7 @@ public class WHHomeFragment extends Fragment {
                         list = sublist;
                         mater.finishRefresh();
                     } else {
-                        if (page == 1) {
+                        if (page == 2) {
                             list = sublist;
                         } else {
                             list.addAll(sublist);
