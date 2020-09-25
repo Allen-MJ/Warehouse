@@ -19,7 +19,6 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -147,7 +146,7 @@ public class FlowerFragment extends BaseFragment {
 
                 break;
             case R.id.oder_bt:
-                onStartFragment(OrderFragment.init());
+                onStartFragment(XsOrderFragment.init());
                 break;
         }
     }

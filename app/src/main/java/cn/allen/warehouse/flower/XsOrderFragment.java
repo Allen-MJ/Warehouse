@@ -22,7 +22,7 @@ import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
 import cn.allen.warehouse.utils.Constants;
 
-public class OrderFragment extends BaseFragment {
+public class XsOrderFragment extends BaseFragment {
     Unbinder unbinder;
     @BindView(R.id.bar_notice)
     AppCompatImageView barNotice;
@@ -42,15 +42,15 @@ public class OrderFragment extends BaseFragment {
     private SharedPreferences shared;
     private int uid;
 
-    public static OrderFragment init() {
-        OrderFragment fragment = new OrderFragment();
+    public static XsOrderFragment init() {
+        XsOrderFragment fragment = new XsOrderFragment();
         return fragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_order, container, false);
+        View view = inflater.inflate(R.layout.fragment_xs_order, container, false);
         actHelper = new ActivityHelper(getActivity(), view);
         unbinder = ButterKnife.bind(this, view);
         return view;
