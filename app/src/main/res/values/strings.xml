@@ -21,5 +21,36 @@
     <string name="type_hint">分类</string>
     <string name="flower_count_hint">库存：</string>
     <string name="notice_title_hint">信息通知</string>
+    <string name="go_order_hint">立即下单</string>
+
+
+    <string name="order_base_hint">基础信息</string>
+    <string name="order_kh_name">客户姓名：</string>
+    <string name="order_kh_name_hint">请填写客户姓名</string>
+    <string name="order_kh_address">酒店地址：</string>
+    <string name="order_kh_address_hint">请填写地址</string>
+    <string name="order_kh_phone">客户电话：</string>
+    <string name="order_kh_phone_hint">请填写电话号码</string>
+
+    <string name="order_date_hint">时间信息</string>
+    <string name="order_date_hl">婚礼日期：</string>
+    <string name="order_date_check_hint">请选择时间</string>
+    <string name="order_date_yy_hint">选择日期预约：</string>
+    <string name="order_date_ck">出库时间：</string>
+    <string name="order_date_hs">回收日期：</string>
+
+    <string name="order_remark">备注信息</string>
+    <string name="order_remark_hint">请填写备注信息</string>
+
+    <string name="order_choice_flower">选择鲜花</string>
+    <string name="order_flower_name">鲜花名称</string>
+    <string name="order_flower_rent">库存</string>
+    <string name="order_flower_order">预定数量</string>
+
+    <string name="order_add_flower">增加鲜花种类</string>
+    <string name="order_money">租金总额：</string>
+
+    <string name="commit_bt">提交</string>
+
     <!--通用 end-->
 </resources>

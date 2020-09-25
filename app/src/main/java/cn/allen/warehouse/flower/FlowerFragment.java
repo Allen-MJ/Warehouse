@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
 import cn.allen.warehouse.adapter.FlowerAdapter;
 import cn.allen.warehouse.adapter.FlowerParentMenuAdapter;
@@ -34,7 +36,7 @@ import cn.allen.warehouse.entry.Flower;
 import cn.allen.warehouse.entry.FlowerType;
 import cn.allen.warehouse.utils.Constants;
 
-public class FlowerFragment extends Fragment {
+public class FlowerFragment extends BaseFragment {
 
     Unbinder unbinder;
     @BindView(R.id.bar_search)
@@ -51,6 +53,8 @@ public class FlowerFragment extends Fragment {
     RecyclerView menuRv;
     @BindView(R.id.flower_rv)
     RecyclerView flowerRv;
+    @BindView(R.id.oder_bt)
+    CardView oderBt;
     private ActivityHelper actHelper;
     private SharedPreferences shared;
     private int uid;
@@ -96,7 +100,7 @@ public class FlowerFragment extends Fragment {
         menuAdapter = new FlowerParentMenuAdapter();
         menuRv.setAdapter(menuAdapter);
 
-        GridLayoutManager manager1 = new GridLayoutManager(getActivity(),4);
+        GridLayoutManager manager1 = new GridLayoutManager(getActivity(), 4);
         flowerRv.setLayoutManager(manager1);
         adapter = new FlowerAdapter();
         flowerRv.setAdapter(adapter);
@@ -112,7 +116,7 @@ public class FlowerFragment extends Fragment {
         });
     }
 
-    private void laodType(){
+    private void laodType() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -122,8 +126,8 @@ public class FlowerFragment extends Fragment {
         }).start();
     }
 
-    private void loadFlowers(int id){
-        actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_START,"");
+    private void loadFlowers(int id) {
+        actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_START, "");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -133,28 +137,35 @@ public class FlowerFragment extends Fragment {
         }).start();
     }
 
-    @OnClick({R.id.ch_date, R.id.hs_date})
+    @OnClick({R.id.ch_date, R.id.hs_date, R.id.oder_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ch_date:
+
                 break;
             case R.id.hs_date:
+
+                break;
+            case R.id.oder_bt:
+                onStartFragment(OrderFragment.init());
                 break;
         }
     }
+
     @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 0:
                     menuAdapter.setList(types);
                     break;
                 case 1:
-                    actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_SUCCES,"");
+                    actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_SUCCES, "");
                     adapter.setList(list);
                     break;
             }
         }
     };
+
 }

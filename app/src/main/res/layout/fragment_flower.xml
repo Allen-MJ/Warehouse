@@ -53,16 +53,48 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.cardview.widget.CardView>-->
         </RelativeLayout>
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/frame_eight_distance">
-            <include layout="@layout/alen_progress_layout"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/flower_rv"
+            android:layout_height="match_parent">
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/frame_eight_distance">
+                <include layout="@layout/alen_progress_layout"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/flower_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/oder_bt"
+                android:layout_width="@dimen/frame_title_height"
+                android:layout_height="@dimen/frame_title_height"
+                app:cardCornerRadius="@dimen/frame_title_height"
+                app:cardBackgroundColor="@color/colorPrimary"
+                android:layout_margin="@dimen/frame_edge_distance"
+                app:cardElevation="1dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:foreground="?selectableItemBackground">
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/ic_logo_24"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_white_color"
+                        android:textSize="@dimen/frame_text_smallst_size"
+                        android:text="@string/go_order_hint"/>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.appcompat.widget.LinearLayoutCompat>
