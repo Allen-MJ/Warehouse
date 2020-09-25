@@ -30,6 +30,7 @@ public class Order implements Serializable {
     private String delivery_times;//子订单号
     private String recovery_dates;//子订单号
     private int number_id;//销售id
+    private String number_name;
 
     public Order() {
     }
@@ -65,6 +66,14 @@ public class Order implements Serializable {
                 ", recovery_dates='" + recovery_dates + '\'' +
                 ", number_id=" + number_id +
                 '}';
+    }
+
+    public String getNumber_name() {
+        return number_name;
+    }
+
+    public void setNumber_name(String number_name) {
+        this.number_name = number_name;
     }
 
     public int getId() {

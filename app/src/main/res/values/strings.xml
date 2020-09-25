@@ -19,7 +19,9 @@
     <string name="ch_date_hint">出货时间</string>
     <string name="hs_date_hint">回收时间</string>
     <string name="type_hint">分类</string>
-    <string name="flower_count_hint">库存：</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="flower_count_hint">库存:</string>
     <string name="notice_title_hint">信息通知</string>
     <!--通用 end-->
 </resources>

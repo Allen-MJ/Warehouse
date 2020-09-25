@@ -30,6 +30,7 @@ import cn.allen.warehouse.adapter.MenuAdapter;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.ShowOrder;
 import cn.allen.warehouse.flower.FlowerFragment;
+import cn.allen.warehouse.home.OrderFragment;
 import cn.allen.warehouse.home.SaleHomeFragment;
 import cn.allen.warehouse.home.SaleHomeFragment.OnItemMenuClickLisenter;
 import cn.allen.warehouse.home.AllOrderFragment;
@@ -116,8 +117,6 @@ public class MainActivity extends AllenBaseActivity {
         list.add(new Type("4","已回收    ",R.drawable.menu_yhk_selecor));
         list.add(new Type("5","完成清点",R.drawable.menu_wcqd_selecor));
         adapter.setList(list);
-        bindFragment(list.get(0).getId());
-        adapter.setCheck(list.get(0).getId());
     }
 
     private void loadNum(){
@@ -146,12 +145,19 @@ public class MainActivity extends AllenBaseActivity {
                 startFragmentAdd(FlowerFragment.init());
                 break;
             case "1":
+                startFragmentAdd(OrderFragment.init(1));
                 break;
             case "2":
+                startFragmentAdd(OrderFragment.init(2));
                 break;
             case "3":
+                startFragmentAdd(OrderFragment.init(3));
                 break;
             case "4":
+                startFragmentAdd(OrderFragment.init(4));
+                break;
+            case "5":
+                startFragmentAdd(OrderFragment.init(5));
                 break;
         }
     }
