@@ -73,7 +73,10 @@
                 android:textColor="@color/text_black_color"
                 android:textSize="@dimen/frame_text_middle_size"
                 android:padding="@dimen/frame_edge_distance"/>
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/notice_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.cardview.widget.CardView>
 </androidx.appcompat.widget.LinearLayoutCompat>

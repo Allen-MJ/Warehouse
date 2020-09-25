@@ -1,16 +1,21 @@
 package cn.allen.warehouse;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import allen.frame.AllenBaseActivity;
 import allen.frame.AllenManager;
 import allen.frame.entry.Type;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
@@ -22,9 +27,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.allen.warehouse.adapter.MenuAdapter;
+import cn.allen.warehouse.data.WebHelper;
+import cn.allen.warehouse.entry.ShowOrder;
 import cn.allen.warehouse.flower.FlowerFragment;
 import cn.allen.warehouse.home.SaleHomeFragment;
-import cn.allen.warehouse.home.WHHomeFragment;
+import cn.allen.warehouse.home.SaleHomeFragment.OnItemMenuClickLisenter;
+import cn.allen.warehouse.home.AllOrderFragment;
 import cn.allen.warehouse.utils.Constants;
 
 public class MainActivity extends AllenBaseActivity {
@@ -39,6 +47,7 @@ public class MainActivity extends AllenBaseActivity {
     private SharedPreferences shared;
     private int type;
     private Fragment curfragment;
+    private Map<String,Integer> map;
 
     @Override
     protected boolean isStatusBarColorWhite() {
@@ -68,9 +77,32 @@ public class MainActivity extends AllenBaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        loadNum();
+    }
+
+    @Override
     protected void addEvent() {
         adapter.setOnItemClickListener(listener);
     }
+
+    private OnItemMenuClickLisenter menulistener = new OnItemMenuClickLisenter() {
+        @Override
+        public void itemMenu(ShowOrder order) {
+            if(order.getId()!=0){
+                bindFragment(String.valueOf(order.getId()));
+                adapter.setCheck(String.valueOf(order.getId()));
+            }else{
+                adapter.setCheck(String.valueOf(order.getId()));
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, AllOrderFragment.init(), null)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        }
+    };
 
     private void loadMenu(){
         list = new ArrayList<>();
@@ -88,6 +120,16 @@ public class MainActivity extends AllenBaseActivity {
         adapter.setCheck(list.get(0).getId());
     }
 
+    private void loadNum(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                map = WebHelper.init().getOrderNumber();
+                handler.sendEmptyMessage(0);
+            }
+        }).start();
+    }
+
     private MenuAdapter.OnItemClickListener listener = new MenuAdapter.OnItemClickListener() {
         @Override
         public void itemClick(View v, Type entry) {
@@ -98,11 +140,7 @@ public class MainActivity extends AllenBaseActivity {
     private void bindFragment(String id){
         switch (id){
             case "0":
-                if(type==1){
-                    startFragmentAdd(SaleHomeFragment.init());
-                }else{
-                    startFragmentAdd(WHHomeFragment.init());
-                }
+                startFragmentAdd(SaleHomeFragment.init().setOnItemMenuClickLisenter(menulistener));
                 break;
             case "-1":
                 startFragmentAdd(FlowerFragment.init());
@@ -152,5 +190,17 @@ public class MainActivity extends AllenBaseActivity {
             curfragment = fragment;
         }
     }
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what){
+                case 0:
+                    adapter.setNumber(map);
+                    break;
+            }
+        }
+    };
 
 }

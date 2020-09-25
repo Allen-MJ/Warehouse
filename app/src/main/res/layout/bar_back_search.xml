@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="@dimen/frame_title_height"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:background="@mipmap/title_bar_bg"
+    android:paddingStart="@dimen/frame_32_distance"
+    android:paddingEnd="@dimen/frame_32_distance">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/back_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/ic_logo_08"
+        android:background="@drawable/icon_bg_selecor"/>
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/bar_search"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_black_color"
+        android:textSize="@dimen/frame_text_smaller_size"
+        android:background="@drawable/wh_white_input_bg"
+        android:hint="@string/search_order_no_hint"
+        android:padding="@dimen/frame_edge_distance"
+        android:layout_marginStart="@dimen/frame_32_distance"
+        android:layout_marginEnd="@dimen/frame_32_distance"
+        android:drawablePadding="@dimen/frame_edge_distance"
+        android:drawableStart="@mipmap/ic_logo_18"
+        android:drawableEnd="@mipmap/ic_logo_12"
+        android:gravity="start|center_vertical"
+        android:singleLine="true"/>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bar_notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_logo_25"
+        android:adjustViewBounds="true"
+        android:layout_margin="@dimen/frame_eight_distance"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bar_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/frame_eight_distance"
+        android:textSize="@dimen/frame_text_small_size"
+        android:textColor="@color/text_white_color"
+        android:hint="@string/nick_name_hint"
+        android:textColorHint="@color/text_white_color"
+        android:layout_marginEnd="@dimen/frame_32_distance"/>
+</androidx.appcompat.widget.LinearLayoutCompat>

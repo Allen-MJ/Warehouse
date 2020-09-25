@@ -13,8 +13,6 @@ import java.util.List;
 
 import allen.frame.ActivityHelper;
 import allen.frame.AllenManager;
-import allen.frame.entry.City;
-import allen.frame.tools.ChoiceTypeDialog;
 import allen.frame.widget.MaterialRefreshLayout;
 import allen.frame.widget.MaterialRefreshListener;
 import androidx.annotation.NonNull;
@@ -27,14 +25,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
 import cn.allen.warehouse.adapter.AllOrderAdapter;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Order;
 import cn.allen.warehouse.utils.Constants;
 
-public class WHHomeFragment extends Fragment {
+public class AllOrderFragment extends BaseFragment {
 
     Unbinder unbinder;
     @BindView(R.id.bar_search)
@@ -47,6 +47,8 @@ public class WHHomeFragment extends Fragment {
     RecyclerView showRv;
     @BindView(R.id.refreshLayout)
     MaterialRefreshLayout mater;
+    @BindView(R.id.back_bt)
+    AppCompatImageView backBt;
     private SharedPreferences shared;
     private AllOrderAdapter adapter;
     private ActivityHelper actHelper;
@@ -56,8 +58,8 @@ public class WHHomeFragment extends Fragment {
     private int pagesize = 10;
     private int uid;
 
-    public static WHHomeFragment init() {
-        WHHomeFragment fragment = new WHHomeFragment();
+    public static AllOrderFragment init() {
+        AllOrderFragment fragment = new AllOrderFragment();
         return fragment;
     }
 
@@ -65,7 +67,7 @@ public class WHHomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wh_home, container, false);
-        actHelper = new ActivityHelper(getActivity(),view);
+        actHelper = new ActivityHelper(getActivity(), view);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -85,7 +87,7 @@ public class WHHomeFragment extends Fragment {
 
     private void initUi(View view) {
         shared = AllenManager.getInstance().getStoragePreference();
-        uid = shared.getInt(Constants.UserId,-1);
+        uid = shared.getInt(Constants.UserId, -1);
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
         adapter = new AllOrderAdapter();
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
@@ -126,7 +128,7 @@ public class WHHomeFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                sublist = WebHelper.init().getAllOrder(uid,page++, pagesize);
+                sublist = WebHelper.init().getAllOrder(uid, page++, pagesize).getList();
                 handler.sendEmptyMessage(0);
             }
         }).start();
@@ -151,7 +153,7 @@ public class WHHomeFragment extends Fragment {
                         mater.finishRefreshLoadMore();
                     }
                     if (list.size() == 0) {
-                        actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_FAIL, "");
+                        actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_FAIL, "暂无订单");
                     }
                     actHelper.setCanLoadMore(mater, pagesize, list);
                     adapter.setList(list);
@@ -159,4 +161,15 @@ public class WHHomeFragment extends Fragment {
             }
         }
     };
+
+    @OnClick(R.id.back_bt)
+    public void onViewClicked(View view) {
+        view.setEnabled(false);
+        switch (view.getId()){
+            case R.id.back_bt:
+                backPreFragment();
+                break;
+        }
+        view.setEnabled(true);
+    }
 }

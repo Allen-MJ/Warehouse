@@ -22,4 +22,5 @@ public class Api {
     public static final String ImgUpload = "ImgUpload";//十九、	上传图片（仓库端：get）
     public static final String Recover = "Recover";//二十、	确认回收（仓库端：post）
     public static final String Writeloss = "Writeloss";//二十一、	填写回收损耗数据（仓库端：post）
+    public static final String GetState = "GetState";//二十二、	获取各订单状态数量之和（仓库端：get）
 }

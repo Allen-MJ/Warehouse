@@ -11,12 +11,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import allen.frame.AllenManager;
 import allen.frame.tools.Logger;
+import cn.allen.warehouse.entry.Data;
 import cn.allen.warehouse.entry.Flower;
 import cn.allen.warehouse.entry.FlowerType;
+import cn.allen.warehouse.entry.Notice;
 import cn.allen.warehouse.entry.Order;
 import cn.allen.warehouse.entry.Response;
 import cn.allen.warehouse.entry.User;
@@ -51,6 +55,15 @@ public class WebHelper {
                 .putString(Constants.UserCreateTime,user.getCreatetime())
                 .putString(Constants.UserWareHouse,user.getWarehouse())
                 .apply();
+    }
+
+    private Object[] getDataFromJson(String json) throws JSONException {
+        Object[] data = new Object[3];
+        JSONObject object = new JSONObject(json);
+        data[0] = object.optInt("recordCount");//总条数
+        data[1] = object.getString("total");//总页数
+        data[2] = object.getString("list");
+        return data;
     }
 
     /**
@@ -89,16 +102,25 @@ public class WebHelper {
      * @param pagesize
      * @return
      */
-    public List<Order> getAllOrder(int uid,int page,int pagesize){
+    public Data<Order> getAllOrder(int uid,int page,int pagesize){
         Object[] objects = new Object[]{
-                "uid",uid,"page",page,"pagesize",pagesize
+                "id",uid,"page",page,"size",pagesize
         };
-        List<Order> list = new ArrayList<>();
         Response response = service.getWebservice(Api.GetAllOrder,objects,WebService.Get);
+        Data<Order> data = new Data<>();
+        List<Order> list = new ArrayList<>();
         if(response.isSuccess("200")){
-            list = gson.fromJson(response.getData(), new TypeToken<List<Order>>(){}.getType());
+            try {
+                Object[] ob = getDataFromJson(response.getData());
+                list = gson.fromJson(ob[2].toString(), new TypeToken<List<Order>>(){}.getType());
+                data.setCount(Integer.parseInt(ob[0].toString()));
+                data.setTotal(Integer.parseInt(ob[1].toString()));
+                data.setList(list);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-        return list;
+        return data;
     }
 
     /**
@@ -152,4 +174,55 @@ public class WebHelper {
         }
         return list;
     }
+
+    /**
+     * 获取消息通知
+     * @return
+     */
+    public List<Notice> getInformation(){
+        Object[] objects = new Object[]{
+        };
+        List<Notice> list = new ArrayList<>();
+        Response response = service.getWebservice(Api.GetInformation,objects,WebService.Get);
+        if(response.isSuccess("200")){
+            list = gson.fromJson(response.getData(), new TypeToken<List<Notice>>(){}.getType());
+        }
+        return list;
+    }
+
+    /**
+     * 数量统计
+     * @return
+     */
+    public Map<String,Integer> getOrderNumber(){
+        Object[] objects = new Object[]{
+        };
+        Map<String,Integer> map = new HashMap<>();
+        Response response = service.getWebservice(Api.GetState,objects,WebService.Get);
+        if(response.isSuccess("200")){
+            try {
+                JSONObject object = new JSONObject(response.getData());
+                map.put("1",object.optInt("daipeihuo"));
+                map.put("2",object.optInt("daichuku"));
+                map.put("3",object.optInt("daihuishou"));
+                map.put("4",object.optInt("yihuishou"));
+                map.put("5",object.optInt("wancheng"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                map.put("1",0);
+                map.put("2",0);
+                map.put("3",0);
+                map.put("4",0);
+                map.put("5",0);
+            }
+        }else{
+            map.put("1",0);
+            map.put("2",0);
+            map.put("3",0);
+            map.put("4",0);
+            map.put("5",0);
+        }
+        return map;
+    }
+
 }

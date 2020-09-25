@@ -4,50 +4,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.bumptech.glide.Glide;
 
-import allen.frame.entry.Type;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 import cn.allen.warehouse.R;
+import cn.allen.warehouse.entry.Flower;
+import cn.allen.warehouse.entry.Notice;
 
-public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class NoticeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Type> list;
-    private Map<String,Boolean> check;
-    private Map<String,Integer> numMap;
+    private List<Notice> list;
 
-    public MenuAdapter(){
-        numMap = new HashMap<>();
+    public NoticeAdapter(){
     }
 
-    public void setList(List<Type> list){
+    public void setList(List<Notice> list){
         this.list = list;
-        check = new HashMap<>();
-        for(Type t:list){
-            check.put(t.getId(),false);
-        }
-        numMap.put("1",0);
-        numMap.put("2",0);
-        numMap.put("3",0);
-        numMap.put("4",0);
-        numMap.put("5",0);
-        notifyDataSetChanged();
-    }
-
-    public void setNumber(Map<String,Integer> numMap){
-        this.numMap = numMap;
-        notifyDataSetChanged();
-    }
-
-    public void setCheck(String id){
-        for(Type t:list){
-            check.put(t.getId(),id.equals(t.getId()));
-        }
         notifyDataSetChanged();
     }
 
@@ -55,7 +32,7 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_menu, parent, false);
+                .inflate(R.layout.item_notice, parent, false);
         v.setLayoutParams(new ViewGroup
                 .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -75,38 +52,30 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public class ObjectHolder extends RecyclerView.ViewHolder{
 
-        private AppCompatTextView name,num;
+        private AppCompatTextView title,date;
         private AppCompatImageView icon;
         private View view;
         public ObjectHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.menu_item_name);
-            num = itemView.findViewById(R.id.menu_item_count);
-            icon = itemView.findViewById(R.id.menu_item_icon);
+            title = itemView.findViewById(R.id.nitice_item_title);
+            date = itemView.findViewById(R.id.nitice_item_date);
+            icon = itemView.findViewById(R.id.nitice_item_icon);
             view = itemView.findViewById(R.id.item_layout);
         }
-        public void bind(final Type entry){
+        public void bind(final Notice entry){
             if(entry!=null){
-                name.setText(entry.getName());
-                if(numMap.get(entry.getId())==null||numMap.get(entry.getId())==0){
-                    num.setVisibility(View.INVISIBLE);
-                }else{
-                    num.setVisibility(View.VISIBLE);
-                    num.setText(""+numMap.get(entry.getId()));
-                }
-                icon.setImageResource(entry.getResId());
+                title.setText(entry.getContent()+",订单号:"+entry.getOrder_id());
+                date.setText(entry.getCreatetime().substring(0,10));
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         view.setEnabled(false);
-                        if(listener!=null&&!check.get(entry.getId())){
+                        if(listener!=null){
                             listener.itemClick(view,entry);
                         }
-                        setCheck(entry.getId());
                         view.setEnabled(true);
                     }
                 });
-                view.setSelected(check.get(entry.getId()));
             }
         }
     }
@@ -115,6 +84,6 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.listener = listener;
     }
     public interface OnItemClickListener{
-        void itemClick(View v, Type entry);
+        void itemClick(View v, Notice entry);
     }
 }
