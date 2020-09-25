@@ -32,7 +32,7 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    private void setCheck(String id){
+    public void setCheck(String id){
         for(Type t:list){
             check.put(t.getId(),id.equals(t.getId()));
         }

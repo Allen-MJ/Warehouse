@@ -84,6 +84,8 @@ public class MainActivity extends AllenBaseActivity {
         list.add(new Type("4","已回收    ",R.drawable.menu_yhk_selecor));
         list.add(new Type("5","完成清点",R.drawable.menu_wcqd_selecor));
         adapter.setList(list);
+        bindFragment(list.get(0).getId());
+        adapter.setCheck(list.get(0).getId());
     }
 
     private MenuAdapter.OnItemClickListener listener = new MenuAdapter.OnItemClickListener() {

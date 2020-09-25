@@ -90,6 +90,8 @@ public class LoginActivity extends AllenIMBaseActivity {
         }
         loginAccount.setText(shared.getString(Constants.UserAccount,""));
         loginPsw.setText(shared.getString(Constants.UserPsw,""));
+        loginPsw.setText("123456");//测试
+
     }
 
     @Override
