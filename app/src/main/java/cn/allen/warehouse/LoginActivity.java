@@ -12,6 +12,7 @@ import android.view.View;
 
 import allen.frame.AllenIMBaseActivity;
 import allen.frame.AllenManager;
+import allen.frame.tools.Logger;
 import allen.frame.tools.MsgUtils;
 import allen.frame.tools.StringUtils;
 import androidx.annotation.NonNull;
@@ -50,6 +51,7 @@ public class LoginActivity extends AllenIMBaseActivity {
 
     @Override
     protected void initBar() {
+        Logger.init().setHttp(true).setDebug(true);
         ButterKnife.bind(this);
         shared = AllenManager.getInstance().getStoragePreference();
     }

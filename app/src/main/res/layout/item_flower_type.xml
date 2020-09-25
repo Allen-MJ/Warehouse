@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/type_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/flower_text_color_gray2white_selector"
+        android:padding="@dimen/frame_eight_distance"
+        android:textSize="@dimen/frame_text_small_size"
+        android:gravity="start|center_vertical"
+        android:drawablePadding="@dimen/frame_four_distance"
+        android:background="@drawable/icon_bg_selecor"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/type_item_child"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/frame_32_distance"/>
+</androidx.appcompat.widget.LinearLayoutCompat>

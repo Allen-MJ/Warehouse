@@ -15,6 +15,8 @@ import java.util.List;
 
 import allen.frame.AllenManager;
 import allen.frame.tools.Logger;
+import cn.allen.warehouse.entry.Flower;
+import cn.allen.warehouse.entry.FlowerType;
 import cn.allen.warehouse.entry.Order;
 import cn.allen.warehouse.entry.Response;
 import cn.allen.warehouse.entry.User;
@@ -95,6 +97,58 @@ public class WebHelper {
         Response response = service.getWebservice(Api.GetAllOrder,objects,WebService.Get);
         if(response.isSuccess("200")){
             list = gson.fromJson(response.getData(), new TypeToken<List<Order>>(){}.getType());
+        }
+        return list;
+    }
+
+    /**
+     * 获取花类
+     * @return
+     */
+    public List<FlowerType> getGrade(){
+        Object[] objects = new Object[]{
+
+        };
+        List<FlowerType> list = new ArrayList<>();
+        Response response = service.getWebservice(Api.GetGrade,objects,WebService.Get);
+        if(response.isSuccess("200")){
+            list = gson.fromJson(response.getData(), new TypeToken<List<FlowerType>>(){}.getType());
+        }
+        return list;
+    }
+
+    /**
+     * 根据类别ID查询鲜花列表
+     * @param id
+     * @return
+     */
+    public List<Flower> getFlowers(int id){
+        Object[] objects = new Object[]{
+            "id",id
+        };
+        List<Flower> list = new ArrayList<>();
+        Response response = service.getWebservice(Api.GetFlowers,objects,WebService.Get);
+        if(response.isSuccess("200")){
+            list = gson.fromJson(response.getData(), new TypeToken<List<Flower>>(){}.getType());
+        }
+        return list;
+    }
+
+    /**
+     *
+     * @param starttime
+     * @param endtime
+     * @param name
+     * @return
+     */
+    public List<Flower> getSeachFlower(String starttime,String endtime,String name){
+        Object[] objects = new Object[]{
+            "starttime",starttime,"endtime",endtime,"name",name
+        };
+        List<Flower> list = new ArrayList<>();
+        Response response = service.getWebservice(Api.GetSeachFlower,objects,WebService.Get);
+        if(response.isSuccess("200")){
+            list = gson.fromJson(response.getData(), new TypeToken<List<Flower>>(){}.getType());
         }
         return list;
     }
