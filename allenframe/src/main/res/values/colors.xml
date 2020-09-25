@@ -66,6 +66,7 @@
     <color name="white_background">#ffffffff</color>
     <color name="transparent_background">#66000000</color>
     <color name="light_blue">#7ea8d9</color>
+    <color name="order_text_red">#FB3E7E</color>
 
 
     <color name="text_blue">#3481DF</color>

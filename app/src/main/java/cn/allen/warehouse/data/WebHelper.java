@@ -225,4 +225,32 @@ public class WebHelper {
         return map;
     }
 
+
+    /**
+     * 五、	根据订单状态查询订单
+     * @param state
+     * @param page
+     * @param pagesize
+     * @return
+     */
+    public Data<Order> getOrderBystate(int uid,int state,int page,int pagesize){
+        Object[] objects = new Object[]{
+                "id",uid,"state",state,"page",page,"size",pagesize
+        };
+        Response response = service.getWebservice(Api.GetOrderState,objects,WebService.Get);
+        Data<Order> data = new Data<>();
+        List<Order> list = new ArrayList<>();
+        if(response.isSuccess("200")){
+            try {
+                Object[] ob = getDataFromJson(response.getData());
+                list = gson.fromJson(ob[2].toString(), new TypeToken<List<Order>>(){}.getType());
+                data.setCount(Integer.parseInt(ob[0].toString()));
+                data.setTotal(Integer.parseInt(ob[1].toString()));
+                data.setList(list);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return data;
+    }
 }

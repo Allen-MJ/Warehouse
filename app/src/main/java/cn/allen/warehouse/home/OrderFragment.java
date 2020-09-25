@@ -1,0 +1,245 @@
+package cn.allen.warehouse.home;
+
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+import allen.frame.ActivityHelper;
+import allen.frame.AllenManager;
+import allen.frame.adapter.CommonAdapter;
+import allen.frame.adapter.ViewHolder;
+import allen.frame.widget.MaterialRefreshLayout;
+import allen.frame.widget.MaterialRefreshListener;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
+import cn.allen.warehouse.BaseFragment;
+import cn.allen.warehouse.R;
+import cn.allen.warehouse.adapter.AllOrderAdapter;
+import cn.allen.warehouse.data.WebHelper;
+import cn.allen.warehouse.entry.Order;
+import cn.allen.warehouse.utils.Constants;
+
+public class OrderFragment extends BaseFragment {
+
+    Unbinder unbinder;
+    @BindView(R.id.bar_search)
+    AppCompatEditText barSearch;
+    @BindView(R.id.bar_notice)
+    AppCompatImageView barNotice;
+    @BindView(R.id.bar_name)
+    AppCompatTextView barName;
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerview;
+    @BindView(R.id.refreshLayout)
+    MaterialRefreshLayout refreshLayout;
+
+    private SharedPreferences shared;
+    private ActivityHelper actHelper;
+    private CommonAdapter<Order> adapter;
+    private List<Order> list, sublist;
+    private boolean isRefresh = false;
+    private int page = 1;
+    private int pagesize = 10;
+    private int uid;
+    private int state;
+    @SuppressLint("HandlerLeak")
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what){
+                case 0:
+                    actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_SUCCES, "");
+
+                    if (isRefresh) {
+                        list = sublist;
+                        refreshLayout.finishRefresh();
+                    } else {
+                        if (page == 2) {
+                            list = sublist;
+                        } else {
+                            list.addAll(sublist);
+                        }
+                        refreshLayout.finishRefreshLoadMore();
+                    }
+                    if (list.size() == 0) {
+                        actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_FAIL, "");
+                    }
+                    actHelper.setCanLoadMore(refreshLayout, pagesize, list);
+                    adapter.setDatas(list);
+                    break;
+                case -1:
+
+                    break;
+            }
+        }
+    };
+
+
+    public static OrderFragment init(int state) {
+        OrderFragment fragment = new OrderFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("state",state);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_order, container, false);
+        actHelper = new ActivityHelper(getActivity(), view);
+        unbinder = ButterKnife.bind(this, view);
+        Bundle b = getArguments();
+        if(b!=null){
+            state=b.getInt("state");
+        }
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        initUi(view);
+        addEvent(view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    private void initUi(View view) {
+        shared = AllenManager.getInstance().getStoragePreference();
+        uid = shared.getInt(Constants.UserId, -1);
+        barSearch.setVisibility(View.GONE);
+        barName.setText(shared.getString(Constants.UserName, "用户昵称"));
+        initAdapter();
+        actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_START, "");
+        loadData();
+    }
+
+    private void initAdapter() {
+        GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
+        adapter = new CommonAdapter<Order>(getContext(), R.layout.order_item_layout) {
+            @Override
+            public void convert(ViewHolder holder, Order entity, int position) {
+                holder.setText(R.id.order_id, "订单号" + entity.getOrder_number());
+                holder.setText(R.id.order_name, entity.getCustomer_name());
+                holder.setText(R.id.tv_order_address, entity.getHotel_address());
+                holder.setText(R.id.tv_order_out_time, entity.getDelivery_time());
+                holder.setText(R.id.tv_order_back_time, entity.getRecovery_date());
+                holder.setText(R.id.tv_salesman, entity.getNumber_name());
+                int statu = entity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
+                switch (statu) {
+                    case 1:
+                        holder.setText(R.id.order_state,"待配货");
+                        holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_logo_06));
+                        break;
+                    case 2:
+                        holder.setText(R.id.order_state,"待出库");
+                        holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_logo_02));
+                        break;
+                    case 3:
+                        holder.setText(R.id.order_state,"待回库");
+                        holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_logo_04));
+                        break;
+                    case 4:
+                        holder.setText(R.id.order_state,"已回库");
+                        holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_logo_28));
+                        break;
+                    case 5:
+                        holder.setText(R.id.order_state,"完成清点");
+                        holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_logo_16));
+                        break;
+                }
+            }
+        };
+        recyclerview.setLayoutManager(manager);
+        recyclerview.setAdapter(adapter);
+    }
+
+    private void addEvent(View view) {
+        refreshLayout.setMaterialRefreshListener(materListener);
+        adapter.setOnItemClickListener(listener);
+    }
+
+    private MaterialRefreshListener materListener = new MaterialRefreshListener() {
+        @Override
+        public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
+            isRefresh = true;
+            page = 1;
+            loadData();
+        }
+
+        @Override
+        public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+            isRefresh = false;
+            loadData();
+        }
+    };
+
+    private CommonAdapter.OnItemClickListener listener = new CommonAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+            return false;
+        }
+    };
+
+    private void loadData() {
+        new Thread(){
+            @Override
+            public void run() {
+                sublist = WebHelper.init().getOrderBystate(uid,state,page++, pagesize).getList();
+                handler.sendEmptyMessage(0);
+            }
+        }.start();
+
+    }
+
+
+    @OnClick({R.id.bar_notice, R.id.bar_name})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.bar_notice:
+                break;
+            case R.id.bar_name:
+                break;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+}
