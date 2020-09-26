@@ -157,6 +157,26 @@ public class WebHelper {
     }
 
     /**
+     * 根据类别、时间、花名查询
+     * @param type
+     * @param endtime
+     * @param starttime
+     * @param name
+     * @return
+     */
+    public List<Flower> getAllType(int type,String endtime,String starttime,String name){
+        Object[] objects = new Object[]{
+            "type",type,"endtime",endtime,"starttime",starttime,"name",name
+        };
+        List<Flower> list = new ArrayList<>();
+        Response response = service.getWebservice(Api.GetAllType,objects,WebService.Get);
+        if(response.isSuccess("200")){
+            list = gson.fromJson(response.getData(), new TypeToken<List<Flower>>(){}.getType());
+        }
+        return list;
+    }
+
+    /**
      *
      * @param starttime
      * @param endtime

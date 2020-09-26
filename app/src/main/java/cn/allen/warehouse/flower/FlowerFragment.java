@@ -61,6 +61,7 @@ public class FlowerFragment extends BaseFragment {
     private FlowerParentMenuAdapter menuAdapter;
     private FlowerAdapter adapter;
     private List<Flower> list;
+    private String startTime,endTime,name;
 
     public static FlowerFragment init() {
         FlowerFragment fragment = new FlowerFragment();
@@ -130,7 +131,7 @@ public class FlowerFragment extends BaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                list = WebHelper.init().getFlowers(id);
+                list = WebHelper.init().getAllType(id,endTime,startTime,name);
                 handler.sendEmptyMessage(1);
             }
         }).start();
