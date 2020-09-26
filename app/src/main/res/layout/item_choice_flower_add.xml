@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/btn_radius"
+        app:cardElevation="1dp"
+        android:layout_margin="@dimen/frame_four_distance">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_add_flower"
+            android:padding="@dimen/frame_eight_distance"
+            android:drawableStart="@mipmap/ic_logo_31"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/frame_text_small_size"
+            android:drawablePadding="@dimen/frame_eight_distance"
+            android:layout_gravity="center"
+            />
+    </androidx.cardview.widget.CardView>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -36,7 +36,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/frame_four_distance">
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/choice_item_rent"
+            android:id="@+id/choice_item_stock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/text_black_color"
@@ -55,7 +55,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/frame_four_distance">
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/choice_item_order"
+            android:id="@+id/choice_item_rent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/text_black_color"
@@ -79,6 +79,7 @@
             android:layout_height="match_parent"
             android:src="@mipmap/ic_logo_13"
             android:scaleType="center"
-            android:adjustViewBounds="true"/>
+            android:adjustViewBounds="true"
+            android:layout_gravity="center"/>
     </androidx.cardview.widget.CardView>
 </androidx.appcompat.widget.LinearLayoutCompat>

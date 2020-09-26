@@ -96,11 +96,12 @@ public class MainActivity extends AllenBaseActivity {
                 adapter.setCheck(String.valueOf(order.getId()));
             }else{
                 adapter.setCheck(String.valueOf(order.getId()));
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, AllOrderFragment.init(), null)
-                        .addToBackStack(null)
-                        .commit();
+                startFragmentAdd(AllOrderFragment.init());
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.container, AllOrderFragment.init(), null)
+//                        .addToBackStack(null)
+//                        .commit();
             }
         }
     };
@@ -117,6 +118,8 @@ public class MainActivity extends AllenBaseActivity {
         list.add(new Type("4","已回收    ",R.drawable.menu_yhk_selecor));
         list.add(new Type("5","完成清点",R.drawable.menu_wcqd_selecor));
         adapter.setList(list);
+        adapter.setCheck(list.get(0).getId());
+        bindFragment(String.valueOf(list.get(0).getId()));
     }
 
     private void loadNum(){
@@ -174,7 +177,7 @@ public class MainActivity extends AllenBaseActivity {
     }
 
     // fragment的切换
-    private void startFragmentAdd(Fragment fragment) {
+    public void startFragmentAdd(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager
                 .beginTransaction();

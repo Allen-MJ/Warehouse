@@ -33,7 +33,7 @@ import cn.allen.warehouse.utils.Constants;
 
 public class OrderInfoFragment extends Fragment {
     Unbinder unbinder;
-    @BindView(R.id.bar_back)
+    @BindView(R.id.back_bt)
     AppCompatImageView barBack;
     @BindView(R.id.bar_title)
     AppCompatTextView barTitle;
