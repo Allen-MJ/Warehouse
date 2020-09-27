@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".order.OrderInfoFragment">
+    tools:context=".order.OrderInfoFragment"
+    android:background="@color/gray_line_color">
 
     <include layout="@layout/bar_back" />
 

@@ -10,6 +10,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 
+import com.baidu.techain.ac.Callback;
+import com.baidu.techain.ac.TH;
+
 import allen.frame.AllenIMBaseActivity;
 import allen.frame.AllenManager;
 import allen.frame.tools.Logger;
@@ -24,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.allen.warehouse.data.WebHelper;
+import cn.allen.warehouse.utils.ChineseToSpeech;
 import cn.allen.warehouse.utils.Constants;
 
 import static androidx.core.content.PermissionChecker.PERMISSION_GRANTED;
@@ -38,6 +42,7 @@ public class LoginActivity extends AllenIMBaseActivity {
     private String account,psw;
     public static final int REQUEST_CAMERA_PERMISSION = 1003;
     private SharedPreferences shared;
+    private ChineseToSpeech speech;
 
     @Override
     protected boolean isStatusBarColorWhite() {
@@ -50,10 +55,17 @@ public class LoginActivity extends AllenIMBaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        speech.destroy();
+    }
+
+    @Override
     protected void initBar() {
         Logger.init().setHttp(true).setDebug(true);
         ButterKnife.bind(this);
         shared = AllenManager.getInstance().getStoragePreference();
+        speech = new ChineseToSpeech(context);
     }
 
     @SuppressLint("MissingSuperCall")
@@ -136,6 +148,22 @@ public class LoginActivity extends AllenIMBaseActivity {
         }).start();
     }
 
+    private void setFlag(int id){
+        TH.tinvoke(100019,"updateTags",new Callback(){
+                    @Override
+                    public Object onEnd(Object... objects) {
+                        Logger.e("PUSH_SDK", "onEnd：" + objects[0]);
+                        return super.onEnd(objects);
+                    }
+
+                    @Override
+                    public Object onError(Object... objects) {
+                        Logger.e("PUSH_SDK", "onError：" + objects[0]);
+                        return super.onError(objects);
+                    }
+                },new Class[]{String[].class},new Object[]{new String[]{String.valueOf(id)}});
+    }
+
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
         @Override
@@ -144,7 +172,9 @@ public class LoginActivity extends AllenIMBaseActivity {
                 case 0:
                     dismissProgressDialog();
                     MsgUtils.showShortToast(context, (String) msg.obj);
+                    setFlag(shared.getInt(Constants.UserId,-1));
                     startActivity(new Intent(context,MainActivity.class));
+//                    speech.speech((String) msg.obj);
                     break;
                 case -1:
                     dismissProgressDialog();

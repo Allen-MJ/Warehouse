@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
 import cn.allen.warehouse.adapter.NoticeAdapter;
 import cn.allen.warehouse.adapter.ShowOrderAdapter;
@@ -34,7 +35,7 @@ import cn.allen.warehouse.entry.Notice;
 import cn.allen.warehouse.entry.ShowOrder;
 import cn.allen.warehouse.utils.Constants;
 
-public class SaleHomeFragment extends Fragment {
+public class SaleHomeFragment extends BaseFragment {
 
     Unbinder unbinder;
     @BindView(R.id.bar_search)

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".home.OrderFragment">
+    tools:context=".home.OrderFragment"
+    android:background="@color/gray_line_color">
 
     <include layout="@layout/bar_search"/>
     <include layout="@layout/alen_progress_layout"/>
