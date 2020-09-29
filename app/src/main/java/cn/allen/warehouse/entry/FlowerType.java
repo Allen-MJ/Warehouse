@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import allen.frame.tools.StringUtils;
+
 public class FlowerType implements Serializable {
     private int id;
     private String name;
@@ -35,7 +37,7 @@ public class FlowerType implements Serializable {
     }
 
     public void setCreatetime(String createtime) {
-        this.createtime = createtime;
+        this.createtime = StringUtils.null2Empty(createtime).replaceAll("T"," ");
     }
 
     public String getAddtimes() {
@@ -43,7 +45,7 @@ public class FlowerType implements Serializable {
     }
 
     public void setAddtimes(String addtimes) {
-        this.addtimes = addtimes;
+        this.addtimes = StringUtils.null2Empty(addtimes).replaceAll("T"," ");
     }
 
     public List<FlowerType> getChildren() {

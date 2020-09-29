@@ -148,8 +148,8 @@ public class LoginActivity extends AllenIMBaseActivity {
         }).start();
     }
 
-    private void setFlag(int id){
-        TH.tinvoke(100019,"updateTags",new Callback(){
+    private void setAlias(int id){
+        TH.tinvoke(100019,"setAlias",new Callback(){
                     @Override
                     public Object onEnd(Object... objects) {
                         Logger.e("PUSH_SDK", "onEnd：" + objects[0]);
@@ -161,7 +161,7 @@ public class LoginActivity extends AllenIMBaseActivity {
                         Logger.e("PUSH_SDK", "onError：" + objects[0]);
                         return super.onError(objects);
                     }
-                },new Class[]{String[].class},new Object[]{new String[]{String.valueOf(id)}});
+                },new Class[]{String.class},"ware_house_"+id);
     }
 
     @SuppressLint("HandlerLeak")
@@ -172,7 +172,7 @@ public class LoginActivity extends AllenIMBaseActivity {
                 case 0:
                     dismissProgressDialog();
                     MsgUtils.showShortToast(context, (String) msg.obj);
-                    setFlag(shared.getInt(Constants.UserId,-1));
+                    setAlias(shared.getInt(Constants.UserId,-1));
                     startActivity(new Intent(context,MainActivity.class));
 //                    speech.speech((String) msg.obj);
                     break;
