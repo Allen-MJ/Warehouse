@@ -1,11 +1,16 @@
 package cn.allen.warehouse.data;
 
+import android.util.Log;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import allen.frame.tools.Logger;
 import allen.frame.tools.StringUtils;
 import cn.allen.warehouse.utils.Constants;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -62,6 +67,30 @@ public class HttpUtil {
             if (response.isSuccessful()) {
                 data = response.body().string();
             }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    // 使用OkHttp上传文件
+    public String uploadFile(String mothed,File file) {
+        String data = "";
+        try {
+        OkHttpClient client = new OkHttpClient();
+        MediaType contentType = MediaType.parse("image/jpeg; charset=utf-8"); // 上传文件的Content-Type
+        RequestBody body = RequestBody.create(contentType, file); // 上传文件的请求体
+        Request request = new Request.Builder()
+                .url(url+mothed) // 上传地址
+                .post(body)
+                .build();
+        Response response = null;
+        response = client.newCall(request).execute();
+        Logger.http("Response>>", response.toString());
+        if (response.isSuccessful()) {
+            data = response.body().string();
+        }
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

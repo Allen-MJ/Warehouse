@@ -53,6 +53,11 @@
     <string name="order_money">租金总额：</string>
 
     <string name="commit_bt">提交</string>
+    <string name="queren_bt">确认</string>
+    <string name="warehouse_out_bt">确认出库</string>
+    <string name="warehouse_return_bt">确认回收</string>
+    <string name="edit_order_bt">修改订单</string>
+    <string name="add_order_bt">追加订单</string>
 
     <!--通用 end-->
 </resources>

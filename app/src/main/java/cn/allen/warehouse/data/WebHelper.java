@@ -7,9 +7,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +24,7 @@ import cn.allen.warehouse.entry.Flower;
 import cn.allen.warehouse.entry.FlowerType;
 import cn.allen.warehouse.entry.Notice;
 import cn.allen.warehouse.entry.Order;
+import cn.allen.warehouse.entry.OrderInfoEntity;
 import cn.allen.warehouse.entry.Response;
 import cn.allen.warehouse.entry.User;
 import cn.allen.warehouse.utils.Constants;
@@ -33,27 +36,28 @@ public class WebHelper {
     private static WebHelper helper;
     private Gson gson;
 
-    private WebHelper(){
+    private WebHelper() {
         service = new WebService();
         gson = new GsonBuilder().registerTypeAdapterFactory(new NullStringEmptyTypeAdapterFactory()).create();
     }
-    public static WebHelper init(){
-        if(helper==null){
+
+    public static WebHelper init() {
+        if (helper == null) {
             helper = new WebHelper();
         }
         return helper;
     }
 
-    private void saveToLoacal(User user){
-        Logger.debug("user",user.toString());
+    private void saveToLoacal(User user) {
+        Logger.debug("user", user.toString());
         AllenManager.getInstance().getStoragePreference().edit()
-                .putInt(Constants.UserId,user.getId())
-                .putString(Constants.UserAccount,user.getAccount())
-                .putString(Constants.UserName,user.getName())
-                .putString(Constants.UserPhone,user.getPhone())
-                .putInt(Constants.UserType,user.getType())
-                .putString(Constants.UserCreateTime,user.getCreatetime())
-                .putString(Constants.UserWareHouse,user.getWarehouse())
+                .putInt(Constants.UserId, user.getId())
+                .putString(Constants.UserAccount, user.getAccount())
+                .putString(Constants.UserName, user.getName())
+                .putString(Constants.UserPhone, user.getPhone())
+                .putInt(Constants.UserType, user.getType())
+                .putString(Constants.UserCreateTime, user.getCreatetime())
+                .putString(Constants.UserWareHouse, user.getWarehouse())
                 .apply();
     }
 
@@ -68,27 +72,28 @@ public class WebHelper {
 
     /**
      * 登录
+     *
      * @param handler
      * @param account
      * @param psw
      */
-    public void login(Handler handler, String account, String psw){
+    public void login(Handler handler, String account, String psw) {
         Object[] objects = new Object[]{
-                "account",account,"pwd",psw
+                "account", account, "pwd", psw
         };
-        Response response = service.getWebservice(Api.Login,objects,WebService.Get);
+        Response response = service.getWebservice(Api.Login, objects, WebService.Get);
         Message msg = new Message();
-        if(response.isSuccess("200")){
-            User user = gson.fromJson(response.getData(),User.class);
-            if(user!=null){
+        if (response.isSuccess("200")) {
+            User user = gson.fromJson(response.getData(), User.class);
+            if (user != null) {
                 saveToLoacal(user);
                 msg.what = 0;
                 msg.obj = response.getMessage();
-            }else{
+            } else {
                 msg.what = -1;
                 msg.obj = "数据异常!";
             }
-        }else{
+        } else {
             msg.what = -1;
             msg.obj = response.getMessage();
         }
@@ -97,22 +102,24 @@ public class WebHelper {
 
     /**
      * 获取所有订单
+     *
      * @param uid
      * @param page
      * @param pagesize
      * @return
      */
-    public Data<Order> getAllOrder(int uid,int page,int pagesize){
+    public Data<Order> getAllOrder(int uid, int page, int pagesize) {
         Object[] objects = new Object[]{
-                "id",uid,"page",page,"size",pagesize
+                "id", uid, "page", page, "size", pagesize
         };
-        Response response = service.getWebservice(Api.GetAllOrder,objects,WebService.Get);
+        Response response = service.getWebservice(Api.GetAllOrder, objects, WebService.Get);
         Data<Order> data = new Data<>();
         List<Order> list = new ArrayList<>();
-        if(response.isSuccess("200")){
+        if (response.isSuccess("200")) {
             try {
                 Object[] ob = getDataFromJson(response.getData());
-                list = gson.fromJson(ob[2].toString(), new TypeToken<List<Order>>(){}.getType());
+                list = gson.fromJson(ob[2].toString(), new TypeToken<List<Order>>() {
+                }.getType());
                 data.setCount(Integer.parseInt(ob[0].toString()));
                 data.setTotal(Integer.parseInt(ob[1].toString()));
                 data.setList(list);
@@ -125,122 +132,131 @@ public class WebHelper {
 
     /**
      * 获取花类
+     *
      * @return
      */
-    public List<FlowerType> getGrade(){
+    public List<FlowerType> getGrade() {
         Object[] objects = new Object[]{
 
         };
         List<FlowerType> list = new ArrayList<>();
-        Response response = service.getWebservice(Api.GetGrade,objects,WebService.Get);
-        if(response.isSuccess("200")){
-            list = gson.fromJson(response.getData(), new TypeToken<List<FlowerType>>(){}.getType());
+        Response response = service.getWebservice(Api.GetGrade, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            list = gson.fromJson(response.getData(), new TypeToken<List<FlowerType>>() {
+            }.getType());
         }
         return list;
     }
 
     /**
      * 根据类别ID查询鲜花列表
+     *
      * @param id
      * @return
      */
-    public List<Flower> getFlowers(int id){
+    public List<Flower> getFlowers(int id) {
         Object[] objects = new Object[]{
-            "id",id
+                "id", id
         };
         List<Flower> list = new ArrayList<>();
-        Response response = service.getWebservice(Api.GetFlowers,objects,WebService.Get);
-        if(response.isSuccess("200")){
-            list = gson.fromJson(response.getData(), new TypeToken<List<Flower>>(){}.getType());
+        Response response = service.getWebservice(Api.GetFlowers, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            list = gson.fromJson(response.getData(), new TypeToken<List<Flower>>() {
+            }.getType());
         }
         return list;
     }
 
     /**
      * 根据类别、时间、花名查询
+     *
      * @param type
      * @param endtime
      * @param starttime
      * @param name
      * @return
      */
-    public List<Flower> getAllType(int type,String endtime,String starttime,String name){
+    public List<Flower> getAllType(int type, String endtime, String starttime, String name) {
         Object[] objects = new Object[]{
-            "type",type,"endtime",endtime,"starttime",starttime,"name",name
+                "type", type, "endtime", endtime, "starttime", starttime, "name", name
         };
         List<Flower> list = new ArrayList<>();
-        Response response = service.getWebservice(Api.GetAllType,objects,WebService.Get);
-        if(response.isSuccess("200")){
-            list = gson.fromJson(response.getData(), new TypeToken<List<Flower>>(){}.getType());
+        Response response = service.getWebservice(Api.GetAllType, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            list = gson.fromJson(response.getData(), new TypeToken<List<Flower>>() {
+            }.getType());
         }
         return list;
     }
 
     /**
-     *
      * @param starttime
      * @param endtime
      * @param name
      * @return
      */
-    public List<Flower> getSeachFlower(String starttime,String endtime,String name){
+    public List<Flower> getSeachFlower(String starttime, String endtime, String name) {
         Object[] objects = new Object[]{
-            "starttime",starttime,"endtime",endtime,"name",name
+                "starttime", starttime, "endtime", endtime, "name", name
         };
         List<Flower> list = new ArrayList<>();
-        Response response = service.getWebservice(Api.GetSeachFlower,objects,WebService.Get);
-        if(response.isSuccess("200")){
-            list = gson.fromJson(response.getData(), new TypeToken<List<Flower>>(){}.getType());
+        Response response = service.getWebservice(Api.GetSeachFlower, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            list = gson.fromJson(response.getData(), new TypeToken<List<Flower>>() {
+            }.getType());
         }
         return list;
     }
 
     /**
      * 获取消息通知
+     *
      * @return
      */
-    public List<Notice> getInformation(){
+    public List<Notice> getInformation() {
         Object[] objects = new Object[]{
         };
         List<Notice> list = new ArrayList<>();
-        Response response = service.getWebservice(Api.GetInformation,objects,WebService.Get);
-        if(response.isSuccess("200")){
-            list = gson.fromJson(response.getData(), new TypeToken<List<Notice>>(){}.getType());
+        Response response = service.getWebservice(Api.GetInformation, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            list = gson.fromJson(response.getData(), new TypeToken<List<Notice>>() {
+            }.getType());
         }
         return list;
     }
 
     /**
      * 数量统计
+     *
      * @return
      */
-    public Map<String,Integer> getOrderNumber(){
+    public Map<String, Integer> getOrderNumber() {
         Object[] objects = new Object[]{
         };
-        Map<String,Integer> map = new HashMap<>();
-        Response response = service.getWebservice(Api.GetState,objects,WebService.Get);
-        if(response.isSuccess("200")){
+        Map<String, Integer> map = new HashMap<>();
+        Response response = service.getWebservice(Api.GetState, objects, WebService.Get);
+        if (response.isSuccess("200")) {
             try {
                 JSONObject object = new JSONObject(response.getData());
-                map.put("1",object.optInt("daipeihuo"));
-                map.put("2",object.optInt("daichuku"));
-                map.put("3",object.optInt("daihuishou"));
-                map.put("4",object.optInt("yihuishou"));
-                map.put("5",object.optInt("wancheng"));
+                map.put("1", object.optInt("daipeihuo"));
+                map.put("2", object.optInt("daichuku"));
+                map.put("3", object.optInt("daihuishou"));
+                map.put("4", object.optInt("yihuishou"));
+                map.put("5", object.optInt("wancheng"));
             } catch (JSONException e) {
                 e.printStackTrace();
-                map.put("1",0);
-                map.put("2",0);
-                map.put("3",0);
-                map.put("4",0);
-                map.put("5",0);
+                map.put("1", 0);
+                map.put("2", 0);
+                map.put("3", 0);
+                map.put("4", 0);
+                map.put("5", 0);
             }
-        }else{
-            map.put("1",0);
-            map.put("2",0);
-            map.put("3",0);
-            map.put("4",0);
-            map.put("5",0);
+        } else {
+            map.put("1", 0);
+            map.put("2", 0);
+            map.put("3", 0);
+            map.put("4", 0);
+            map.put("5", 0);
         }
         return map;
     }
@@ -248,22 +264,24 @@ public class WebHelper {
 
     /**
      * 五、	根据订单状态查询订单
+     *
      * @param state
      * @param page
      * @param pagesize
      * @return
      */
-    public Data<Order> getOrderBystate(int uid,int state,int page,int pagesize){
+    public Data<Order> getOrderBystate(int uid, int state, int page, int pagesize) {
         Object[] objects = new Object[]{
-                "id",uid,"state",state,"page",page,"size",pagesize
+                "id", uid, "state", state, "page", page, "size", pagesize
         };
-        Response response = service.getWebservice(Api.GetOrderState,objects,WebService.Get);
+        Response response = service.getWebservice(Api.GetOrderState, objects, WebService.Get);
         Data<Order> data = new Data<>();
         List<Order> list = new ArrayList<>();
-        if(response.isSuccess("200")){
+        if (response.isSuccess("200")) {
             try {
                 Object[] ob = getDataFromJson(response.getData());
-                list = gson.fromJson(ob[2].toString(), new TypeToken<List<Order>>(){}.getType());
+                list = gson.fromJson(ob[2].toString(), new TypeToken<List<Order>>() {
+                }.getType());
                 data.setCount(Integer.parseInt(ob[0].toString()));
                 data.setTotal(Integer.parseInt(ob[1].toString()));
                 data.setList(list);
@@ -273,4 +291,161 @@ public class WebHelper {
         }
         return data;
     }
+
+    /**
+     * 根据订单号查询订单内容（销售端/仓库端：get）
+     *
+     * @param numberID
+     * @return
+     */
+    public OrderInfoEntity getOrderInfo(String numberID) {
+        Object[] objects = new Object[]{
+                "ordernumber", numberID
+        };
+        Response response = service.getWebservice(Api.ReturnOrder, objects, WebService.Get);
+        OrderInfoEntity data = new OrderInfoEntity();
+        if (response.isSuccess("200")) {
+            data = gson.fromJson(response.getData(), new TypeToken<OrderInfoEntity>() {
+            }.getType());
+        }
+        return data;
+    }
+
+    /**
+     * 十六、	鲜花确认配送（仓库端：get）
+     * @param handler
+     * @param id
+     */
+    public void confirmDelivery(Handler handler,int id) {
+        Object[] objects = new Object[]{
+                "id", id
+        };
+        Response response = service.getWebservice(Api.IsFlowerTrue, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+           Message msg=new Message();
+           msg.obj=response.getMessage();
+           msg.what=101;
+           handler.sendMessage(msg);
+        }else {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=-1;
+            handler.sendMessage(msg);
+        }
+    }
+
+    /**
+     * 十七、	待配货提交（仓库端：get）
+     * @param handler
+     * @param orderId
+     */
+    public void submitDelivery(Handler handler,String orderId) {
+        Object[] objects = new Object[]{
+                "order", orderId
+        };
+        Response response = service.getWebservice(Api.WatingSubmit, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=101;
+            handler.sendMessage(msg);
+        }else {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=-1;
+            handler.sendMessage(msg);
+        }
+    }
+
+    /**
+     *十八、	确认出库 （仓库端：get）
+     * @param handler
+     * @param orderId
+     */
+    public void warehouseOut(Handler handler,String orderId) {
+        Object[] objects = new Object[]{
+                "order", orderId
+        };
+        Response response = service.getWebservice(Api.WarehouseOut, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=101;
+            handler.sendMessage(msg);
+        }else {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=-1;
+            handler.sendMessage(msg);
+        }
+    }
+
+    /**
+     *
+     * @param handler
+     * @param orderId
+     * @param customer_name
+     * @param list
+     */
+    public void tobeReturned(Handler handler,String orderId,String customer_name,String list) {
+        Object[] objects = new Object[]{
+                "order", orderId,"customer_name",customer_name,"list",list
+        };
+        Response response = service.getWebservice(Api.Recover, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=101;
+            handler.sendMessage(msg);
+        }else {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=-1;
+            handler.sendMessage(msg);
+        }
+    }
+
+    /**
+     * 二十一、	填写回收损耗数据（仓库端：post）
+     * @param handler
+     * @param orderId
+     * @param list
+     */
+    public void Returned(Handler handler, String orderId, JSONArray list) {
+        Object[] objects = new Object[]{
+                "order", orderId,"list",list
+        };
+        Response response = service.getWebservice(Api.Writeloss, objects, WebService.Post);
+        if (response.isSuccess("200")) {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=101;
+            handler.sendMessage(msg);
+        }else {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=-1;
+            handler.sendMessage(msg);
+        }
+    }
+
+    public void uploadFile(Handler handler, File file) {
+        Object[] objects = new Object[]{
+                "file",file
+        };
+        Response response = service.upload(Api.ImgUpload+"?file="+file.getName(), file);
+        if (response.isSuccess("200")) {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=101;
+            handler.sendMessage(msg);
+        }else {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=-1;
+            handler.sendMessage(msg);
+        }
+    }
+
+
 }

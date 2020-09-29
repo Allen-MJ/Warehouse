@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_margin="@dimen/frame_four_distance"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/frame_four_distance"
+        app:cardElevation="@dimen/frame_two_distance">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/frame_edge_distance"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="@dimen/frame_four_distance"
+                android:text="xxxxxxx"
+                android:textSize="@dimen/frame_text_middle_size" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="@dimen/frame_eight_distance"
+                android:text="数量：100"
+                android:textSize="@dimen/frame_text_middle_size" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/frame_four_distance"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/frame_four_distance"
+        app:cardElevation="@dimen/frame_two_distance">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/frame_edge_distance"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="@dimen/frame_four_distance"
+                android:text="损耗:"
+                android:textSize="@dimen/frame_text_middle_size" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_sunhao"
+                android:layout_width="@dimen/frame_50_distance"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@null"
+                android:inputType="number"
+                android:padding="@dimen/frame_eight_distance"
+                android:text="20"
+                android:textColor="@color/order_text_red"
+                android:textSize="@dimen/frame_text_middle_size" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+</androidx.appcompat.widget.LinearLayoutCompat>

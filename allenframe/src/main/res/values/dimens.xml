@@ -15,6 +15,7 @@
     <dimen name="frame_32_distance">32dp</dimen>
     <dimen name="frame_45_distance">45dp</dimen>
     <dimen name="frame_43_distance">43dp</dimen>
+    <dimen name="frame_50_distance">50dp</dimen>
     <dimen name="frame_100_distance">100dp</dimen>
     <dimen name="frame_203_distance">203dp</dimen>
     <dimen name="frame_210_distance">210dp</dimen>

@@ -86,10 +86,25 @@ public class StringUtils {
 		if(object==null){
 			return null;
 		}
-		if(object instanceof String){
-			return "\""+object.toString()+"\"";
+		if (object instanceof String && !getJSONType(object.toString())) {
+			return "\"" + object.toString() + "\"";
 		}else{
 			return object.toString();
 		}
+	}
+
+	public static boolean getJSONType(String str) {
+		boolean result = false;
+		if (StringUtils.notEmpty(str)) {
+			str = str.trim();
+			if (str.startsWith("{") && str.endsWith("}")) {
+				result = true;
+			} else if (str.startsWith("[") && str.endsWith("]")) {
+				result = true;
+
+			}
+		}
+		return result;
+
 	}
 }

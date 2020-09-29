@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,9 +31,16 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
-import cn.allen.warehouse.adapter.AllOrderAdapter;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Order;
+import cn.allen.warehouse.order.DeliverFragment;
+import cn.allen.warehouse.order.DeliverXsFragment;
+import cn.allen.warehouse.order.ReturnedFragment;
+import cn.allen.warehouse.order.ReturnedXsFragment;
+import cn.allen.warehouse.order.ToBeReturnedFragment;
+import cn.allen.warehouse.order.ToBeReturnedXsFragment;
+import cn.allen.warehouse.order.WarehouseOutFragment;
+import cn.allen.warehouse.order.WarehouseOutXsFragment;
 import cn.allen.warehouse.utils.Constants;
 
 public class OrderFragment extends BaseFragment {
@@ -59,12 +65,13 @@ public class OrderFragment extends BaseFragment {
     private int page = 1;
     private int pagesize = 10;
     private int uid;
+    private int type;//0为仓库管理员  1为销售员
     private int state;
     @SuppressLint("HandlerLeak")
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 0:
                     actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_SUCCES, "");
 
@@ -96,7 +103,7 @@ public class OrderFragment extends BaseFragment {
     public static OrderFragment init(int state) {
         OrderFragment fragment = new OrderFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("state",state);
+        bundle.putInt("state", state);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -113,8 +120,8 @@ public class OrderFragment extends BaseFragment {
         actHelper = new ActivityHelper(getActivity(), view);
         unbinder = ButterKnife.bind(this, view);
         Bundle b = getArguments();
-        if(b!=null){
-            state=b.getInt("state");
+        if (b != null) {
+            state = b.getInt("state");
         }
         return view;
     }
@@ -134,6 +141,7 @@ public class OrderFragment extends BaseFragment {
 
     private void initUi(View view) {
         shared = AllenManager.getInstance().getStoragePreference();
+        type = shared.getInt(Constants.UserType, -1);
         uid = shared.getInt(Constants.UserId, -1);
         barSearch.setVisibility(View.GONE);
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
@@ -156,23 +164,23 @@ public class OrderFragment extends BaseFragment {
                 int statu = entity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                 switch (statu) {
                     case 1:
-                        holder.setText(R.id.order_state,"待配货");
+                        holder.setText(R.id.order_state, "待配货");
                         holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_logo_06));
                         break;
                     case 2:
-                        holder.setText(R.id.order_state,"待出库");
+                        holder.setText(R.id.order_state, "待出库");
                         holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_logo_02));
                         break;
                     case 3:
-                        holder.setText(R.id.order_state,"待回库");
+                        holder.setText(R.id.order_state, "待回库");
                         holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_logo_04));
                         break;
                     case 4:
-                        holder.setText(R.id.order_state,"已回库");
+                        holder.setText(R.id.order_state, "已回库");
                         holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_logo_28));
                         break;
                     case 5:
-                        holder.setText(R.id.order_state,"完成清点");
+                        holder.setText(R.id.order_state, "完成清点");
                         holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_logo_16));
                         break;
                 }
@@ -205,7 +213,39 @@ public class OrderFragment extends BaseFragment {
     private CommonAdapter.OnItemClickListener listener = new CommonAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-
+            Order order = list.get(position);
+            int statu = order.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
+            String id = order.getOrder_number();
+            switch (statu) {
+                case 1:
+                    if (type == 0) {
+                        onStartFragment(DeliverFragment.newInstance(id));
+                    } else if (type == 1) {
+                        onStartFragment(DeliverXsFragment.newInstance(id));
+                    }
+                    break;
+                case 2:
+                    if (type == 0) {
+                        onStartFragment(WarehouseOutFragment.newInstance(id));
+                    } else if (type == 1) {
+                        onStartFragment(WarehouseOutXsFragment.newInstance(id));
+                    }
+                    break;
+                case 3:
+                    if (type == 0) {
+                        onStartFragment(ToBeReturnedFragment.newInstance(id));
+                    } else if (type == 1) {
+                        onStartFragment(ToBeReturnedXsFragment.newInstance(id));
+                    }
+                    break;
+                case 4:
+                    if (type == 0) {
+                        onStartFragment(ReturnedFragment.newInstance(id));
+                    } else if (type == 1) {
+                        onStartFragment(ReturnedXsFragment.newInstance(id));
+                    }
+                    break;
+            }
         }
 
         @Override
@@ -215,10 +255,10 @@ public class OrderFragment extends BaseFragment {
     };
 
     private void loadData() {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
-                sublist = WebHelper.init().getOrderBystate(uid,state,page++, pagesize).getList();
+                sublist = WebHelper.init().getOrderBystate(uid, state, page++, pagesize).getList();
                 handler.sendEmptyMessage(0);
             }
         }.start();

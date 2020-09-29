@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".order.DeliverFragment">
+
+    <include layout="@layout/bar_back" />
+
+    <include
+        layout="@layout/alen_progress_layout"
+        android:visibility="gone" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/frame_eight_distance"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/frame_four_distance"
+        app:cardElevation="@dimen/frame_four_distance">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/layout_bottom">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:orientation="vertical">
+
+                    <include layout="@layout/order_xs_item_public_layout" />
+
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/layout_main"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/frame_eight_distance">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_main_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="历史配货:"
+                                android:textColor="@color/text_normal_color"
+                                android:textSize="@dimen/frame_text_normal_size" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerview_main"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:padding="@dimen/frame_four_distance" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/layout_children"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/frame_eight_distance">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_children_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="修改配货:"
+                                android:textColor="@color/text_normal_color"
+                                android:textSize="@dimen/frame_text_normal_size" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerview_children"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:padding="@dimen/frame_four_distance" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.core.widget.NestedScrollView>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical"
+                android:padding="@dimen/frame_eight_distance"
+                android:visibility="visible">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/frame_eight_distance"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/frame_four_distance"
+                    app:cardElevation="@dimen/frame_two_distance">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical|right"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/frame_eight_distance"
+                            android:text="已完成所有配货确认才能点击提交"
+                            android:textColor="@color/text_normal_color"
+                            android:textSize="@dimen/frame_text_smaller_size"
+                            android:visibility="gone" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/tv_submit"
+                            android:layout_width="@dimen/frame_203_distance"
+                            android:layout_height="@dimen/frame_50_distance"
+                            android:layout_marginLeft="@dimen/frame_eight_distance"
+                            android:layout_marginRight="@dimen/frame_edge_distance"
+                            android:background="@drawable/frame_btn_selector"
+                            android:text="@string/edit_order_bt"
+                            android:textColor="@color/text_white_color"
+                            android:textSize="@dimen/frame_text_normal_size" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+                </androidx.cardview.widget.CardView>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

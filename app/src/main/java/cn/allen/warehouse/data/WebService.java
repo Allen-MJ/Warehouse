@@ -3,6 +3,8 @@ package cn.allen.warehouse.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+
 import allen.frame.tools.Logger;
 import allen.frame.tools.StringUtils;
 import cn.allen.warehouse.entry.Response;
@@ -12,7 +14,7 @@ public class WebService {
     public static int Post = 1;
     private HttpUtil httpUtil;
 
-    public WebService(){
+    public WebService() {
         httpUtil = new HttpUtil();
     }
 
@@ -22,6 +24,10 @@ public class WebService {
         } else {
             return getResult(getOkHttpPost(MethodName, arrays));
         }
+    }
+
+    public Response upload(String MethodName, File file) {
+        return getResult(  httpUtil.uploadFile(MethodName, file));
     }
 
     public Response getWebservice(String MethodName, Object[] arrays) {
@@ -36,7 +42,7 @@ public class WebService {
                         + (arrays[i] == null ? "" : StringUtils.null2Empty(arrays[i].toString())));
             }
         }
-        Logger.http(MethodName,  "[" + sb.toString() + "]");
+        Logger.http(MethodName, "[" + sb.toString() + "]");
         return httpUtil.okhttpget(MethodName, sb.toString());
     }
 
@@ -49,7 +55,7 @@ public class WebService {
             }
         }
         sb.append("}");
-        Logger.http(MethodName,  "[" + sb.toString() + "]");
+        Logger.http(MethodName, "[" + sb.toString() + "]");
         return httpUtil.okhttppost(MethodName, sb.toString());
     }
 
