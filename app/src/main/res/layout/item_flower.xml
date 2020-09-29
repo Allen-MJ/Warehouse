@@ -19,12 +19,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <androidx.appcompat.widget.AppCompatImageView
+            <allen.frame.widget.PercentImageView
                 android:id="@+id/flower_item_icon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="fitCenter"
-                android:adjustViewBounds="true"/>
+                android:scaleType="fitXY"/>
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/flower_item_name"
                 android:layout_width="match_parent"

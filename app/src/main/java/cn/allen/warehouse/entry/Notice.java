@@ -2,6 +2,8 @@ package cn.allen.warehouse.entry;
 
 import java.io.Serializable;
 
+import allen.frame.tools.StringUtils;
+
 public class Notice implements Serializable {
     private int id;
     private String content;
@@ -52,7 +54,7 @@ public class Notice implements Serializable {
     }
 
     public void setCreatetime(String createtime) {
-        this.createtime = createtime;
+        this.createtime = StringUtils.null2Empty(createtime).replaceAll("T"," ");
     }
 
     public String getAddtimes() {
@@ -60,6 +62,6 @@ public class Notice implements Serializable {
     }
 
     public void setAddtimes(String addtimes) {
-        this.addtimes = addtimes;
+        this.addtimes = StringUtils.null2Empty(addtimes).replaceAll("T"," ");
     }
 }

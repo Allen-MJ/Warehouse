@@ -2,6 +2,8 @@ package cn.allen.warehouse.entry;
 
 import java.io.Serializable;
 
+import allen.frame.tools.StringUtils;
+
 public class Flower implements Serializable {
     private int id;
     private String name;
@@ -134,7 +136,7 @@ public class Flower implements Serializable {
     }
 
     public void setCreatetime(String createtime) {
-        this.createtime = createtime;
+        this.createtime = StringUtils.null2Empty(createtime).replaceAll("T"," ");
     }
 
     public int getState() {
@@ -174,7 +176,7 @@ public class Flower implements Serializable {
     }
 
     public void setAddtimes(String addtimes) {
-        this.addtimes = addtimes;
+        this.addtimes = StringUtils.null2Empty(addtimes).replaceAll("T"," ");
     }
 
     public String getTypename() {

@@ -2,6 +2,8 @@ package cn.allen.warehouse.entry;
 
 import java.io.Serializable;
 
+import allen.frame.tools.StringUtils;
+
 public class User implements Serializable {
     private int id;
     private String name;
@@ -66,7 +68,7 @@ public class User implements Serializable {
     }
 
     public void setCreatetime(String createtime) {
-        this.createtime = createtime;
+        this.createtime = StringUtils.null2Empty(createtime).replaceAll("T"," ");
     }
 
     public String getPhone() {

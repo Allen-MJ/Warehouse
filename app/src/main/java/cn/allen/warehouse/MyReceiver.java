@@ -80,7 +80,6 @@ public class MyReceiver extends BroadcastReceiver {
                 String content3 = bundle.getString("content");
                 Logger.e("Push_Demo", "receive TYPE_NOTIFICATION_OPENED, id=" + id3 + ", title=" + title3
                         + ", content=" + content3);
-                arg0.startService(new Intent(arg0,SpeekService.class).putExtra("content",content3));
                 /*
                  * MainActivity.print("receive TYPE_NOTIFICATION_OPENED, id=" + id3 + ", title=" + title3 + ", content="
                  * + content3, 0);

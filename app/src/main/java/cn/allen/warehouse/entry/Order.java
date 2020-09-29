@@ -2,6 +2,8 @@ package cn.allen.warehouse.entry;
 
 import java.io.Serializable;
 
+import allen.frame.tools.StringUtils;
+
 public class Order implements Serializable {
     private int id;
     private String customer_name;
@@ -113,7 +115,7 @@ public class Order implements Serializable {
     }
 
     public void setWedding_date(String wedding_date) {
-        this.wedding_date = wedding_date;
+        this.wedding_date = StringUtils.null2Empty(wedding_date).replaceAll("T"," ");
     }
 
     public String getDelivery_time() {
@@ -121,7 +123,7 @@ public class Order implements Serializable {
     }
 
     public void setDelivery_time(String delivery_time) {
-        this.delivery_time = delivery_time;
+        this.delivery_time = StringUtils.null2Empty(delivery_time).replaceAll("T"," ");
     }
 
     public String getRecovery_date() {
@@ -129,7 +131,7 @@ public class Order implements Serializable {
     }
 
     public void setRecovery_date(String recovery_date) {
-        this.recovery_date = recovery_date;
+        this.recovery_date = StringUtils.null2Empty(recovery_date).replaceAll("T"," ");
     }
 
     public String getRemark() {
@@ -161,7 +163,7 @@ public class Order implements Serializable {
     }
 
     public void setOrder_createtime(String order_createtime) {
-        this.order_createtime = order_createtime;
+        this.order_createtime = StringUtils.null2Empty(order_createtime).replaceAll("T"," ");
     }
 
     public int getActual_rent() {
@@ -201,7 +203,7 @@ public class Order implements Serializable {
     }
 
     public void setCollect_date(String collect_date) {
-        this.collect_date = collect_date;
+        this.collect_date = StringUtils.null2Empty(collect_date).replaceAll("T"," ");
     }
 
     public int getCollect_status() {
@@ -257,7 +259,7 @@ public class Order implements Serializable {
     }
 
     public void setAddtimes(String addtimes) {
-        this.addtimes = addtimes;
+        this.addtimes = StringUtils.null2Empty(addtimes).replaceAll("T"," ");
     }
 
     public String getWedding_dates() {
@@ -265,7 +267,7 @@ public class Order implements Serializable {
     }
 
     public void setWedding_dates(String wedding_dates) {
-        this.wedding_dates = wedding_dates;
+        this.wedding_dates = StringUtils.null2Empty(wedding_dates).replaceAll("T"," ");
     }
 
     public String getDelivery_times() {
@@ -273,7 +275,7 @@ public class Order implements Serializable {
     }
 
     public void setDelivery_times(String delivery_times) {
-        this.delivery_times = delivery_times;
+        this.delivery_times = StringUtils.null2Empty(delivery_times).replaceAll("T"," ");
     }
 
     public String getRecovery_dates() {
@@ -281,7 +283,7 @@ public class Order implements Serializable {
     }
 
     public void setRecovery_dates(String recovery_dates) {
-        this.recovery_dates = recovery_dates;
+        this.recovery_dates = StringUtils.null2Empty(recovery_dates).replaceAll("T"," ");
     }
 
     public int getNumber_id() {

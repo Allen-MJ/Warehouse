@@ -1,14 +1,18 @@
 package cn.allen.warehouse.flower;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 
+import java.util.Calendar;
 import java.util.List;
 
 import allen.frame.ActivityHelper;
@@ -56,12 +60,13 @@ public class FlowerFragment extends BaseFragment {
     CardView oderBt;
     private ActivityHelper actHelper;
     private SharedPreferences shared;
-    private int uid;
+    private int uid,id;
     private List<FlowerType> types;
     private FlowerParentMenuAdapter menuAdapter;
     private FlowerAdapter adapter;
     private List<Flower> list;
     private String startTime,endTime,name;
+    private Calendar c;
 
     public static FlowerFragment init() {
         FlowerFragment fragment = new FlowerFragment();
@@ -91,6 +96,7 @@ public class FlowerFragment extends BaseFragment {
     }
 
     private void initUi(View view) {
+        c = Calendar.getInstance();
         shared = AllenManager.getInstance().getStoragePreference();
         uid = shared.getInt(Constants.UserId, -1);
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
@@ -111,7 +117,21 @@ public class FlowerFragment extends BaseFragment {
         menuAdapter.setOnItemClickListener(new FlowerParentMenuAdapter.OnItemClickListener() {
             @Override
             public void itemClick(View v, FlowerType entry) {
-                loadFlowers(entry.getId());
+                id = entry.getId();
+                loadFlowers();
+            }
+        });
+        barSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    view.setEnabled(false);
+                    name = barSearch.getText().toString().trim();
+                    loadFlowers();
+                    view.setEnabled(true);
+                    return true;
+                }
+                return true;
             }
         });
     }
@@ -126,7 +146,7 @@ public class FlowerFragment extends BaseFragment {
         }).start();
     }
 
-    private void loadFlowers(int id) {
+    private void loadFlowers() {
         actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_START, "");
         new Thread(new Runnable() {
             @Override
@@ -139,17 +159,39 @@ public class FlowerFragment extends BaseFragment {
 
     @OnClick({R.id.ch_date, R.id.hs_date, R.id.oder_bt})
     public void onViewClicked(View view) {
+        view.setEnabled(false);
         switch (view.getId()) {
             case R.id.ch_date:
-
+                DatePickerDialog ch = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                startTime = year+"-"+(month+1>9?month+1:"0"+(month+1))+"-"+(dayOfMonth>9?dayOfMonth:"0"+dayOfMonth);
+                                chDate.setText(startTime);
+                                loadFlowers();
+                            }
+                        },
+                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                ch.show();
                 break;
             case R.id.hs_date:
-
+                DatePickerDialog hs = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                endTime = year+"-"+(month+1>9?month+1:"0"+(month+1))+"-"+(dayOfMonth>9?dayOfMonth:"0"+dayOfMonth);
+                                hsDate.setText(endTime);
+                                loadFlowers();
+                            }
+                        },
+                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                hs.show();
                 break;
             case R.id.oder_bt:
                 onStartFragment(XsOrderFragment.init());
                 break;
         }
+        view.setEnabled(true);
     }
 
     @SuppressLint("HandlerLeak")
