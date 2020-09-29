@@ -1,3 +1,4 @@
+include ':techain'
 include ':allenframe'
 include ':app'
 rootProject.name = "Warehouse"
