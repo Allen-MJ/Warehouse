@@ -54,7 +54,7 @@
         android:layout_margin="@dimen/frame_four_distance"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/frame_four_distance">
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/choice_item_rent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -63,7 +63,9 @@
             android:singleLine="true"
             android:paddingTop="@dimen/frame_eight_distance"
             android:paddingBottom="@dimen/frame_eight_distance"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:background="@android:color/transparent"
+            android:inputType="number"/>
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"

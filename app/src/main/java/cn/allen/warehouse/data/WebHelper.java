@@ -93,7 +93,7 @@ public class WebHelper {
                 msg.what = -1;
                 msg.obj = "数据异常!";
             }
-        } else {
+        }else{
             msg.what = -1;
             msg.obj = response.getMessage();
         }
@@ -448,4 +448,36 @@ public class WebHelper {
     }
 
 
+
+    /**
+     * 销售端下单
+     * @param handler
+     * @param customerName
+     * @param hotelAddress
+     * @param customerPhone
+     * @param weddingDate
+     * @param deliveryTime
+     * @param recoveryDate
+     * @param remark
+     * @param numberId
+     * @param money
+     * @param list
+     */
+    public void placingOrder(Handler handler, String customerName, String hotelAddress, String customerPhone, String weddingDate,
+                             String deliveryTime, String recoveryDate, String remark, int numberId, float money, String list){
+        Object[] objects = new Object[]{
+                "customer_name",customerName,"hotel_address",hotelAddress,"customer_phone",customerPhone,
+                "wedding_date",weddingDate,"delivery_time",deliveryTime,"recovery_date",recoveryDate,"remark",remark,"number_id",numberId,
+                "money",money,"list",list
+        };
+        Response response = service.getWebservice(Api.PlacingOrder,objects,WebService.Post);
+        Message msg = new Message();
+        if(response.isSuccess("200")){
+            msg.what = 0;
+        }else{
+            msg.what = -1;
+        }
+        msg.obj = response.getMessage();
+        handler.sendMessage(msg);
+    }
 }

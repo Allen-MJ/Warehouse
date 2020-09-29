@@ -1,10 +1,14 @@
 package cn.allen.warehouse.adapter;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import allen.frame.tools.StringUtils;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +41,7 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyDataSetChanged();
     }
     public void addList(Flower entry){
+        entry.setRent(1);
         list.add(entry);
         notifyDataSetChanged();
     }
@@ -44,6 +49,27 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void delete(int index){
         list.remove(index);
         notifyDataSetChanged();
+    }
+
+    public String getChoice(){
+        StringBuffer sb = new StringBuffer();
+        sb.append("[");
+        for(Flower flower:list){
+            sb.append(",{");
+            sb.append("\"id\":");
+            sb.append(flower.getId()+",");
+            sb.append("\"name\":");
+            sb.append("\""+flower.getName()+"\",");
+            sb.append("\"count\":");
+            sb.append(flower.getRent());
+            sb.append("}");
+        }
+        sb.append("]");
+        return sb.toString().replaceFirst(",","");
+    }
+
+    public ArrayList<Flower> getList(){
+        return (ArrayList<Flower>)list;
     }
 
     @NonNull
@@ -98,8 +124,9 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class ObjectHolder extends RecyclerView.ViewHolder{
 
-        private AppCompatTextView name,rent,stock;
+        private AppCompatTextView name,stock;
         private AppCompatImageView delete;
+        private AppCompatEditText rent;
         private View view;
         public ObjectHolder(@NonNull View itemView) {
             super(itemView);
@@ -123,6 +150,23 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             listener.deleteClick(view,position);
                         }
                         view.setEnabled(true);
+                    }
+                });
+                rent.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        String num = StringUtils.empty(charSequence.toString())?"1":charSequence.toString();
+                        list.get(position).setRent(Integer.parseInt(num));
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
                     }
                 });
             }

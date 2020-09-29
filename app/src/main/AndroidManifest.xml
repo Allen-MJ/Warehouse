@@ -36,6 +36,11 @@
             android:name=".MainActivity"
             android:screenOrientation="landscape">
         </activity>
+        <activity
+            android:name=".flower.FlowerChoiceActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.SwipeBack.Translucent">
+        </activity>
         <receiver
             android:name=".MyReceiver"
             android:exported="false" >

@@ -1,5 +1,9 @@
 package cn.allen.warehouse.flower;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,7 +11,14 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 
+import org.json.JSONArray;
+
+import java.util.Calendar;
+
+import allen.frame.tools.MsgUtils;
+import allen.frame.tools.StringUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -26,6 +37,7 @@ import butterknife.Unbinder;
 import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
 import cn.allen.warehouse.adapter.ChoiceFlowerAdapter;
+import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Flower;
 import cn.allen.warehouse.utils.Constants;
 
@@ -63,7 +75,10 @@ public class XsOrderFragment extends BaseFragment {
     private SharedPreferences shared;
     private int uid;
     private ChoiceFlowerAdapter adapter;
-
+    private Calendar c;
+    private String customerName, hotelAddress, customerPhone, weddingDate,deliveryTime, recoveryDate, remark;
+    private float money;
+    private String list;
     public static XsOrderFragment init() {
         XsOrderFragment fragment = new XsOrderFragment();
         return fragment;
@@ -76,6 +91,23 @@ public class XsOrderFragment extends BaseFragment {
         actHelper = new ActivityHelper(getActivity(), view);
         unbinder = ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode== Activity.RESULT_OK){
+            if(requestCode==11){
+                Flower flower = (Flower) data.getSerializableExtra("flower");
+                adapter.addList(flower);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        choiceRv.scrollToPosition(adapter.getItemCount()-1);
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -92,6 +124,7 @@ public class XsOrderFragment extends BaseFragment {
     }
 
     private void initUi(View view) {
+        c = Calendar.getInstance();
         shared = AllenManager.getInstance().getStoragePreference();
         uid = shared.getInt(Constants.UserId, -1);
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
@@ -114,7 +147,8 @@ public class XsOrderFragment extends BaseFragment {
 
         @Override
         public void addClick(View v) {
-            Flower flower = new Flower();
+            startActivityForResult(new Intent(getActivity(),FlowerChoiceActivity.class).putExtra("choice",adapter.getList()),11);
+            /*Flower flower = new Flower();
             flower.setId(1);
             flower.setName("ceshiasdasd");
             flower.setStock(1000);
@@ -125,7 +159,7 @@ public class XsOrderFragment extends BaseFragment {
                 public void run() {
                     choiceRv.scrollToPosition(adapter.getItemCount()-1);
                 }
-            });
+            });*/
         }
 
         @Override
@@ -141,21 +175,115 @@ public class XsOrderFragment extends BaseFragment {
                 backPreFragment();
                 break;
             case R.id.order_date_hl:
+                DatePickerDialog hl = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                orderDateHl.setText(year+"-"+(month+1>9?month+1:"0"+(month+1))+"-"+(dayOfMonth>9?dayOfMonth:"0"+dayOfMonth));
+                            }
+                        },
+                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                hl.show();
                 break;
             case R.id.order_date_ck:
+                DatePickerDialog ck = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                orderDateCk.setText(year+"-"+(month+1>9?month+1:"0"+(month+1))+"-"+(dayOfMonth>9?dayOfMonth:"0"+dayOfMonth));
+                            }
+                        },
+                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                ck.show();
                 break;
             case R.id.order_date_hs:
+                DatePickerDialog hs = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                orderDateHs.setText(year+"-"+(month+1>9?month+1:"0"+(month+1))+"-"+(dayOfMonth>9?dayOfMonth:"0"+dayOfMonth));
+                            }
+                        },
+                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                hs.show();
                 break;
             case R.id.order_commit:
+                if(checkIsOk()){
+                    placingOrder();
+                }
                 break;
         }
     }
 
+    private void placingOrder(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                WebHelper.init().placingOrder(handler,customerName, hotelAddress, customerPhone, weddingDate,deliveryTime, recoveryDate, remark,uid,money,list);
+            }
+        }).start();
+    }
+
+    private boolean checkIsOk(){
+//        customerName, hotelAddress, customerPhone, weddingDate,deliveryTime, recoveryDate, remark,numberId,money,list
+        customerName = orderKhName.getText().toString().trim();
+        hotelAddress = orderKhAddress.getText().toString().trim();
+        customerPhone = orderKhPhone.getText().toString().trim();
+        weddingDate = orderDateHl.getText().toString().trim();
+        deliveryTime = orderDateCk.getText().toString().trim();
+        recoveryDate = orderDateHs.getText().toString().trim();
+        remark = orderRemark.getText().toString().trim();
+        list = adapter.getChoice();
+        if(StringUtils.empty(customerName)){
+            MsgUtils.showMDMessage(getActivity(),"请输入客户姓名!");
+            return false;
+        }
+        if(StringUtils.empty(hotelAddress)){
+            MsgUtils.showMDMessage(getActivity(),"请输入酒店地址!");
+            return false;
+        }
+        if(StringUtils.empty(customerPhone)){
+            MsgUtils.showMDMessage(getActivity(),"请输入客户电话!");
+            return false;
+        }
+        if(StringUtils.empty(customerPhone)){
+            MsgUtils.showMDMessage(getActivity(),"请输入客户电话!");
+            return false;
+        }
+        if(StringUtils.empty(weddingDate)){
+            MsgUtils.showMDMessage(getActivity(),"请输入婚礼日期!");
+            return false;
+        }
+        if(StringUtils.empty(deliveryTime)){
+            MsgUtils.showMDMessage(getActivity(),"请输入出库日期!");
+            return false;
+        }
+        if(StringUtils.empty(recoveryDate)){
+            MsgUtils.showMDMessage(getActivity(),"请输入回收日期!");
+            return false;
+        }
+        if(list.length()==2){
+            MsgUtils.showMDMessage(getActivity(),"请选择鲜花!");
+            return false;
+        }
+
+        return true;
+    }
+
+    @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what){
-
+                case 0:
+                    actHelper.dismissProgressDialog();
+                    MsgUtils.showShortToast(getActivity(), (String) msg.obj);
+                    backPreFragment();
+                    break;
+                case -1:
+                    actHelper.dismissProgressDialog();
+                    MsgUtils.showMDMessage(getActivity(), (String) msg.obj);
+                    break;
             }
         }
     };
