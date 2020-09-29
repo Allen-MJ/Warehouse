@@ -67,11 +67,12 @@ public class AllOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         public void bind(final Order entry){
             if(entry!=null){
-                no.setText(entry.getOrder_number());
+                no.setText("订单号:"+entry.getOrder_number());
                 name.setText(entry.getCustomer_name());
                 address.setText(entry.getHotel_address());
                 ch.setText("出库时间:"+entry.getDelivery_time());
                 hs.setText("回收时间:"+entry.getRecovery_date());
+                person.setText("销售员:"+entry.getNumber_name());
                 address.setText(entry.getHotel_address());
                 status.setText(Constants.getStatusName(entry.getOrder_process()));
                 status.setCompoundDrawablesRelativeWithIntrinsicBounds(Constants.getStatusResId(entry.getOrder_process()),0,0,0);

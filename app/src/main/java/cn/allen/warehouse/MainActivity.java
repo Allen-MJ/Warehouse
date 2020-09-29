@@ -96,12 +96,7 @@ public class MainActivity extends AllenBaseActivity {
                 adapter.setCheck(String.valueOf(order.getId()));
             }else{
                 adapter.setCheck(String.valueOf(order.getId()));
-                startFragmentAdd(AllOrderFragment.init());
-//                getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.container, AllOrderFragment.init(), null)
-//                        .addToBackStack(null)
-//                        .commit();
+                startNextFragment(AllOrderFragment.init());
             }
         }
     };
@@ -174,6 +169,14 @@ public class MainActivity extends AllenBaseActivity {
                 break;
         }
         v.setEnabled(true);
+    }
+
+    private void startNextFragment(Fragment fragment){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, fragment, null)
+                .addToBackStack(null)
+                .commit();
     }
 
     // fragment的切换

@@ -15,6 +15,8 @@
         android:layout_marginTop="@dimen/frame_four_distance"
         android:layout_marginBottom="@dimen/frame_four_distance"
         android:foreground="?selectableItemBackground"
+        app:contentPaddingLeft="@dimen/frame_edge_distance"
+        app:contentPaddingRight="@dimen/frame_edge_distance"
         app:cardCornerRadius="@dimen/btn_radius">
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -30,7 +32,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/frame_text_smaller_size"
+                    android:textSize="@dimen/frame_text_smallst_size"
                     android:textColor="@color/text_gray_color"
                     android:padding="@dimen/frame_four_distance"
                     android:gravity="start"
@@ -58,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_black_color"
-                android:textSize="@dimen/frame_text_small_size"
+                android:textSize="@dimen/frame_text_middle_size"
                 android:padding="@dimen/frame_four_distance"
                 android:singleLine="true"/>
             <androidx.appcompat.widget.AppCompatTextView
@@ -89,7 +91,9 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/frame_text_smaller_size"
                     android:textColor="@color/text_black_color"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    android:layout_marginStart="@dimen/frame_four_distance"
+                    android:layout_marginEnd="@dimen/frame_four_distance"/>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/order_item_whperson"
                     android:layout_width="match_parent"

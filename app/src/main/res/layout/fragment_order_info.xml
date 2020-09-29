@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".order.OrderInfoFragment"
+    android:background="@color/gray_line_color">
+
+    <include layout="@layout/bar_back" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/frame_four_distance"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/frame_four_distance"
+        app:cardElevation="@dimen/frame_four_distance">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/frame_four_distance">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/frame_four_distance"
+                    android:text="基础信息"
+                    android:textColor="@color/text_normal_color"
+                    android:textSize="@dimen/frame_text_middle_size" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/order_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/frame_four_distance"
+                    android:text="订单号"
+                    android:textSize="@dimen/frame_text_normal_size" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/frame_four_distance"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/frame_four_distance"
+                app:cardElevation="@dimen/frame_four_distance">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/frame_four_distance">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/order_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/frame_four_distance"
+                            android:text="xxxxxxx"
+                            android:textColor="@color/text_normal_color"
+                            android:textSize="@dimen/frame_text_middle_size" />
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/order_state"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/frame_eight_distance"
+                            android:gravity="center_vertical"
+                            android:text="代配送"
+                            android:textColor="@color/order_text_red"
+                            android:textSize="@dimen/frame_text_small_size" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/frame_four_distance">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="地址:"
+                            android:textColor="@color/text_normal_color"
+                            android:textSize="@dimen/frame_text_normal_size" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_order_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                            android:textColor="@color/text_normal_color"
+                            android:textSize="@dimen/frame_text_normal_size" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/frame_four_distance">
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:paddingRight="@dimen/frame_four_distance">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="出库时间:"
+                                android:textColor="@color/text_normal_color"
+                                android:textSize="@dimen/frame_text_smaller_size" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_order_out_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="2020.9.25"
+                                android:textColor="@color/text_normal_color"
+                                android:textSize="@dimen/frame_text_smaller_size" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:paddingRight="@dimen/frame_four_distance">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="回收时间:"
+                                android:textColor="@color/text_normal_color"
+                                android:textSize="@dimen/frame_text_smaller_size" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_order_back_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="2020.9.25"
+                                android:textColor="@color/text_normal_color"
+                                android:textSize="@dimen/frame_text_smaller_size" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:paddingRight="@dimen/frame_four_distance"
+                            android:visibility="gone">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="销售员:"
+                                android:textColor="@color/text_normal_color"
+                                android:textSize="@dimen/frame_text_smaller_size" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_salesman"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="张三"
+                                android:textColor="@color/text_normal_color"
+                                android:textSize="@dimen/frame_text_smaller_size" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center_vertical|right"
+            android:padding="@dimen/frame_eight_distance"
+            android:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="已完成所有配货确认才能点击提交"
+                android:padding="@dimen/frame_eight_distance"
+                android:textColor="@color/text_normal_color"
+                android:textSize="@dimen/frame_text_smaller_size" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:background="@drawable/frame_btn_selector"
+                android:text="提交"
+                android:paddingTop="@dimen/frame_eight_distance"
+                android:paddingBottom="@dimen/frame_eight_distance"
+                android:paddingLeft="@dimen/frame_32_distance"
+                android:paddingRight="@dimen/frame_32_distance"
+                android:layout_gravity="center"
+                android:textColor="@color/text_normal_color"
+                android:textSize="@dimen/frame_text_smaller_size" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
