@@ -234,6 +234,7 @@ public class XsOrderFragment extends BaseFragment {
         recoveryDate = orderDateHs.getText().toString().trim();
         remark = orderRemark.getText().toString().trim();
         list = adapter.getChoice();
+        money = adapter.getMonney();
         if(StringUtils.empty(customerName)){
             MsgUtils.showMDMessage(getActivity(),"请输入客户姓名!");
             return false;

@@ -72,6 +72,14 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return (ArrayList<Flower>)list;
     }
 
+    public float getMonney(){
+        float money = 0f;
+        for(Flower flower:list){
+            money = money + flower.getUnit_price()*flower.getRent();
+        }
+        return money;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
