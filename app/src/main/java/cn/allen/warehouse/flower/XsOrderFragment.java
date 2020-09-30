@@ -106,6 +106,7 @@ public class XsOrderFragment extends BaseFragment {
                         choiceRv.scrollToPosition(adapter.getItemCount()-1);
                     }
                 });
+                orderMoney.setText("¥"+adapter.getMonney());
             }
         }
     }
