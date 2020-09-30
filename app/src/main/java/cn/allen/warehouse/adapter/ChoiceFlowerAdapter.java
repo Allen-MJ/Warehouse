@@ -170,6 +170,9 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                         String num = StringUtils.empty(charSequence.toString())?"1":charSequence.toString();
                         list.get(position).setRent(Integer.parseInt(num));
+                        if(listener!=null){
+                            listener.numEdit(view);
+                        }
                     }
 
                     @Override

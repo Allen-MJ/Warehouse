@@ -149,23 +149,11 @@ public class XsOrderFragment extends BaseFragment {
         @Override
         public void addClick(View v) {
             startActivityForResult(new Intent(getActivity(),FlowerChoiceActivity.class).putExtra("choice",adapter.getList()),11);
-            /*Flower flower = new Flower();
-            flower.setId(1);
-            flower.setName("ceshiasdasd");
-            flower.setStock(1000);
-            flower.setRent(11);
-            adapter.addList(flower);
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    choiceRv.scrollToPosition(adapter.getItemCount()-1);
-                }
-            });*/
         }
 
         @Override
         public void numEdit(View v) {
-
+            orderMoney.setText("¥"+adapter.getMonney());
         }
     };
 
