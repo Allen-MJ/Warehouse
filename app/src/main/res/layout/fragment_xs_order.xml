@@ -131,6 +131,7 @@
                                 android:textSize="@dimen/frame_text_small_size"
                                 android:background="@android:color/transparent"
                                 android:padding="@dimen/frame_eight_distance"
+                                android:inputType="phone"
                                 android:hint="@string/order_kh_phone_hint"
                                 android:gravity="center"/>
                         </androidx.appcompat.widget.LinearLayoutCompat>

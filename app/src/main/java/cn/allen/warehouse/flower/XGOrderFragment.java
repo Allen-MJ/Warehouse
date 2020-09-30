@@ -19,6 +19,8 @@ import java.util.Calendar;
 
 import allen.frame.ActivityHelper;
 import allen.frame.AllenManager;
+import allen.frame.tools.CheckUtils;
+import allen.frame.tools.Logger;
 import allen.frame.tools.MsgUtils;
 import allen.frame.tools.StringUtils;
 import androidx.annotation.NonNull;
@@ -38,6 +40,7 @@ import cn.allen.warehouse.R;
 import cn.allen.warehouse.adapter.ChoiceFlowerAdapter;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Flower;
+import cn.allen.warehouse.entry.Order;
 import cn.allen.warehouse.utils.Constants;
 
 public class XGOrderFragment extends BaseFragment {
@@ -90,6 +93,7 @@ public class XGOrderFragment extends BaseFragment {
     private String list;
     private AddReciver addReciver;
     private String no;
+    private Order order;
 
     public static XGOrderFragment init(String orderno) {
         XGOrderFragment fragment = new XGOrderFragment();
@@ -136,17 +140,20 @@ public class XGOrderFragment extends BaseFragment {
         adapter = new ChoiceFlowerAdapter();
         choiceRv.setLayoutManager(manager);
         choiceRv.setAdapter(adapter);
+        baseUpdate.setVisibility(View.VISIBLE);
+        dateUpdate.setVisibility(View.VISIBLE);
+        remarkUpdate.setVisibility(View.VISIBLE);
+        flowerUpdate.setVisibility(View.VISIBLE);
         setBaseUpdate(false);
         setDateUpdate(false);
         setRemarkUpdate(false);
+        loaddata();
     }
 
     private void setBaseUpdate(boolean isUpdate){
         orderKhName.setEnabled(isUpdate);
         orderKhAddress.setEnabled(isUpdate);
         orderKhPhone.setEnabled(isUpdate);
-        delete.setVisibility(View.GONE);
-        adapter.setUpdate(false);
     }
 
     private void setDateUpdate(boolean isUpdate){
@@ -181,7 +188,8 @@ public class XGOrderFragment extends BaseFragment {
         }
     };
 
-    @OnClick({R.id.back_bt, R.id.order_date_hl, R.id.order_date_ck, R.id.order_date_hs, R.id.order_commit,R.id.base_update, R.id.date_update, R.id.remark_update, R.id.flower_update})
+    @OnClick({R.id.back_bt, R.id.order_date_hl, R.id.order_date_ck, R.id.order_date_hs, R.id.order_commit,R.id.base_update,
+            R.id.date_update, R.id.remark_update, R.id.flower_update})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_bt:
@@ -222,7 +230,7 @@ public class XGOrderFragment extends BaseFragment {
                 break;
             case R.id.order_commit:
                 if (checkIsOk()) {
-                    placingOrder();
+                    updateOrder();
                 }
                 break;
             case R.id.base_update:
@@ -235,17 +243,27 @@ public class XGOrderFragment extends BaseFragment {
                 setRemarkUpdate(true);
                 break;
             case R.id.flower_update:
-                delete.setVisibility(View.VISIBLE);
-                adapter.setUpdate(true);
                 break;
         }
     }
 
-    private void placingOrder() {
+    private void updateOrder() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                WebHelper.init().placingOrder(handler, customerName, hotelAddress, customerPhone, weddingDate, deliveryTime, recoveryDate, remark, uid, money, list);
+                WebHelper.init().updateOrder(handler, no, customerName, hotelAddress, customerPhone, weddingDate, deliveryTime, recoveryDate, remark, uid, money, list);
+            }
+        }).start();
+    }
+
+    private void loaddata(){
+        actHelper.showProgressDialog("");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                order = WebHelper.init().getOrderByNo(handler,no);
+                Logger.e("debug","order+++++");
+                handler.sendEmptyMessage(1);
             }
         }).start();
     }
@@ -273,8 +291,8 @@ public class XGOrderFragment extends BaseFragment {
             MsgUtils.showMDMessage(getActivity(), "请输入客户电话!");
             return false;
         }
-        if (StringUtils.empty(customerPhone)) {
-            MsgUtils.showMDMessage(getActivity(), "请输入客户电话!");
+        if (CheckUtils.phoneIsOk(customerPhone)) {
+            MsgUtils.showMDMessage(getActivity(), "请输入正确的手机号码!");
             return false;
         }
         if (StringUtils.empty(weddingDate)) {
@@ -314,6 +332,23 @@ public class XGOrderFragment extends BaseFragment {
                 case -1:
                     actHelper.dismissProgressDialog();
                     MsgUtils.showMDMessage(getActivity(), (String) msg.obj);
+                    break;
+                case 1:
+                    actHelper.dismissProgressDialog();
+                    if(order!=null){
+                        orderKhName.setText(order.getCustomer_name());
+                        orderKhAddress.setText(order.getHotel_address());
+                        orderKhPhone.setText(order.getCustomer_phone());
+                        orderDateHl.setText(order.getWedding_date().substring(0,10));
+                        orderDateCk.setText(order.getDelivery_time().substring(0,10));
+                        orderDateHs.setText(order.getRecovery_date().substring(0,10));
+                        orderRemark.setText(order.getRemark());
+                        adapter.addList(order.getMainchildren());
+                        orderMoney.setText("¥" + adapter.getMonney());
+                    }else{
+                        MsgUtils.showMDMessage(getActivity(),"数据查询失败!");
+                        backPreFragment();
+                    }
                     break;
             }
         }

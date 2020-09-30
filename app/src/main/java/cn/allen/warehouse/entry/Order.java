@@ -1,6 +1,7 @@
 package cn.allen.warehouse.entry;
 
 import java.io.Serializable;
+import java.util.List;
 
 import allen.frame.tools.StringUtils;
 
@@ -13,7 +14,7 @@ public class Order implements Serializable {
     private String delivery_time;
     private String recovery_date;
     private String remark;
-    private int rent;//租金
+    private float rent;//租金
     private String order_number;
     private String order_createtime;
     private int actual_rent;//实际收的租金
@@ -33,6 +34,33 @@ public class Order implements Serializable {
     private String recovery_dates;//子订单号
     private int number_id;//销售id
     private String number_name;
+    private List<Flower> children;
+    private List<Flower> mainchildren;
+    private List<Image> Images;
+
+    public List<Flower> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Flower> children) {
+        this.children = children;
+    }
+
+    public List<Flower> getMainchildren() {
+        return mainchildren;
+    }
+
+    public void setMainchildren(List<Flower> mainchildren) {
+        this.mainchildren = mainchildren;
+    }
+
+    public List<Image> getImages() {
+        return Images;
+    }
+
+    public void setImages(List<Image> images) {
+        Images = images;
+    }
 
     public Order() {
     }
@@ -142,11 +170,11 @@ public class Order implements Serializable {
         this.remark = remark;
     }
 
-    public int getRent() {
+    public float getRent() {
         return rent;
     }
 
-    public void setRent(int rent) {
+    public void setRent(float rent) {
         this.rent = rent;
     }
 
@@ -292,5 +320,65 @@ public class Order implements Serializable {
 
     public void setNumber_id(int number_id) {
         this.number_id = number_id;
+    }
+
+    class Image implements Serializable{
+        private int id;
+        private String order_id;
+        private String img;
+        private String createtime;
+        private String addtimes;
+        private String customer_name;
+
+        public Image() {
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getOrder_id() {
+            return order_id;
+        }
+
+        public void setOrder_id(String order_id) {
+            this.order_id = order_id;
+        }
+
+        public String getImg() {
+            return img;
+        }
+
+        public void setImg(String img) {
+            this.img = img;
+        }
+
+        public String getCreatetime() {
+            return createtime;
+        }
+
+        public void setCreatetime(String createtime) {
+            this.createtime = createtime;
+        }
+
+        public String getAddtimes() {
+            return addtimes;
+        }
+
+        public void setAddtimes(String addtimes) {
+            this.addtimes = addtimes;
+        }
+
+        public String getCustomer_name() {
+            return customer_name;
+        }
+
+        public void setCustomer_name(String customer_name) {
+            this.customer_name = customer_name;
+        }
     }
 }

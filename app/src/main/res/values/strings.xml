@@ -60,5 +60,9 @@
     <string name="edit_order_bt">修改订单</string>
     <string name="add_order_bt">追加订单</string>
 
+    <string name="add_order_main_no">主订单号</string>
+    <string name="add_order_main_info">主订单客户信息</string>
+    <string name="add_order_flower">追加鲜花</string>
+
     <!--通用 end-->
 </resources>

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,14 @@ import cn.allen.warehouse.R;
 import cn.allen.warehouse.adapter.AllOrderAdapter;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Order;
+import cn.allen.warehouse.order.DeliverFragment;
+import cn.allen.warehouse.order.DeliverXsFragment;
+import cn.allen.warehouse.order.ReturnedFragment;
+import cn.allen.warehouse.order.ReturnedXsFragment;
+import cn.allen.warehouse.order.ToBeReturnedFragment;
+import cn.allen.warehouse.order.ToBeReturnedXsFragment;
+import cn.allen.warehouse.order.WarehouseOutFragment;
+import cn.allen.warehouse.order.WarehouseOutXsFragment;
 import cn.allen.warehouse.utils.Constants;
 
 public class AllOrderFragment extends BaseFragment {
@@ -56,10 +65,14 @@ public class AllOrderFragment extends BaseFragment {
     private boolean isRefresh = false;
     private int page = 1;
     private int pagesize = 10;
-    private int uid;
+    private int uid,type;
+    private String no;
 
-    public static AllOrderFragment init() {
+    public static AllOrderFragment init(String no) {
         AllOrderFragment fragment = new AllOrderFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("no",no);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -86,8 +99,11 @@ public class AllOrderFragment extends BaseFragment {
     }
 
     private void initUi(View view) {
+        no = getArguments().getString("no");
+        barSearch.setText(no);
         shared = AllenManager.getInstance().getStoragePreference();
         uid = shared.getInt(Constants.UserId, -1);
+        type = shared.getInt(Constants.UserType,-1);
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
         adapter = new AllOrderAdapter();
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
@@ -100,6 +116,22 @@ public class AllOrderFragment extends BaseFragment {
     private void addEvent(View view) {
         mater.setMaterialRefreshListener(materListener);
         adapter.setOnItemClickListener(listener);
+        barSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    view.setEnabled(false);
+                    no = barSearch.getText().toString().trim();
+                    page = 1;
+                    actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_START,"");
+                    isRefresh = true;
+                    loadData();
+                    view.setEnabled(true);
+                    return true;
+                }
+                return true;
+            }
+        });
     }
 
     private MaterialRefreshListener materListener = new MaterialRefreshListener() {
@@ -119,8 +151,39 @@ public class AllOrderFragment extends BaseFragment {
 
     private AllOrderAdapter.OnItemClickListener listener = new AllOrderAdapter.OnItemClickListener() {
         @Override
-        public void itemClick(View v, Order entry) {
-
+        public void itemClick(View v, Order order) {
+            int statu = order.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
+            String id = order.getOrder_number();
+            switch (statu) {
+                case 1:
+                    if (type == 0) {
+                        onStartFragment(DeliverFragment.newInstance(id));
+                    } else if (type == 1) {
+                        onStartFragment(DeliverXsFragment.newInstance(id));
+                    }
+                    break;
+                case 2:
+                    if (type == 0) {
+                        onStartFragment(WarehouseOutFragment.newInstance(id));
+                    } else if (type == 1) {
+                        onStartFragment(WarehouseOutXsFragment.newInstance(id));
+                    }
+                    break;
+                case 3:
+                    if (type == 0) {
+                        onStartFragment(ToBeReturnedFragment.newInstance(id));
+                    } else if (type == 1) {
+                        onStartFragment(ToBeReturnedXsFragment.newInstance(id));
+                    }
+                    break;
+                case 4:
+                    if (type == 0) {
+                        onStartFragment(ReturnedFragment.newInstance(id));
+                    } else if (type == 1) {
+                        onStartFragment(ReturnedXsFragment.newInstance(id));
+                    }
+                    break;
+            }
         }
     };
 
@@ -128,7 +191,7 @@ public class AllOrderFragment extends BaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                sublist = WebHelper.init().getAllOrder(uid, page++, pagesize).getList();
+                sublist = WebHelper.init().getAllOrder(uid, no, page++, pagesize).getList();
                 handler.sendEmptyMessage(0);
             }
         }).start();

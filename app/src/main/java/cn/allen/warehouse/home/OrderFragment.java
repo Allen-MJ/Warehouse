@@ -143,7 +143,7 @@ public class OrderFragment extends BaseFragment {
         shared = AllenManager.getInstance().getStoragePreference();
         type = shared.getInt(Constants.UserType, -1);
         uid = shared.getInt(Constants.UserId, -1);
-        barSearch.setVisibility(View.GONE);
+        barSearch.setVisibility(View.INVISIBLE);
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
         initAdapter();
         actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_START, "");

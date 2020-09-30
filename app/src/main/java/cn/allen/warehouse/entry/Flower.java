@@ -6,11 +6,14 @@ import allen.frame.tools.StringUtils;
 
 public class Flower implements Serializable {
     private int id;
+    private int flower_id;
     private String name;
-    private int stock;
+    private String flower_name;
+    private int stock;//库存
+    private int scheduled_quantity;//预定数量
     private int big_id;
     private int small_id;
-    private int rent;
+    private float rent;
     private float rent_loss;
     private String img;
     private int warehouse;
@@ -49,6 +52,30 @@ public class Flower implements Serializable {
                 ", typename='" + typename + '\'' +
                 ", warehousename='" + warehousename + '\'' +
                 '}';
+    }
+
+    public int getScheduled_quantity() {
+        return scheduled_quantity;
+    }
+
+    public void setScheduled_quantity(int scheduled_quantity) {
+        this.scheduled_quantity = scheduled_quantity;
+    }
+
+    public int getFlower_id() {
+        return flower_id;
+    }
+
+    public void setFlower_id(int flower_id) {
+        this.flower_id = flower_id;
+    }
+
+    public String getFlower_name() {
+        return flower_name;
+    }
+
+    public void setFlower_name(String flower_name) {
+        this.flower_name = flower_name;
     }
 
     public int getId() {
@@ -91,11 +118,11 @@ public class Flower implements Serializable {
         this.small_id = small_id;
     }
 
-    public int getRent() {
+    public float getRent() {
         return rent;
     }
 
-    public void setRent(int rent) {
+    public void setRent(float rent) {
         this.rent = rent;
     }
 

@@ -1,15 +1,19 @@
 package cn.allen.warehouse.home;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +38,7 @@ import cn.allen.warehouse.adapter.ShowOrderAdapter;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Notice;
 import cn.allen.warehouse.entry.ShowOrder;
+import cn.allen.warehouse.flower.XsOrderFragment;
 import cn.allen.warehouse.utils.Constants;
 
 public class SaleHomeFragment extends BaseFragment {
@@ -52,11 +58,15 @@ public class SaleHomeFragment extends BaseFragment {
     RecyclerView showRv;
     @BindView(R.id.notice_rv)
     RecyclerView noticeRv;
+    @BindView(R.id.oder_bt)
+    CardView oderBt;
     private ShowOrderAdapter adapter;
     private List<ShowOrder> showOrders;
     private SharedPreferences shared;
     private NoticeAdapter noticeAdapter;
     private List<Notice> notices;
+    private Calendar c;
+    private int type;
 
     public static SaleHomeFragment init() {
         SaleHomeFragment fragment = new SaleHomeFragment();
@@ -85,13 +95,20 @@ public class SaleHomeFragment extends BaseFragment {
     }
 
     private void initUi(View view) {
+        c = Calendar.getInstance();
         shared = AllenManager.getInstance().getStoragePreference();
+        type = shared.getInt(Constants.UserType,-1);
+        if(type==1){
+            oderBt.setVisibility(View.VISIBLE);
+        }else{
+            oderBt.setVisibility(View.GONE);
+        }
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
         adapter = new ShowOrderAdapter();
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
         showRv.setLayoutManager(manager);
         showRv.setAdapter(adapter);
-        GridLayoutManager manager1 = new GridLayoutManager(getActivity(),2);
+        GridLayoutManager manager1 = new GridLayoutManager(getActivity(), 2);
         noticeRv.setLayoutManager(manager1);
         noticeAdapter = new NoticeAdapter();
         noticeRv.setAdapter(noticeAdapter);
@@ -103,9 +120,22 @@ public class SaleHomeFragment extends BaseFragment {
         adapter.setOnItemClickListener(new ShowOrderAdapter.OnItemClickListener() {
             @Override
             public void itemClick(View v, ShowOrder entry) {
-                if(OnItemMenuClickLisenter!=null){
+                if (OnItemMenuClickLisenter != null) {
                     OnItemMenuClickLisenter.itemMenu(entry);
                 }
+            }
+        });
+        barSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    view.setEnabled(false);
+                    String no = barSearch.getText().toString().trim();
+                    onStartFragment(AllOrderFragment.init(no));
+                    view.setEnabled(true);
+                    return true;
+                }
+                return true;
             }
         });
     }
@@ -114,20 +144,25 @@ public class SaleHomeFragment extends BaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Map<String,Integer> map = WebHelper.init().getOrderNumber();
+                Map<String, Integer> map = WebHelper.init().getOrderNumber();
+                int num1 = map.get("1") == null ? 0 : map.get("1");
+                int num2 = map.get("2") == null ? 0 : map.get("2");
+                int num3 = map.get("3") == null ? 0 : map.get("3");
+                int num4 = map.get("4") == null ? 0 : map.get("4");
+                int num5 = map.get("5") == null ? 0 : map.get("5");
                 showOrders = new ArrayList<>();
-                showOrders.add(new ShowOrder(0, "所有订单", 0));
-                showOrders.add(new ShowOrder(1, "待配货", map.get("1")==null?0:map.get("1")));
-                showOrders.add(new ShowOrder(2, "待出库", map.get("2")==null?0:map.get("2")));
-                showOrders.add(new ShowOrder(3, "待回收", map.get("3")==null?0:map.get("3")));
-                showOrders.add(new ShowOrder(4, "已回收", map.get("4")==null?0:map.get("4")));
-                showOrders.add(new ShowOrder(5, "完成清算", map.get("5")==null?0:map.get("5")));
+                showOrders.add(new ShowOrder(0, "所有订单", (num1 + num2 + num3 + num4 + num5)));
+                showOrders.add(new ShowOrder(1, "待配货", num1));
+                showOrders.add(new ShowOrder(2, "待出库", num2));
+                showOrders.add(new ShowOrder(3, "待回收", num3));
+                showOrders.add(new ShowOrder(4, "已回收", num4));
+                showOrders.add(new ShowOrder(5, "完成清算", num5));
                 handler.sendEmptyMessage(0);
             }
         }).start();
     }
 
-    private void loadMsg(){
+    private void loadMsg() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -137,22 +172,45 @@ public class SaleHomeFragment extends BaseFragment {
         }).start();
     }
 
-    @OnClick({R.id.bar_notice, R.id.start_date, R.id.end_date})
+    @OnClick({R.id.bar_notice, R.id.start_date, R.id.end_date, R.id.oder_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bar_notice:
+
                 break;
             case R.id.start_date:
+                DatePickerDialog start = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                startDate.setText(year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth));
+                            }
+                        },
+                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                start.show();
                 break;
             case R.id.end_date:
+                DatePickerDialog end = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                endDate.setText(year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth));
+                            }
+                        },
+                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                end.show();
+                break;
+            case R.id.oder_bt:
+                onStartFragment(XsOrderFragment.init());
                 break;
         }
     }
+
     @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 0:
                     adapter.setList(showOrders);
                     break;
@@ -164,11 +222,13 @@ public class SaleHomeFragment extends BaseFragment {
     };
 
     private OnItemMenuClickLisenter OnItemMenuClickLisenter;
-    public Fragment setOnItemMenuClickLisenter(OnItemMenuClickLisenter OnItemMenuClickLisenter){
+
+    public Fragment setOnItemMenuClickLisenter(OnItemMenuClickLisenter OnItemMenuClickLisenter) {
         this.OnItemMenuClickLisenter = OnItemMenuClickLisenter;
         return this;
     }
-    public interface OnItemMenuClickLisenter{
+
+    public interface OnItemMenuClickLisenter {
         void itemMenu(ShowOrder order);
     }
 }

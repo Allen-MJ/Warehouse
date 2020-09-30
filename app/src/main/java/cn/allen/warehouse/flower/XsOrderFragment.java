@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import java.io.FileFilter;
 import java.util.Calendar;
 
+import allen.frame.tools.CheckUtils;
 import allen.frame.tools.MsgUtils;
 import allen.frame.tools.StringUtils;
 import androidx.annotation.NonNull;
@@ -227,8 +228,8 @@ public class XsOrderFragment extends BaseFragment {
             MsgUtils.showMDMessage(getActivity(),"请输入客户电话!");
             return false;
         }
-        if(StringUtils.empty(customerPhone)){
-            MsgUtils.showMDMessage(getActivity(),"请输入客户电话!");
+        if (CheckUtils.phoneIsOk(customerPhone)) {
+            MsgUtils.showMDMessage(getActivity(), "请输入正确的手机号码!");
             return false;
         }
         if(StringUtils.empty(weddingDate)){

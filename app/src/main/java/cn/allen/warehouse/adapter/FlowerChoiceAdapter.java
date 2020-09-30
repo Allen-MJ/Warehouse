@@ -42,7 +42,7 @@ public class FlowerChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         int size = choice==null?0:choice.size();
         if(size>0){
             for(Flower flower:choice){
-                select.put(flower.getId(),true);
+                select.put((flower.getFlower_id()>0?flower.getFlower_id():flower.getId()),true);
             }
         }
         notifyDataSetChanged();
@@ -94,12 +94,16 @@ public class FlowerChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onClick(View view) {
                         view.setEnabled(false);
-                        if(listener!=null&&!select.get(entry.getId())){
+                        if(listener!=null&&!select.get(entry.getId())&&entry.getStock()>0){
                             add(position);
                             MsgUtils.showShortToast(view.getContext(),"已添加!");
                             listener.addClick(view,entry);
                         }else{
-                            MsgUtils.showShortToast(view.getContext(),"已在列表中!");
+                            if(entry.getStock()==0){
+                                MsgUtils.showShortToast(view.getContext(),"暂无库存!");
+                            }else{
+                                MsgUtils.showShortToast(view.getContext(),"已在列表中!");
+                            }
                         }
                         view.setEnabled(true);
                     }

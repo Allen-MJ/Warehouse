@@ -109,9 +109,9 @@ public class WebHelper {
      * @param pagesize
      * @return
      */
-    public Data<Order> getAllOrder(int uid, int page, int pagesize) {
+    public Data<Order> getAllOrder(int uid, String no, int page, int pagesize) {
         Object[] objects = new Object[]{
-                "id", uid, "page", page, "size", pagesize
+                "id", uid, "order", no,"page", page, "size", pagesize
         };
         Response response = service.getWebservice(Api.GetAllOrder, objects, WebService.Get);
         Data<Order> data = new Data<>();
@@ -481,5 +481,79 @@ public class WebHelper {
         }
         msg.obj = response.getMessage();
         handler.sendMessage(msg);
+    }
+
+    /**
+     * 修改订单
+     * @param handler
+     * @param ordernumber
+     * @param customerName
+     * @param hotelAddress
+     * @param customerPhone
+     * @param weddingDate
+     * @param deliveryTime
+     * @param recoveryDate
+     * @param remark
+     * @param numberId
+     * @param money
+     * @param list
+     */
+    public void updateOrder(Handler handler, String ordernumber, String customerName, String hotelAddress, String customerPhone, String weddingDate,
+                             String deliveryTime, String recoveryDate, String remark, int numberId, float money, String list){
+        Object[] objects = new Object[]{
+                "ordernumber",ordernumber,"customer_name",customerName,"hotel_address",hotelAddress,"customer_phone",customerPhone,
+                "wedding_date",weddingDate,"delivery_time",deliveryTime,"recovery_date",recoveryDate,"remark",remark,"number_id",numberId,
+                "money",money,"list",list
+        };
+        Response response = service.getWebservice(Api.UpdateOrder,objects,WebService.Post);
+        Message msg = new Message();
+        if(response.isSuccess("200")){
+            msg.what = 0;
+        }else{
+            msg.what = -1;
+        }
+        msg.obj = response.getMessage();
+        handler.sendMessage(msg);
+    }
+
+    /**
+     * 追加订单
+     * @param handler
+     * @param ordernumber
+     * @param money
+     * @param list
+     */
+    public void additionalOrder(Handler handler, String ordernumber, float money, String list){
+        Object[] objects = new Object[]{
+                "ordernumber",ordernumber,
+                "money",money,"list",list
+        };
+        Response response = service.getWebservice(Api.AdditionalOrder,objects,WebService.Post);
+        Message msg = new Message();
+        if(response.isSuccess("200")){
+            msg.what = 0;
+        }else{
+            msg.what = -1;
+        }
+        msg.obj = response.getMessage();
+        handler.sendMessage(msg);
+    }
+
+    /**
+     * 根据订单号获取订单详情
+     * @param handler
+     * @param no
+     * @return
+     */
+    public Order getOrderByNo(Handler handler,String no){
+        Order order = null;
+        Object[] objects = new Object[]{
+                "ordernumber", no
+        };
+        Response response = service.getWebservice(Api.ReturnOrder, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            order = gson.fromJson(response.getData(), new TypeToken<Order>() {}.getType());
+        }
+        return order;
     }
 }

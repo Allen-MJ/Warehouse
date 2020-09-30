@@ -96,7 +96,7 @@ public class MainActivity extends AllenBaseActivity {
                 adapter.setCheck(String.valueOf(order.getId()));
             }else{
                 adapter.setCheck(String.valueOf(order.getId()));
-                startNextFragment(AllOrderFragment.init());
+                startNextFragment(AllOrderFragment.init(""));
             }
         }
     };

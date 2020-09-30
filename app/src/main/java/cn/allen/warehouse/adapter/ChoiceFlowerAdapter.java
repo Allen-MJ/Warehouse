@@ -27,34 +27,32 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<Flower> list;
     private final int Type_Add = 0;
     private final int Type_List = 1;
-    private boolean isUpdate = true;
 
     public ChoiceFlowerAdapter(){
         list = new ArrayList<>();
     }
 
     public void setList(List<Flower> list){
-        this.list = list;
+        if(list!=null){
+            this.list = list;
+        }
         notifyDataSetChanged();
     }
 
     public void addList(List<Flower> list){
-        this.list.addAll(list);
+        if(list!=null){
+            this.list.addAll(list);
+        }
         notifyDataSetChanged();
     }
     public void addList(Flower entry){
-        entry.setRent(1);
+        entry.setScheduled_quantity(1);
         list.add(entry);
         notifyDataSetChanged();
     }
 
     public void delete(int index){
         list.remove(index);
-        notifyDataSetChanged();
-    }
-
-    public void setUpdate(boolean isUpdate){
-        this.isUpdate = isUpdate;
         notifyDataSetChanged();
     }
 
@@ -66,9 +64,9 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             sb.append("\"id\":");
             sb.append(flower.getId()+",");
             sb.append("\"name\":");
-            sb.append("\""+flower.getName()+"\",");
+            sb.append("\""+(flower.getFlower_id()>0?flower.getFlower_name():flower.getName())+"\",");
             sb.append("\"count\":");
-            sb.append(flower.getRent());
+            sb.append(flower.getScheduled_quantity());
             sb.append("}");
         }
         sb.append("]");
@@ -82,7 +80,7 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public float getMonney(){
         float money = 0f;
         for(Flower flower:list){
-            money = money + flower.getUnit_price()*flower.getRent();
+            money = money + flower.getRent()*flower.getScheduled_quantity();
         }
         return money;
     }
@@ -111,26 +109,18 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        if(isUpdate){
-            return list==null?1:list.size()+1;
-        }else{
-            return list==null?0:list.size();
-        }
+        return list==null?1:list.size()+1;
     }
 
     @Override
     public int getItemViewType(int position) {
         int size = list==null?0:list.size();
-        if(isUpdate){
-            if(size==0){
-                return Type_Add;
-            }else if(position<size){
-                return Type_List;
-            }else{
-                return Type_Add;
-            }
-        }else{
+        if(size==0){
+            return Type_Add;
+        }else if(position<size){
             return Type_List;
+        }else{
+            return Type_Add;
         }
     }
 
@@ -162,11 +152,9 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         public void bind(final Flower entry,int position){
             if(entry!=null){
-                name.setText(entry.getName());
+                name.setText(entry.getFlower_id()>0?entry.getFlower_name():entry.getName());
                 stock.setText(String.valueOf(entry.getStock()));
-                rent.setText(String.valueOf(entry.getRent()));
-                rent.setEnabled(isUpdate);
-                deleteView.setVisibility(isUpdate?View.VISIBLE:View.GONE);
+                rent.setText(String.valueOf(entry.getScheduled_quantity()));
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -190,10 +178,14 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         int count = Integer.parseInt(num);
                         if(count>entry.getStock()){
                             MsgUtils.showShortToast(view.getContext(),"库存不足!");
-                            list.get(position).setRent(entry.getStock());
+                            list.get(position).setScheduled_quantity(entry.getStock());
                             rent.setText(""+entry.getStock());
+                        }else if(count==0){
+                            MsgUtils.showShortToast(view.getContext(),"预定数不能为!");
+                            list.get(position).setScheduled_quantity(1);
+                            rent.setText("1");
                         }else{
-                            list.get(position).setRent(count);
+                            list.get(position).setScheduled_quantity(count);
                         }
                         if(listener!=null){
                             listener.numEdit(view);
