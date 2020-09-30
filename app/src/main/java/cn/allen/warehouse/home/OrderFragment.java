@@ -63,7 +63,7 @@ public class OrderFragment extends BaseFragment {
     private List<Order> list, sublist;
     private boolean isRefresh = false;
     private int page = 1;
-    private int pagesize = 10;
+    private int pagesize = 20;
     private int uid;
     private int type;//0为仓库管理员  1为销售员
     private int state;

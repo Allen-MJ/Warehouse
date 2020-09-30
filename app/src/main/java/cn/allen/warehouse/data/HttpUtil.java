@@ -12,6 +12,7 @@ import cn.allen.warehouse.utils.Constants;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -21,7 +22,7 @@ public class HttpUtil {
     private static final long TIME_OUT = 120;//单位秒S
     private String url;
 
-    public HttpUtil(){
+    public HttpUtil() {
         url = Constants.Url;
     }
 
@@ -75,22 +76,26 @@ public class HttpUtil {
     }
 
     // 使用OkHttp上传文件
-    public String uploadFile(String mothed,File file) {
+    public String uploadFile(String mothed, File file) {
         String data = "";
         try {
-        OkHttpClient client = new OkHttpClient();
-        MediaType contentType = MediaType.parse("image/jpeg; charset=utf-8"); // 上传文件的Content-Type
-        RequestBody body = RequestBody.create(contentType, file); // 上传文件的请求体
-        Request request = new Request.Builder()
-                .url(url+mothed) // 上传地址
-                .post(body)
-                .build();
-        Response response = null;
-        response = client.newCall(request).execute();
-        Logger.http("Response>>", response.toString());
-        if (response.isSuccessful()) {
-            data = response.body().string();
-        }
+            OkHttpClient client = new OkHttpClient();
+            MediaType contentType = MediaType.parse("image/jpeg; charset=utf-8"); // 上传文件的Content-Type
+            // 上传文件使用MultipartBody.Builder
+            RequestBody body = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("file", file.getName(), RequestBody.create(contentType, file)) // 提交图片，第一个参数是键（name="第一个参数"），第二个参数是文件名，第三个是一个RequestBody
+                    .build();
+            Request request = new Request.Builder()
+                    .url(url + mothed) // 上传地址
+                    .post(body)
+                    .build();
+            Response response = null;
+            response = client.newCall(request).execute();
+            Logger.http("Response>>", response.toString());
+            if (response.isSuccessful()) {
+                data = response.body().string();
+            }
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

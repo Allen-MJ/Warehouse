@@ -36,13 +36,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.ImageEntity;
 import cn.allen.warehouse.entry.OrderInfoEntity;
+import cn.allen.warehouse.flower.XGOrderFragment;
+import cn.allen.warehouse.flower.XsOrderFragment;
 import cn.allen.warehouse.utils.Constants;
 
-public class ReturnedXsFragment extends Fragment {
+public class ReturnedXsFragment extends BaseFragment {
     Unbinder unbinder;
     @BindView(R.id.back_bt)
     AppCompatImageView barBack;
@@ -324,10 +327,14 @@ public class ReturnedXsFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.tv_submit})
+    @OnClick({R.id.tv_submit,R.id.back_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_submit:
+                onStartFragment(XGOrderFragment.init(numberID));
+                break;
+            case R.id.back_bt:
+                backPreFragment();
                 break;
         }
 

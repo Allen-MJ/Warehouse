@@ -29,6 +29,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,13 +50,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.ImageEntity;
 import cn.allen.warehouse.entry.OrderInfoEntity;
 import cn.allen.warehouse.utils.Constants;
 
-public class ToBeReturnedFragment extends Fragment {
+public class ToBeReturnedFragment extends BaseFragment {
     Unbinder unbinder;
     @BindView(R.id.back_bt)
     AppCompatImageView barBack;
@@ -106,7 +111,8 @@ public class ToBeReturnedFragment extends Fragment {
     private List<OrderInfoEntity.MainchildrenBean> mainList;
     private String numberID;
     private OrderInfoEntity orderInfoEntity;
-    private List<ImageEntity> imageEntityList=new ArrayList<>();
+    private List<ImageEntity> imageEntityList = new ArrayList<>();
+    private CommonAdapter<ImageEntity> imageAdapter;
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -155,10 +161,16 @@ public class ToBeReturnedFragment extends Fragment {
                     }
 
                     break;
+                case 102:
+                    String url=(String)msg.obj;
+                    ImageEntity imageEntity=new ImageEntity();
+                    imageEntity.setMess(url);
+                    imageEntityList.add(imageEntity);
+                    imageAdapter.setDatas(imageEntityList);
                 case 101:
                     actHelper.dismissProgressDialog();
                     MsgUtils.showLongToast(getContext(), (String) msg.obj);
-                    loadData();
+                    backPreFragment();
                     break;
                 case -1:
                     actHelper.dismissProgressDialog();
@@ -224,20 +236,20 @@ public class ToBeReturnedFragment extends Fragment {
         }.start();
     }
 
-    private void upload(){
-        new Thread(){
+    private void upload() {
+        new Thread() {
             @Override
             public void run() {
-                WebHelper.init().uploadFile(handler,file);
+                WebHelper.init().uploadFile(handler, file);
             }
         }.start();
     }
 
-    private void submit() {
+    private void submit(JSONArray imageJson) {
         new Thread() {
             @Override
             public void run() {
-//                WebHelper.init().tobeReturned(handler, numberID, orderInfoEntity.getCustomer_name(), imagelist);
+                WebHelper.init().tobeReturned(handler, numberID, orderInfoEntity.getCustomer_name(), imageJson);
             }
         }.start();
     }
@@ -271,6 +283,15 @@ public class ToBeReturnedFragment extends Fragment {
         };
         recyclerviewMain.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerviewMain.setAdapter(mainAdapter);
+
+        imageAdapter = new CommonAdapter<ImageEntity>(getContext(), R.layout.order_image_item_layout) {
+            @Override
+            public void convert(ViewHolder holder, ImageEntity entity, int position) {
+                holder.setImageByUrl(R.id.image, entity.getMess(), R.drawable.mis_default_error);
+            }
+        };
+        recyclerviewImage.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerviewImage.setAdapter(imageAdapter);
     }
 
     private void addEvent(View view) {
@@ -297,22 +318,36 @@ public class ToBeReturnedFragment extends Fragment {
     private void commitFile(Uri uri) {
         String path = FileUtils.getPath(getContext(), Uri.fromFile(imgFile));
         file = new File(path);
-        ImageEntity imageEntity=new ImageEntity();
-        imageEntity.setFile(file);
-        imageEntityList.add(imageEntity);
         upload();
     }
 
 
-    @OnClick({R.id.tv_submit,R.id.image})
+    @OnClick({R.id.tv_submit, R.id.image, R.id.back_bt})
     public void onViewClicked(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.image:
                 takePhone();
                 break;
             case R.id.tv_submit:
+
+                JSONArray array = new JSONArray();
+                if (imageEntityList!=null&&!imageEntityList.isEmpty()) {
+                    for (int i = 0; i < imageEntityList.size(); i++) {
+                        try {
+                           ImageEntity imageEntity = imageEntityList.get(i);
+                            JSONObject object = new JSONObject();
+                            object.put("imgs", imageEntity.getMess());
+                            array.put(object);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
                 actHelper.showProgressDialog("");
-                submit();
+                submit(array);
+                break;
+            case R.id.back_bt:
+                backPreFragment();
                 break;
         }
 

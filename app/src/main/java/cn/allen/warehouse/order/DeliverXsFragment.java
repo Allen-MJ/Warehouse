@@ -31,12 +31,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.OrderInfoEntity;
+import cn.allen.warehouse.flower.XGOrderFragment;
+import cn.allen.warehouse.flower.XsOrderFragment;
 import cn.allen.warehouse.utils.Constants;
 
-public class DeliverXsFragment extends Fragment {
+public class DeliverXsFragment extends BaseFragment {
     Unbinder unbinder;
     @BindView(R.id.back_bt)
     AppCompatImageView barBack;
@@ -219,15 +222,6 @@ public class DeliverXsFragment extends Fragment {
         }.start();
     }
 
-    private void submit() {
-        new Thread() {
-            @Override
-            public void run() {
-                WebHelper.init().submitDelivery(handler, numberID);
-            }
-        }.start();
-    }
-
     private void initAdapter() {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_info_item_layout) {
@@ -235,20 +229,14 @@ public class DeliverXsFragment extends Fragment {
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
                 holder.setText(R.id.tv_name, entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
+                holder.setVisible(R.id.btn_submit, false);
+                holder.setVisible(R.id.tv_submit, true);
                 int status = entity.getId_check();
                 if (status == 0) {
-                    holder.setVisible(R.id.btn_submit, true);
-                    holder.setVisible(R.id.tv_submit, false);
+                    holder.setText(R.id.tv_submit, "未配货");
                 } else {
-                    holder.setVisible(R.id.btn_submit, false);
-                    holder.setVisible(R.id.tv_submit, true);
+                    holder.setText(R.id.tv_submit, "已成功配货");
                 }
-                holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        confirm(entity.getId());
-                    }
-                });
             }
         };
         recyclerviewChildren.setLayoutManager(manager);
@@ -259,20 +247,14 @@ public class DeliverXsFragment extends Fragment {
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
                 holder.setText(R.id.tv_name, entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
+                holder.setVisible(R.id.btn_submit, false);
+                holder.setVisible(R.id.tv_submit, true);
                 int status = entity.getId_check();
                 if (status == 0) {
-                    holder.setVisible(R.id.btn_submit, true);
-                    holder.setVisible(R.id.tv_submit, false);
+                    holder.setText(R.id.tv_submit, "未配货");
                 } else {
-                    holder.setVisible(R.id.btn_submit, false);
-                    holder.setVisible(R.id.tv_submit, true);
+                    holder.setText(R.id.tv_submit, "已成功配货");
                 }
-                holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        confirm(entity.getId());
-                    }
-                });
             }
         };
         recyclerviewMain.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -296,8 +278,15 @@ public class DeliverXsFragment extends Fragment {
         }
     };
 
-    @OnClick(R.id.tv_submit)
-    public void onViewClicked() {
-
+    @OnClick({R.id.tv_submit,R.id.back_bt})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_submit:
+                onStartFragment(XGOrderFragment.init(numberID));
+                break;
+            case R.id.back_bt:
+                backPreFragment();
+                break;
+        }
     }
 }

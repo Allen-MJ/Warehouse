@@ -22,6 +22,7 @@ import allen.frame.tools.Logger;
 import cn.allen.warehouse.entry.Data;
 import cn.allen.warehouse.entry.Flower;
 import cn.allen.warehouse.entry.FlowerType;
+import cn.allen.warehouse.entry.ImageEntity;
 import cn.allen.warehouse.entry.Notice;
 import cn.allen.warehouse.entry.Order;
 import cn.allen.warehouse.entry.OrderInfoEntity;
@@ -347,7 +348,7 @@ public class WebHelper {
         if (response.isSuccess("200")) {
             Message msg=new Message();
             msg.obj=response.getMessage();
-            msg.what=101;
+            msg.what=102;
             handler.sendMessage(msg);
         }else {
             Message msg=new Message();
@@ -370,7 +371,7 @@ public class WebHelper {
         if (response.isSuccess("200")) {
             Message msg=new Message();
             msg.obj=response.getMessage();
-            msg.what=101;
+            msg.what=102;
             handler.sendMessage(msg);
         }else {
             Message msg=new Message();
@@ -387,11 +388,11 @@ public class WebHelper {
      * @param customer_name
      * @param list
      */
-    public void tobeReturned(Handler handler,String orderId,String customer_name,String list) {
+    public void tobeReturned(Handler handler,String orderId,String customer_name,JSONArray list) {
         Object[] objects = new Object[]{
                 "order", orderId,"customer_name",customer_name,"list",list
         };
-        Response response = service.getWebservice(Api.Recover, objects, WebService.Get);
+        Response response = service.getWebservice(Api.Recover, objects, WebService.Post);
         if (response.isSuccess("200")) {
             Message msg=new Message();
             msg.obj=response.getMessage();
@@ -419,7 +420,7 @@ public class WebHelper {
         if (response.isSuccess("200")) {
             Message msg=new Message();
             msg.obj=response.getMessage();
-            msg.what=101;
+            msg.what=102;
             handler.sendMessage(msg);
         }else {
             Message msg=new Message();
@@ -433,11 +434,12 @@ public class WebHelper {
         Object[] objects = new Object[]{
                 "file",file
         };
-        Response response = service.upload(Api.ImgUpload+"?file="+file.getName(), file);
+        Response response = service.upload(Api.ImgUpload, file);
+        ImageEntity data = new ImageEntity();
         if (response.isSuccess("200")) {
             Message msg=new Message();
-            msg.obj=response.getMessage();
-            msg.what=101;
+            msg.obj=response.getData();
+            msg.what=102;
             handler.sendMessage(msg);
         }else {
             Message msg=new Message();

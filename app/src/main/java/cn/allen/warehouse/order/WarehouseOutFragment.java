@@ -31,12 +31,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.OrderInfoEntity;
 import cn.allen.warehouse.utils.Constants;
 
-public class WarehouseOutFragment extends Fragment {
+public class WarehouseOutFragment extends BaseFragment {
     Unbinder unbinder;
     @BindView(R.id.back_bt)
     AppCompatImageView barBack;
@@ -138,6 +139,11 @@ public class WarehouseOutFragment extends Fragment {
                     actHelper.dismissProgressDialog();
                     MsgUtils.showLongToast(getContext(), (String) msg.obj);
                     loadData();
+                    break;
+                case 102:
+                    actHelper.dismissProgressDialog();
+                    MsgUtils.showLongToast(getContext(), (String) msg.obj);
+                    backPreFragment();
                     break;
                 case -1:
                     actHelper.dismissProgressDialog();
@@ -278,9 +284,16 @@ public class WarehouseOutFragment extends Fragment {
         }
     };
 
-    @OnClick(R.id.tv_submit)
-    public void onViewClicked() {
-        actHelper.showProgressDialog("");
-        warehouseOut();
+    @OnClick({R.id.tv_submit, R.id.back_bt})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_submit:
+                actHelper.showProgressDialog("");
+                warehouseOut();
+                break;
+            case R.id.back_bt:
+                backPreFragment();
+                break;
+        }
     }
 }
