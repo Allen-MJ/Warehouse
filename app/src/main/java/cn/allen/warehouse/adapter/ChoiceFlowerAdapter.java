@@ -27,6 +27,7 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<Flower> list;
     private final int Type_Add = 0;
     private final int Type_List = 1;
+    private boolean isUpdate = true;
 
     public ChoiceFlowerAdapter(){
         list = new ArrayList<>();
@@ -49,6 +50,11 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void delete(int index){
         list.remove(index);
+        notifyDataSetChanged();
+    }
+
+    public void setUpdate(boolean isUpdate){
+        this.isUpdate = isUpdate;
         notifyDataSetChanged();
     }
 
@@ -105,18 +111,26 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return list==null?1:list.size()+1;
+        if(isUpdate){
+            return list==null?1:list.size()+1;
+        }else{
+            return list==null?0:list.size();
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
         int size = list==null?0:list.size();
-        if(size==0){
-            return Type_Add;
-        }else if(position<size){
-            return Type_List;
+        if(isUpdate){
+            if(size==0){
+                return Type_Add;
+            }else if(position<size){
+                return Type_List;
+            }else{
+                return Type_Add;
+            }
         }else{
-            return Type_Add;
+            return Type_List;
         }
     }
 
@@ -136,7 +150,7 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private AppCompatTextView name,stock;
         private AppCompatImageView delete;
         private AppCompatEditText rent;
-        private View view;
+        private View view,deleteView;
         public ObjectHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.choice_item_name);
@@ -144,12 +158,15 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             stock = itemView.findViewById(R.id.choice_item_stock);
             delete = itemView.findViewById(R.id.choice_item_delete);
             view = itemView.findViewById(R.id.item_layout);
+            deleteView = itemView.findViewById(R.id.item_delete);
         }
         public void bind(final Flower entry,int position){
             if(entry!=null){
                 name.setText(entry.getName());
                 stock.setText(String.valueOf(entry.getStock()));
                 rent.setText(String.valueOf(entry.getRent()));
+                rent.setEnabled(isUpdate);
+                deleteView.setVisibility(isUpdate?View.VISIBLE:View.GONE);
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
