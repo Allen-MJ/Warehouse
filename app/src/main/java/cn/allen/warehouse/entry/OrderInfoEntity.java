@@ -3,6 +3,8 @@ package cn.allen.warehouse.entry;
 import java.io.Serializable;
 import java.util.List;
 
+import allen.frame.tools.StringUtils;
+
 public class OrderInfoEntity implements Serializable {
 
     /**
@@ -108,7 +110,7 @@ public class OrderInfoEntity implements Serializable {
     }
 
     public void setWedding_date(String wedding_date) {
-        this.wedding_date = wedding_date;
+        this.wedding_date = StringUtils.null2Empty(wedding_date).replaceAll("T"," ");
     }
 
     public String getDelivery_time() {
@@ -116,7 +118,7 @@ public class OrderInfoEntity implements Serializable {
     }
 
     public void setDelivery_time(String delivery_time) {
-        this.delivery_time = delivery_time;
+        this.delivery_time = StringUtils.null2Empty(delivery_time).replaceAll("T"," ");
     }
 
     public String getRecovery_date() {
@@ -124,7 +126,7 @@ public class OrderInfoEntity implements Serializable {
     }
 
     public void setRecovery_date(String recovery_date) {
-        this.recovery_date = recovery_date;
+        this.recovery_date = StringUtils.null2Empty(recovery_date).replaceAll("T"," ");
     }
 
     public String getRemark() {
@@ -156,7 +158,7 @@ public class OrderInfoEntity implements Serializable {
     }
 
     public void setOrder_createtime(String order_createtime) {
-        this.order_createtime = order_createtime;
+        this.order_createtime = StringUtils.null2Empty(order_createtime).replaceAll("T"," ");
     }
 
     public double getActual_rent() {
@@ -196,7 +198,7 @@ public class OrderInfoEntity implements Serializable {
     }
 
     public void setCollect_date(String collect_date) {
-        this.collect_date = collect_date;
+        this.collect_date = StringUtils.null2Empty(collect_date).replaceAll("T"," ");
     }
 
     public int getCollect_status() {
@@ -252,7 +254,7 @@ public class OrderInfoEntity implements Serializable {
     }
 
     public void setAddtimes(String addtimes) {
-        this.addtimes = addtimes;
+        this.addtimes = StringUtils.null2Empty(addtimes).replaceAll("T"," ");
     }
 
     public String getWedding_dates() {
@@ -260,7 +262,7 @@ public class OrderInfoEntity implements Serializable {
     }
 
     public void setWedding_dates(String wedding_dates) {
-        this.wedding_dates = wedding_dates;
+        this.wedding_dates = StringUtils.null2Empty(wedding_dates).replaceAll("T"," ");
     }
 
     public String getDelivery_times() {
@@ -268,7 +270,7 @@ public class OrderInfoEntity implements Serializable {
     }
 
     public void setDelivery_times(String delivery_times) {
-        this.delivery_times = delivery_times;
+        this.delivery_times = StringUtils.null2Empty(delivery_times).replaceAll("T"," ");
     }
 
     public String getRecovery_dates() {
@@ -276,7 +278,7 @@ public class OrderInfoEntity implements Serializable {
     }
 
     public void setRecovery_dates(String recovery_dates) {
-        this.recovery_dates = recovery_dates;
+        this.recovery_dates = StringUtils.null2Empty(recovery_dates).replaceAll("T"," ");
     }
 
     public int getNumber_id() {
@@ -425,7 +427,7 @@ public class OrderInfoEntity implements Serializable {
         }
 
         public void setCreatetime(String createtime) {
-            this.createtime = createtime;
+            this.createtime = StringUtils.null2Empty(createtime).replaceAll("T"," ");
         }
 
         public int getMain_ornot() {
@@ -456,8 +458,8 @@ public class OrderInfoEntity implements Serializable {
             return addtimes;
         }
 
-        public void setAddtimes(Object addtimes) {
-            this.addtimes = addtimes;
+        public void setAddtimes(String addtimes) {
+            this.addtimes = StringUtils.null2Empty(addtimes).replaceAll("T"," ");
         }
 
         public Object getOrder_number() {
@@ -517,7 +519,7 @@ public class OrderInfoEntity implements Serializable {
         private int main_ornot;
         private int zd1;
         private Object zd2;
-        private Object addtimes;
+        private String addtimes;
         private Object order_number;
         private int id_check;
         private int flower_id;
@@ -591,7 +593,7 @@ public class OrderInfoEntity implements Serializable {
         }
 
         public void setCreatetime(String createtime) {
-            this.createtime = createtime;
+            this.createtime = StringUtils.null2Empty(createtime).replaceAll("T"," ");
         }
 
         public int getMain_ornot() {
@@ -618,12 +620,12 @@ public class OrderInfoEntity implements Serializable {
             this.zd2 = zd2;
         }
 
-        public Object getAddtimes() {
+        public String getAddtimes() {
             return addtimes;
         }
 
-        public void setAddtimes(Object addtimes) {
-            this.addtimes = addtimes;
+        public void setAddtimes(String addtimes) {
+            this.addtimes = StringUtils.null2Empty(addtimes).replaceAll("T"," ");
         }
 
         public Object getOrder_number() {
@@ -665,7 +667,7 @@ public class OrderInfoEntity implements Serializable {
         private String order_id;
         private String img;
         private String createtime;
-        private Object addtimes;
+        private String addtimes;
         private String customer_name;
 
         public int getId() {
@@ -697,15 +699,15 @@ public class OrderInfoEntity implements Serializable {
         }
 
         public void setCreatetime(String createtime) {
-            this.createtime = createtime;
+            this.createtime = StringUtils.null2Empty(createtime).replaceAll("T"," ");
         }
 
-        public Object getAddtimes() {
+        public String getAddtimes() {
             return addtimes;
         }
 
-        public void setAddtimes(Object addtimes) {
-            this.addtimes = addtimes;
+        public void setAddtimes(String addtimes) {
+            this.addtimes = StringUtils.null2Empty(addtimes).replaceAll("T"," ");
         }
 
         public String getCustomer_name() {
