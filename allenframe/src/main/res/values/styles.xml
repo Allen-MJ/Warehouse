@@ -72,7 +72,6 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
-    
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
     	<item name="android:textSize">@dimen/frame_text_middle_size</item>
 	</style>

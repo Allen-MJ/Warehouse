@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import allen.frame.tools.MsgUtils;
 import allen.frame.tools.StringUtils;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
@@ -169,7 +170,14 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                         String num = StringUtils.empty(charSequence.toString())?"1":charSequence.toString();
-                        list.get(position).setRent(Integer.parseInt(num));
+                        int count = Integer.parseInt(num);
+                        if(count>entry.getStock()){
+                            MsgUtils.showShortToast(view.getContext(),"库存不足!");
+                            list.get(position).setRent(entry.getStock());
+                            rent.setText(""+entry.getStock());
+                        }else{
+                            list.get(position).setRent(count);
+                        }
                         if(listener!=null){
                             listener.numEdit(view);
                         }

@@ -50,6 +50,7 @@ public class FlowerChoiceActivity extends AllenIMBaseActivity {
     @Override
     protected void initBar() {
         ButterKnife.bind(this);
+        barSearch.setHint("查询鲜花名称");
     }
 
     @Override
@@ -80,8 +81,9 @@ public class FlowerChoiceActivity extends AllenIMBaseActivity {
         adapter.setOnItemClickListener(new FlowerChoiceAdapter.OnItemClickListener() {
             @Override
             public void addClick(View v, Flower flower) {
-                setResult(RESULT_OK,new Intent().putExtra("flower",flower));
-                finish();
+//                setResult(RESULT_OK,new Intent().putExtra("flower",flower));
+//                finish();
+                sendBroadcast(new Intent("add_flower").putExtra("flower",flower));
             }
         });
     }

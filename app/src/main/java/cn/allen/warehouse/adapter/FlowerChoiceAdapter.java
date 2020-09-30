@@ -89,7 +89,7 @@ public class FlowerChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public void bind(final Flower entry,int position){
             if(entry!=null){
                 name.setText(entry.getName());
-                stock.setText(String.valueOf(entry.getStock()));
+                stock.setText("库存："+entry.getStock());
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

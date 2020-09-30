@@ -16,11 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 
-import org.json.JSONArray;
-
-import java.io.FileFilter;
 import java.util.Calendar;
 
+import allen.frame.ActivityHelper;
+import allen.frame.AllenManager;
 import allen.frame.tools.MsgUtils;
 import allen.frame.tools.StringUtils;
 import androidx.annotation.NonNull;
@@ -31,9 +30,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import allen.frame.ActivityHelper;
-import allen.frame.AllenManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,7 +41,7 @@ import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Flower;
 import cn.allen.warehouse.utils.Constants;
 
-public class XsOrderFragment extends BaseFragment {
+public class XGOrderFragment extends BaseFragment {
     Unbinder unbinder;
     @BindView(R.id.bar_notice)
     AppCompatImageView barNotice;
@@ -84,8 +80,12 @@ public class XsOrderFragment extends BaseFragment {
     private float money;
     private String list;
     private AddReciver addReciver;
-    public static XsOrderFragment init() {
-        XsOrderFragment fragment = new XsOrderFragment();
+    private String no;
+    public static XGOrderFragment init(String orderno) {
+        XGOrderFragment fragment = new XGOrderFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("no",orderno);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -116,6 +116,7 @@ public class XsOrderFragment extends BaseFragment {
     }
 
     private void initUi(View view) {
+        no = getArguments().getString("no");
         c = Calendar.getInstance();
         shared = AllenManager.getInstance().getStoragePreference();
         uid = shared.getInt(Constants.UserId, -1);
