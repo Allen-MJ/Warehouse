@@ -3,4 +3,7 @@
     <color name="colorPrimary">#FF357B</color>
     <color name="colorPrimaryDark">#FF357B</color>
     <color name="colorAccent">#FF357B</color>
+    <color name="trans">#00000000</color>
+    <color name="colorbtm">#CC363636</color>
+    <color name="colorbtmHs">#80000000</color>
 </resources>

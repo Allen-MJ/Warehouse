@@ -32,7 +32,7 @@ public class CheckUtils {
 //		卫星通信：1349；虚拟运营商：170、171
 		Pattern p = Pattern.compile("^((13[0-9])|(14[1,4-9])|(15[^4,\\D])|(166)|(17[0-8])|(18[0-9])|(19[8,9]))\\d{8}$");
 		Matcher m = p.matcher(phone);
-	    if (TextUtils.isEmpty(phone)) return false;  
+	    if (TextUtils.isEmpty(phone)) return false;
 	    else return m.matches();
 	}
 	/** 

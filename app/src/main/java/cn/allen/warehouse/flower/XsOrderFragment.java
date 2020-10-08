@@ -228,7 +228,7 @@ public class XsOrderFragment extends BaseFragment {
             MsgUtils.showMDMessage(getActivity(),"请输入客户电话!");
             return false;
         }
-        if (CheckUtils.phoneIsOk(customerPhone)) {
+        if (!CheckUtils.phoneIsOk(customerPhone)) {
             MsgUtils.showMDMessage(getActivity(), "请输入正确的手机号码!");
             return false;
         }

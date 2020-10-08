@@ -52,6 +52,7 @@ import cn.allen.warehouse.entry.ImageEntity;
 import cn.allen.warehouse.entry.OrderInfoEntity;
 import cn.allen.warehouse.flower.XGOrderFragment;
 import cn.allen.warehouse.flower.XsOrderFragment;
+import cn.allen.warehouse.flower.ZjOrderFragment;
 import cn.allen.warehouse.utils.Constants;
 
 public class ToBeReturnedXsFragment extends BaseFragment {
@@ -280,7 +281,7 @@ public class ToBeReturnedXsFragment extends BaseFragment {
             case R.id.image:
                 break;
             case R.id.tv_submit:
-                onStartFragment(XGOrderFragment.init(numberID));
+                onStartFragment(ZjOrderFragment.init(numberID));
                 break;
             case R.id.back_bt:
                 backPreFragment();

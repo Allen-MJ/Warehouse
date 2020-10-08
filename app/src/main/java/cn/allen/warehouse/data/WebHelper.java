@@ -431,11 +431,7 @@ public class WebHelper {
     }
 
     public void uploadFile(Handler handler, File file) {
-        Object[] objects = new Object[]{
-                "file",file
-        };
         Response response = service.upload(Api.ImgUpload, file);
-        ImageEntity data = new ImageEntity();
         if (response.isSuccess("200")) {
             Message msg=new Message();
             msg.obj=response.getData();

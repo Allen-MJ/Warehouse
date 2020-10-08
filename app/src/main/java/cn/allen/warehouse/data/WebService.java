@@ -27,7 +27,7 @@ public class WebService {
     }
 
     public Response upload(String MethodName, File file) {
-        return getResult(  httpUtil.uploadFile(MethodName, file));
+        return getResult(httpUtil.uploadFile(MethodName, file));
     }
 
     public Response getWebservice(String MethodName, Object[] arrays) {

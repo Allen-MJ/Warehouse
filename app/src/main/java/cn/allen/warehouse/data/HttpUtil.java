@@ -95,6 +95,7 @@ public class HttpUtil {
             Logger.http("Response>>", response.toString());
             if (response.isSuccessful()) {
                 data = response.body().string();
+                Logger.http("data>>", data);
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block

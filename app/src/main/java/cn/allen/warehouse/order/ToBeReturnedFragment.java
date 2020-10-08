@@ -2,16 +2,20 @@ package cn.allen.warehouse.order;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -34,6 +39,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -162,11 +170,13 @@ public class ToBeReturnedFragment extends BaseFragment {
 
                     break;
                 case 102:
+                    actHelper.dismissProgressDialog();
                     String url=(String)msg.obj;
                     ImageEntity imageEntity=new ImageEntity();
                     imageEntity.setMess(url);
                     imageEntityList.add(imageEntity);
                     imageAdapter.setDatas(imageEntityList);
+                    break;
                 case 101:
                     actHelper.dismissProgressDialog();
                     MsgUtils.showLongToast(getContext(), (String) msg.obj);
@@ -237,6 +247,7 @@ public class ToBeReturnedFragment extends BaseFragment {
     }
 
     private void upload() {
+        actHelper.showProgressDialog("正在上传图片,请稍候...");
         new Thread() {
             @Override
             public void run() {
@@ -288,6 +299,8 @@ public class ToBeReturnedFragment extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, ImageEntity entity, int position) {
                 holder.setImageByUrl(R.id.image, entity.getMess(), R.drawable.mis_default_error);
+                ImageView view=holder.getView(R.id.image);
+
             }
         };
         recyclerviewImage.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -305,7 +318,11 @@ public class ToBeReturnedFragment extends BaseFragment {
                 // 拍照并进行裁剪
                 case REQUEST_TAKE_PHOTO:
                     Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    intent.setData(Uri.fromFile(imgFile));
+                    if (isAndroidQ){
+                        intent.setData(imgUri);
+                    }else {
+                        intent.setData(Uri.fromFile(imgFile));
+                    }
                     getActivity().sendBroadcast(intent);
                     commitFile(imgUri);
                     break;
@@ -316,11 +333,10 @@ public class ToBeReturnedFragment extends BaseFragment {
     private File file;
 
     private void commitFile(Uri uri) {
-        String path = FileUtils.getPath(getContext(), Uri.fromFile(imgFile));
+        String path = FileUtils.getPath(getContext(), uri);
         file = new File(path);
         upload();
     }
-
 
     @OnClick({R.id.tv_submit, R.id.image, R.id.back_bt})
     public void onViewClicked(View view) {
@@ -356,6 +372,10 @@ public class ToBeReturnedFragment extends BaseFragment {
     private Uri imgUri; // 拍照时返回的uri
     private File imgFile;// 拍照保存的图片文件
     private static final int REQUEST_TAKE_PHOTO = 0;// 拍照
+    /**
+     *  是否是Android 10以上手机
+     */
+    private boolean isAndroidQ = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
 
     private void takePhone() {
         // 要保存的文件名
@@ -365,8 +385,13 @@ public class ToBeReturnedFragment extends BaseFragment {
         // 要保存的图片文件
         imgFile = FileUtils.getInstance().creatNewFile("take_photo", fileName + ".jpg");
         // 将file转换成uri
-        // 注意7.0及以上与之前获取的uri不一样了，返回的是provider路径
-        imgUri = getUriForFile(getContext(), imgFile);
+        if (isAndroidQ) {
+            // 适配android 10
+            imgUri = createImageUri();
+        } else {
+            // 注意7.0及以上与之前获取的uri不一样了，返回的是provider路径
+            imgUri = getUriForFile(getActivity(), imgFile);
+        }
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // 添加Uri读取权限
         intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
@@ -377,6 +402,30 @@ public class ToBeReturnedFragment extends BaseFragment {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
         startActivityForResult(intent, REQUEST_TAKE_PHOTO);
     }
+    /**
+     * 创建图片地址uri,用于保存拍照后的照片 Android 10以后使用这种方法
+     * @return 图片的uri
+     */
+    private Uri createImageUri() {
+        //设置保存参数到ContentValues中
+        ContentValues contentValues = new ContentValues();
+        //设置文件名
+        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, System.currentTimeMillis()+"");
+        //兼容Android Q和以下版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            //android Q中不再使用DATA字段，而用RELATIVE_PATH代替
+            //TODO RELATIVE_PATH是相对路径不是绝对路径;照片存储的地方为：内部存储/Pictures/preventpro
+            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CkglCache");
+        }
+        //设置文件类型
+        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/JPEG");
+        //执行insert操作，向系统文件夹中添加文件
+        //EXTERNAL_CONTENT_URI代表外部存储器，该值不变
+        Uri uri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+        return uri;
+
+    }
+
 
     private Uri getUriForFile(Context context, File file) {
         if (context == null || file == null) {
