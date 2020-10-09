@@ -105,7 +105,7 @@ public class ShowOrder implements Serializable {
 
     public String getStatus(int process) {
         String status = "";
-        switch (id){
+        switch (process){
             case 1:
                 status = "待配货";
                 break;

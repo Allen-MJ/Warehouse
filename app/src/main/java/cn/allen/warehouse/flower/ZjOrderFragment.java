@@ -210,7 +210,7 @@ public class ZjOrderFragment extends BaseFragment {
                     actHelper.dismissProgressDialog();
                     if (order != null) {
                         addOrderKhName.setText(order.getCustomer_name());
-                        addOrderKhPhone.setText("客户电话："+order.getCustomer_phone());
+                        addOrderKhPhone.setText("客户电话：" + order.getCustomer_phone());
                         addOrderKhAddress.setText("地址：" + order.getHotel_address());
                         addOrderHlDate.setText("婚礼时间：" + order.getWedding_date().substring(0, 10));
                         addOrderCkDate.setText("出库时间：" + order.getDelivery_time().substring(0, 10));
@@ -226,7 +226,7 @@ public class ZjOrderFragment extends BaseFragment {
         }
     };
 
-    @OnClick({R.id.order_commit})
+    @OnClick({R.id.order_commit,R.id.back_bt})
     public void onViewClicked(View view) {
         view.setEnabled(false);
         switch (view.getId()) {
@@ -234,6 +234,9 @@ public class ZjOrderFragment extends BaseFragment {
                 if (checkIsOk()) {
                     additionalOrder();
                 }
+                break;
+            case R.id.back_bt:
+                backPreFragment();
                 break;
         }
         view.setEnabled(true);
