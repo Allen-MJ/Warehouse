@@ -127,8 +127,7 @@ public class ReturnedXsFragment extends BaseFragment {
                     tvPhone.setText(orderInfoEntity.getCustomer_phone());
                     tvDate1.setText(orderInfoEntity.getWedding_dates());
                     tvRemark.setText(orderInfoEntity.getRemark());
-                    tvTotal.setText("￥"+orderInfoEntity.getRent());
-                    tvShTotal.setText("￥"+orderInfoEntity.getActual_loss_rent());
+
                     int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
@@ -147,12 +146,23 @@ public class ReturnedXsFragment extends BaseFragment {
                             orderState.setText("完成清点");
                             break;
                     }
+                    double total=0;
+                    double loss_total=0;
                     childrenList = orderInfoEntity.getChildren();
                     if (childrenList == null || childrenList.isEmpty()) {
                         layoutChildren.setVisibility(View.GONE);
                     } else {
                         layoutChildren.setVisibility(View.VISIBLE);
                         childrenAdapter.setDatas(childrenList);
+                        for (OrderInfoEntity.ChildrenBean childrenBean:childrenList) {
+                            int count=childrenBean.getScheduled_quantity();
+                            int loss_count=childrenBean.getLoss_quantity();
+                            double rent=childrenBean.getRent();
+                            double loss_rent=childrenBean.getLoss_rent();
+                            total=total+count*rent;
+                            loss_total=loss_total+loss_count*loss_rent;
+
+                        }
                     }
                     mainList = orderInfoEntity.getMainchildren();
                     if (mainList == null || mainList.isEmpty()) {
@@ -160,7 +170,18 @@ public class ReturnedXsFragment extends BaseFragment {
                     } else {
                         layoutMain.setVisibility(View.VISIBLE);
                         mainAdapter.setDatas(mainList);
+                        for (OrderInfoEntity.MainchildrenBean mainchildrenBean:mainList) {
+                            int count=mainchildrenBean.getScheduled_quantity();
+                            int loss_count=mainchildrenBean.getLoss_quantity();
+                            double rent=mainchildrenBean.getRent();
+                            double loss_rent=mainchildrenBean.getLoss_rent();
+                            total=total+count*rent;
+                            loss_total=loss_total+loss_count*loss_rent;
+
+                        }
                     }
+                    tvTotal.setText("￥"+total);
+                    tvShTotal.setText("￥"+loss_total);
                     imageList = orderInfoEntity.getImages();
                     if (imageList != null || !imageList.isEmpty()) {
                         imageAdapter.setDatas(imageList);
@@ -253,7 +274,8 @@ public class ReturnedXsFragment extends BaseFragment {
                 if (et_count.getTag() != null && et_count.getTag() instanceof TextWatcher) {
                     et_count.removeTextChangedListener((TextWatcher) et_count.getTag());
                 }
-                et_count.setText(entity.getLoss_quantity());
+                et_count.setText(entity.getLoss_quantity()+"");
+                et_count.setSelection((entity.getLoss_quantity()+"").length());
                 TextWatcher textWatcher = new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {

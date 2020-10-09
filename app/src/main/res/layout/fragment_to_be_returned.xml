@@ -90,6 +90,19 @@
                                 android:layout_weight="1"
                                 android:padding="@dimen/frame_four_distance" />
                         </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerview_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
                     </androidx.appcompat.widget.LinearLayoutCompat>
                 </androidx.core.widget.NestedScrollView>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -98,49 +111,38 @@
                 android:id="@+id/layout_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_alignParentBottom="true"
+                android:orientation="vertical"
                 android:padding="@dimen/frame_eight_distance"
-                android:visibility="visible"
-                >
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                >
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/frame_eight_distance"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="@dimen/frame_four_distance"
-                    app:cardElevation="@dimen/frame_two_distance">
-                <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="@dimen/mis_image_size"
-                    android:layout_height="@dimen/mis_image_size"
-                    android:src="@mipmap/ic_logo_14"
-                    />
-                </androidx.cardview.widget.CardView>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerview_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                android:visibility="visible">
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center_vertical|right"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/frame_eight_distance"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/frame_four_distance"
+                        app:cardElevation="@dimen/frame_two_distance">
+
+                        <ImageView
+                            android:id="@+id/image"
+                            android:layout_width="@dimen/mis_image_size"
+                            android:layout_height="@dimen/mis_image_size"
+                            android:src="@mipmap/ic_logo_14" />
+                    </androidx.cardview.widget.CardView>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|right"
                         android:padding="@dimen/frame_eight_distance"
                         android:text="拍照上传后才能点击确认回收"
                         android:textColor="@color/text_normal_color"
