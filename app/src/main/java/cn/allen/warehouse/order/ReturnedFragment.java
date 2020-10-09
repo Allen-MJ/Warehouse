@@ -276,8 +276,13 @@ public class ReturnedFragment extends BaseFragment {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        mainList.get(position).setLoss_quantity(Integer.parseInt(s.toString()));
-                        notifyItemChanged(position);
+                        if (!s.toString().equals("")) {
+                            childrenList.get(position).setLoss_quantity(Integer.parseInt(s.toString()));
+                            notifyItemChanged(position);
+                        }else {
+                            childrenList.get(position).setLoss_quantity(0);
+                            notifyItemChanged(position);
+                        }
                     }
                 };
                 et_count.addTextChangedListener(textWatcher);
@@ -314,6 +319,9 @@ public class ReturnedFragment extends BaseFragment {
                     public void afterTextChanged(Editable s) {
                         if (!s.toString().equals("")){
                             mainList.get(position).setLoss_quantity(Integer.parseInt(s.toString()));
+                            notifyItemChanged(position);
+                        }else {
+                            mainList.get(position).setLoss_quantity(0);
                             notifyItemChanged(position);
                         }
                     }
