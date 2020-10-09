@@ -277,7 +277,12 @@ public class ReturnedFragment extends BaseFragment {
                     @Override
                     public void afterTextChanged(Editable s) {
                         if (!s.toString().equals("")) {
-                            childrenList.get(position).setLoss_quantity(Integer.parseInt(s.toString()));
+                            int loss_count=Integer.parseInt(s.toString());
+                            int count=childrenList.get(position).getScheduled_quantity();
+                            if (loss_count>count){
+                                loss_count=count;
+                            }
+                            childrenList.get(position).setLoss_quantity(loss_count);
                             notifyItemChanged(position);
                         }else {
                             childrenList.get(position).setLoss_quantity(0);
@@ -318,7 +323,12 @@ public class ReturnedFragment extends BaseFragment {
                     @Override
                     public void afterTextChanged(Editable s) {
                         if (!s.toString().equals("")){
-                            mainList.get(position).setLoss_quantity(Integer.parseInt(s.toString()));
+                            int loss_count=Integer.parseInt(s.toString());
+                            int count=mainList.get(position).getScheduled_quantity();
+                            if (loss_count>count){
+                                loss_count=count;
+                            }
+                            mainList.get(position).setLoss_quantity(loss_count);
                             notifyItemChanged(position);
                         }else {
                             mainList.get(position).setLoss_quantity(0);
