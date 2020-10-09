@@ -76,6 +76,7 @@ public class SaleHomeFragment extends BaseFragment {
     private List<Notice> notices;
     private Calendar c;
     private int type;
+    private String start,end;
 
     public static SaleHomeFragment init() {
         SaleHomeFragment fragment = new SaleHomeFragment();
@@ -198,7 +199,7 @@ public class SaleHomeFragment extends BaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Map<String, Integer> map = WebHelper.init().getOrderNumber(shared.getInt(Constants.UserId,-1));
+                Map<String, Integer> map = WebHelper.init().getOrderNumber(shared.getInt(Constants.UserId,-1),start,end);
                 int num1 = map.get("1") == null ? 0 : map.get("1");
                 int num2 = map.get("2") == null ? 0 : map.get("2");
                 int num3 = map.get("3") == null ? 0 : map.get("3");
@@ -242,26 +243,30 @@ public class SaleHomeFragment extends BaseFragment {
 
                 break;
             case R.id.start_date:
-                DatePickerDialog start = new DatePickerDialog(getActivity(),
+                DatePickerDialog mstart = new DatePickerDialog(getActivity(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                startDate.setText(year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth));
+                                start = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
+                                startDate.setText(start);
+                                loadcount();
                             }
                         },
                         c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-                start.show();
+                mstart.show();
                 break;
             case R.id.end_date:
-                DatePickerDialog end = new DatePickerDialog(getActivity(),
+                DatePickerDialog mend = new DatePickerDialog(getActivity(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                endDate.setText(year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth));
+                                end = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
+                                endDate.setText(end);
+                                loadcount();
                             }
                         },
                         c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-                end.show();
+                mend.show();
                 break;
             case R.id.oder_bt:
                 onStartFragment(XsOrderFragment.init());

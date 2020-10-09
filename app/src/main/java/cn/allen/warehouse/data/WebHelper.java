@@ -284,6 +284,38 @@ public class WebHelper {
         return map;
     }
 
+    public Map<String, Integer> getOrderNumber(int id, String starttime, String endtime) {
+        Object[] objects = new Object[]{
+                "id",id,"starttime",starttime,"endtime",endtime
+        };
+        Map<String, Integer> map = new HashMap<>();
+        Response response = service.getWebservice(Api.GetStates, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            try {
+                JSONObject object = new JSONObject(response.getData());
+                map.put("1", object.optInt("daipeihuo"));
+                map.put("2", object.optInt("daichuku"));
+                map.put("3", object.optInt("daihuishou"));
+                map.put("4", object.optInt("yihuishou"));
+                map.put("5", object.optInt("wancheng"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                map.put("1", 0);
+                map.put("2", 0);
+                map.put("3", 0);
+                map.put("4", 0);
+                map.put("5", 0);
+            }
+        } else {
+            map.put("1", 0);
+            map.put("2", 0);
+            map.put("3", 0);
+            map.put("4", 0);
+            map.put("5", 0);
+        }
+        return map;
+    }
+
 
     /**
      * 五、	根据订单状态查询订单
