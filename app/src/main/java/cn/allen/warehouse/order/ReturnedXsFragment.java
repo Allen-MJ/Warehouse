@@ -289,8 +289,13 @@ public class ReturnedXsFragment extends BaseFragment {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        mainList.get(position).setLoss_quantity(Integer.parseInt(s.toString()));
-                        notifyItemChanged(position);
+                        if (!s.toString().equals("")) {
+                            childrenList.get(position).setLoss_quantity(Integer.parseInt(s.toString()));
+                            notifyItemChanged(position);
+                        }else {
+                            childrenList.get(position).setLoss_quantity(0);
+                            notifyItemChanged(position);
+                        }
                     }
                 };
                 et_count.addTextChangedListener(textWatcher);
@@ -310,31 +315,6 @@ public class ReturnedXsFragment extends BaseFragment {
                 et_count.setText(entity.getLoss_quantity() + "");
                 et_count.setFocusable(false);
                 et_count.setFocusableInTouchMode(false);
-                /*if (et_count.getTag() != null && et_count.getTag() instanceof TextWatcher) {
-                    et_count.removeTextChangedListener((TextWatcher) et_count.getTag());
-                }
-                et_count.setText(entity.getLoss_quantity() + "");
-                TextWatcher textWatcher = new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        if (!s.toString().equals("")) {
-                            mainList.get(position).setLoss_quantity(Integer.parseInt(s.toString()));
-                            notifyItemChanged(position);
-                        }
-                    }
-                };
-                et_count.addTextChangedListener(textWatcher);
-                et_count.setTag(textWatcher);*/
             }
         };
         recyclerviewMain.setLayoutManager(new LinearLayoutManager(getActivity()));
