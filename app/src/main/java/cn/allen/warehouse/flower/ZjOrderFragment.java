@@ -17,14 +17,11 @@ import java.util.Calendar;
 
 import allen.frame.ActivityHelper;
 import allen.frame.AllenManager;
-import allen.frame.tools.CheckUtils;
 import allen.frame.tools.Logger;
 import allen.frame.tools.MsgUtils;
-import allen.frame.tools.StringUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,6 +36,7 @@ import cn.allen.warehouse.adapter.ChoiceFlowerAdapter;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Flower;
 import cn.allen.warehouse.entry.Order;
+import cn.allen.warehouse.entry.ShowOrder;
 import cn.allen.warehouse.utils.Constants;
 
 public class ZjOrderFragment extends BaseFragment {
@@ -76,6 +74,8 @@ public class ZjOrderFragment extends BaseFragment {
     AppCompatTextView orderMoney;
     @BindView(R.id.order_commit)
     AppCompatButton orderCommit;
+    @BindView(R.id.add_order_kh_phone)
+    AppCompatTextView addOrderKhPhone;
 
     private ActivityHelper actHelper;
     private SharedPreferences shared;
@@ -159,13 +159,13 @@ public class ZjOrderFragment extends BaseFragment {
         }
     };
 
-    private void loaddata(){
+    private void loaddata() {
         actHelper.showProgressDialog("");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                order = WebHelper.init().getOrderByNo(handler,no);
-                Logger.e("debug","order+++++");
+                order = WebHelper.init().getOrderByNo(handler, no);
+                Logger.e("debug", "order+++++");
                 handler.sendEmptyMessage(1);
             }
         }).start();
@@ -182,12 +182,12 @@ public class ZjOrderFragment extends BaseFragment {
         return true;
     }
 
-    private void additionalOrder(){
+    private void additionalOrder() {
         actHelper.showProgressDialog("");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                WebHelper.init().additionalOrder(handler,no,money,list);
+                WebHelper.init().additionalOrder(handler, no, money, list);
             }
         }).start();
     }
@@ -210,11 +210,13 @@ public class ZjOrderFragment extends BaseFragment {
                     actHelper.dismissProgressDialog();
                     if (order != null) {
                         addOrderKhName.setText(order.getCustomer_name());
-                        addOrderKhAddress.setText(order.getHotel_address());
-                        addOrderHlDate.setText(order.getWedding_date().substring(0, 10));
-                        addOrderCkDate.setText(order.getDelivery_time().substring(0, 10));
-                        addOrderHsDate.setText(order.getRecovery_date().substring(0, 10));
-                        addOrderRemark.setText(order.getRemark());
+                        addOrderKhPhone.setText("客户电话："+order.getCustomer_phone());
+                        addOrderKhAddress.setText("地址：" + order.getHotel_address());
+                        addOrderHlDate.setText("婚礼时间：" + order.getWedding_date().substring(0, 10));
+                        addOrderCkDate.setText("出库时间：" + order.getDelivery_time().substring(0, 10));
+                        addOrderHsDate.setText("回收时间：" + order.getRecovery_date().substring(0, 10));
+                        addOrderRemark.setText("备注信息：" + order.getRemark());
+                        addOrderState.setText(new ShowOrder().getStatus(order.getOrder_process()));
                     } else {
                         MsgUtils.showMDMessage(getActivity(), "数据查询失败!");
                         backPreFragment();
@@ -229,7 +231,7 @@ public class ZjOrderFragment extends BaseFragment {
         view.setEnabled(false);
         switch (view.getId()) {
             case R.id.order_commit:
-                if(checkIsOk()){
+                if (checkIsOk()) {
                     additionalOrder();
                 }
                 break;

@@ -40,12 +40,13 @@ import cn.allen.warehouse.entry.Notice;
 import cn.allen.warehouse.entry.ShowOrder;
 import cn.allen.warehouse.flower.XsOrderFragment;
 import cn.allen.warehouse.utils.Constants;
+import cn.allen.warehouse.widget.SearchEditText;
 
 public class SaleHomeFragment extends BaseFragment {
 
     Unbinder unbinder;
     @BindView(R.id.bar_search)
-    AppCompatEditText barSearch;
+    SearchEditText barSearch;
     @BindView(R.id.bar_notice)
     AppCompatImageView barNotice;
     @BindView(R.id.bar_name)
@@ -123,6 +124,13 @@ public class SaleHomeFragment extends BaseFragment {
                 if (OnItemMenuClickLisenter != null) {
                     OnItemMenuClickLisenter.itemMenu(entry);
                 }
+            }
+        });
+        barSearch.setOnSerchListenner(new SearchEditText.onSerchListenner() {
+            @Override
+            public void onSerchEvent() {
+                String no = barSearch.getText().toString().trim();
+                onStartFragment(AllOrderFragment.init(no));
             }
         });
         barSearch.setOnKeyListener(new View.OnKeyListener() {

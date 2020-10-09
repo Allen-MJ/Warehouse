@@ -102,4 +102,26 @@ public class ShowOrder implements Serializable {
         }
         return redId;
     }
+
+    public String getStatus(int process) {
+        String status = "";
+        switch (id){
+            case 1:
+                status = "待配货";
+                break;
+            case 2:
+                status = "待出库";
+                break;
+            case 3:
+                status = "待回收";
+                break;
+            case 4:
+                status = "已回收";
+                break;
+            case 5:
+                status = "完成清点";
+                break;
+        }
+        return status;
+    }
 }

@@ -42,12 +42,13 @@ import cn.allen.warehouse.order.ToBeReturnedXsFragment;
 import cn.allen.warehouse.order.WarehouseOutFragment;
 import cn.allen.warehouse.order.WarehouseOutXsFragment;
 import cn.allen.warehouse.utils.Constants;
+import cn.allen.warehouse.widget.SearchEditText;
 
 public class OrderFragment extends BaseFragment {
 
     Unbinder unbinder;
     @BindView(R.id.bar_search)
-    AppCompatEditText barSearch;
+    SearchEditText barSearch;
     @BindView(R.id.bar_notice)
     AppCompatImageView barNotice;
     @BindView(R.id.bar_name)

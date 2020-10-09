@@ -42,12 +42,13 @@ import cn.allen.warehouse.order.ToBeReturnedXsFragment;
 import cn.allen.warehouse.order.WarehouseOutFragment;
 import cn.allen.warehouse.order.WarehouseOutXsFragment;
 import cn.allen.warehouse.utils.Constants;
+import cn.allen.warehouse.widget.SearchEditText;
 
 public class AllOrderFragment extends BaseFragment {
 
     Unbinder unbinder;
     @BindView(R.id.bar_search)
-    AppCompatEditText barSearch;
+    SearchEditText barSearch;
     @BindView(R.id.bar_notice)
     AppCompatImageView barNotice;
     @BindView(R.id.bar_name)
@@ -116,6 +117,16 @@ public class AllOrderFragment extends BaseFragment {
     private void addEvent(View view) {
         mater.setMaterialRefreshListener(materListener);
         adapter.setOnItemClickListener(listener);
+        barSearch.setOnSerchListenner(new SearchEditText.onSerchListenner() {
+            @Override
+            public void onSerchEvent() {
+                no = barSearch.getText().toString().trim();
+                page = 1;
+                actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_START,"");
+                isRefresh = true;
+                loadData();
+            }
+        });
         barSearch.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {

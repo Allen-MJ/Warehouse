@@ -7,7 +7,7 @@
     android:background="@mipmap/title_bar_bg"
     android:paddingStart="@dimen/frame_32_distance"
     android:paddingEnd="@dimen/frame_32_distance">
-    <androidx.appcompat.widget.AppCompatEditText
+    <cn.allen.warehouse.widget.SearchEditText
         android:id="@+id/bar_search"
         android:layout_width="0dp"
         android:layout_weight="1"

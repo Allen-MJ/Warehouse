@@ -38,12 +38,13 @@ import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Flower;
 import cn.allen.warehouse.entry.FlowerType;
 import cn.allen.warehouse.utils.Constants;
+import cn.allen.warehouse.widget.SearchEditText;
 
 public class FlowerFragment extends BaseFragment {
 
     Unbinder unbinder;
     @BindView(R.id.bar_search)
-    AppCompatEditText barSearch;
+    SearchEditText barSearch;
     @BindView(R.id.bar_notice)
     AppCompatImageView barNotice;
     @BindView(R.id.bar_name)
@@ -132,6 +133,13 @@ public class FlowerFragment extends BaseFragment {
                     return true;
                 }
                 return true;
+            }
+        });
+        barSearch.setOnSerchListenner(new SearchEditText.onSerchListenner() {
+            @Override
+            public void onSerchEvent() {
+                name = barSearch.getText().toString().trim();
+                loadFlowers();
             }
         });
     }

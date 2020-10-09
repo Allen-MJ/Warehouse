@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -28,19 +29,16 @@ import cn.allen.warehouse.R;
 import cn.allen.warehouse.adapter.FlowerChoiceAdapter;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Flower;
+import cn.allen.warehouse.widget.SearchEditText;
 
 public class FlowerChoiceActivity extends AllenIMBaseActivity {
 
     @BindView(R.id.bar_search)
-    AppCompatEditText barSearch;
+    SearchEditText barSearch;
     @BindView(R.id.rv)
     RecyclerView rv;
     @BindView(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.iv_send)
-    ImageView ivSend;
-    @BindView(R.id.iv_clear)
-    ImageView ivClear;
     private List<Flower> list;
     private ArrayList<Flower> choice;
     private String name = "";
@@ -74,20 +72,26 @@ public class FlowerChoiceActivity extends AllenIMBaseActivity {
 
     @Override
     protected void addEvent() {
-        barSearch.addTextChangedListener(watcher);
-//        barSearch.setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-//                if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-//                    view.setEnabled(false);
-//                    name = barSearch.getText().toString().trim();
-//                    loadFlowers();
-//                    view.setEnabled(true);
-//                    return true;
-//                }
-//                return true;
-//            }
-//        });
+        barSearch.setOnSerchListenner(new SearchEditText.onSerchListenner() {
+            @Override
+            public void onSerchEvent() {
+                name = barSearch.getText().toString().trim();
+                loadFlowers();
+            }
+        });
+        barSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    view.setEnabled(false);
+                    name = barSearch.getText().toString().trim();
+                    loadFlowers();
+                    view.setEnabled(true);
+                    return true;
+                }
+                return true;
+            }
+        });
         adapter.setOnItemClickListener(new FlowerChoiceAdapter.OnItemClickListener() {
             @Override
             public void addClick(View v, Flower flower) {
@@ -97,30 +101,6 @@ public class FlowerChoiceActivity extends AllenIMBaseActivity {
             }
         });
     }
-
-    TextWatcher watcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (StringUtils.notEmpty(s.toString())) {
-                // edittext加刪除按鈕
-                ivClear.setVisibility(View.VISIBLE);
-            }else {
-                ivClear.setVisibility(View.GONE);
-            }
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            name = barSearch.getText().toString().trim();
-            loadFlowers();
-        }
-    };
 
     private void loadFlowers() {
         new Thread(new Runnable() {
@@ -145,31 +125,14 @@ public class FlowerChoiceActivity extends AllenIMBaseActivity {
     };
 
 
-    @OnClick({R.id.iv_back, R.id.iv_send,R.id.iv_clear})
+    @OnClick({R.id.iv_back})
     public void onViewClicked(View view) {
         view.setEnabled(false);
         switch (view.getId()) {
-            case R.id.iv_clear:
-                barSearch.setText("");
-                ivClear.setVisibility(View.GONE);
-                break;
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.iv_send:
-
-                name = barSearch.getText().toString().trim();
-                loadFlowers();
-
-                break;
         }
         view.setEnabled(true);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }

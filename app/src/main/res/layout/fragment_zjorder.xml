@@ -70,14 +70,24 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/text_gray_color"
-                                    android:textSize="@dimen/frame_text_normal_size"/>
+                                    android:textSize="@dimen/frame_text_normal_size"
+                                    android:textStyle="bold"/>
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:id="@+id/add_order_state"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/colorPrimary"
-                                    android:textSize="@dimen/frame_text_middle_size"/>
+                                    android:textSize="@dimen/frame_text_middle_size"
+                                    android:textStyle="bold"/>
                             </androidx.appcompat.widget.LinearLayoutCompat>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/add_order_kh_phone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_gray_color"
+                                android:textSize="@dimen/frame_text_normal_size"
+                                android:padding="@dimen/frame_eight_distance"
+                                android:textStyle="bold"/>
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/add_order_kh_address"
                                 android:layout_width="match_parent"
