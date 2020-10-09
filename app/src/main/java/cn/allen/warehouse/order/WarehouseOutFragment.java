@@ -120,14 +120,16 @@ public class WarehouseOutFragment extends BaseFragment {
                             break;
                     }
                     childrenList = orderInfoEntity.getChildren();
-                    if (childrenList == null || childrenList.isEmpty()) {
+                    int childrensize=childrenList==null?0:childrenList.size();
+                    if (childrensize==0) {
                         layoutChildren.setVisibility(View.GONE);
                     } else {
                         layoutChildren.setVisibility(View.VISIBLE);
                         childrenAdapter.setDatas(childrenList);
                     }
                     mainList = orderInfoEntity.getMainchildren();
-                    if (mainList == null || mainList.isEmpty()) {
+                    int mainsize=mainList==null?0:mainList.size();
+                    if (mainsize==0) {
                         layoutMain.setVisibility(View.GONE);
                     } else {
                         layoutMain.setVisibility(View.VISIBLE);

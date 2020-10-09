@@ -13,7 +13,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        ndk { abiFilter "armeabi" }
+//        ndk { abiFilter "armeabi" ,"x86"}
     }
 
     buildTypes {
