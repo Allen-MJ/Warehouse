@@ -231,8 +231,9 @@ public class WebHelper {
      *
      * @return
      */
-    public Map<String, Integer> getOrderNumber() {
+    public Map<String, Integer> getOrderNumber(int id) {
         Object[] objects = new Object[]{
+                "id",id
         };
         Map<String, Integer> map = new HashMap<>();
         Response response = service.getWebservice(Api.GetState, objects, WebService.Get);
