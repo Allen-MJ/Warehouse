@@ -314,6 +314,32 @@ public class WebHelper {
     }
 
     /**
+     * 十三、	已回库（销售端：get）
+     * @param handler
+     * @param orderNumber
+     * @param rent
+     * @param lossRent
+     */
+    public void returnOrder(Handler handler,String orderNumber,String rent,String lossRent) {
+        Object[] objects = new Object[]{
+                "ordernumber", orderNumber,"rent",rent,"actual_loss_rent",lossRent
+        };
+        Response response = service.getWebservice(Api.SubmitReturn, objects, WebService.Get);
+        OrderInfoEntity data = new OrderInfoEntity();
+        if (response.isSuccess("200")) {
+           Message msg=new Message();
+           msg.what=102;
+           msg.obj=response.getMessage();
+           handler.sendMessage(msg);
+        }else {
+            Message msg=new Message();
+            msg.what=-1;
+            msg.obj=response.getMessage();
+            handler.sendMessage(msg);
+        }
+    }
+
+    /**
      * 十六、	鲜花确认配送（仓库端：get）
      * @param handler
      * @param id
