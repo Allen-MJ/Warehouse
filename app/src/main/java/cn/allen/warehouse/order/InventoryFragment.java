@@ -147,7 +147,8 @@ public class InventoryFragment extends BaseFragment {
                         mainAdapter.setDatas(mainList);
                     }
                     imageList = orderInfoEntity.getImages();
-                    if (imageList != null || !imageList.isEmpty()) {
+                    int imagesize=imageList==null?0:imageList.size();
+                    if (imagesize>0) {
                         imageAdapter.setDatas(imageList);
                     }
 
