@@ -105,6 +105,7 @@ public class MainActivity extends AllenBaseActivity {
                 adapter.setCheck(String.valueOf(order.getId()));
                 startNextFragment(AllOrderFragment.init(""));
             }
+            loadNum();
         }
     };
 

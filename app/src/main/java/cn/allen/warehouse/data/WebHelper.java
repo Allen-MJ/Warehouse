@@ -227,6 +227,27 @@ public class WebHelper {
     }
 
     /**
+     * 信息已读
+     * @param handler
+     * @param id
+     */
+    public void readMsg(Handler handler, int id){
+        Object[] objects = new Object[]{
+                "id", id
+        };
+        Response response = service.getWebservice(Api.GetRed, objects, WebService.Get);
+        Message msg = new Message();
+        if (response.isSuccess("200")) {
+                msg.what = 10;
+                msg.obj = response.getMessage();
+        }else{
+            msg.what = -1;
+            msg.obj = response.getMessage();
+        }
+        handler.sendMessage(msg);
+    }
+
+    /**
      * 数量统计
      *
      * @return

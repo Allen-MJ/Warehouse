@@ -39,6 +39,14 @@ import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Notice;
 import cn.allen.warehouse.entry.ShowOrder;
 import cn.allen.warehouse.flower.XsOrderFragment;
+import cn.allen.warehouse.order.DeliverFragment;
+import cn.allen.warehouse.order.DeliverXsFragment;
+import cn.allen.warehouse.order.ReturnedFragment;
+import cn.allen.warehouse.order.ReturnedXsFragment;
+import cn.allen.warehouse.order.ToBeReturnedFragment;
+import cn.allen.warehouse.order.ToBeReturnedXsFragment;
+import cn.allen.warehouse.order.WarehouseOutFragment;
+import cn.allen.warehouse.order.WarehouseOutXsFragment;
 import cn.allen.warehouse.utils.Constants;
 import cn.allen.warehouse.widget.SearchEditText;
 
@@ -146,6 +154,44 @@ public class SaleHomeFragment extends BaseFragment {
                 return true;
             }
         });
+        noticeAdapter.setOnItemClickListener(new NoticeAdapter.OnItemClickListener() {
+            @Override
+            public void itemClick(View v, Notice entry) {
+                read(entry.getId());
+                int statu = entry.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
+                String id = entry.getOrder_id();
+                switch (statu) {
+                    case 1:
+                        if (type == 0) {
+                            onStartFragment(DeliverFragment.newInstance(id));
+                        } else if (type == 1) {
+                            onStartFragment(DeliverXsFragment.newInstance(id));
+                        }
+                        break;
+                    case 2:
+                        if (type == 0) {
+                            onStartFragment(WarehouseOutFragment.newInstance(id));
+                        } else if (type == 1) {
+                            onStartFragment(WarehouseOutXsFragment.newInstance(id));
+                        }
+                        break;
+                    case 3:
+                        if (type == 0) {
+                            onStartFragment(ToBeReturnedFragment.newInstance(id));
+                        } else if (type == 1) {
+                            onStartFragment(ToBeReturnedXsFragment.newInstance(id));
+                        }
+                        break;
+                    case 4:
+                        if (type == 0) {
+                            onStartFragment(ReturnedFragment.newInstance(id));
+                        } else if (type == 1) {
+                            onStartFragment(ReturnedXsFragment.newInstance(id));
+                        }
+                        break;
+                }
+            }
+        });
     }
 
     private void loadcount() {
@@ -176,6 +222,15 @@ public class SaleHomeFragment extends BaseFragment {
             public void run() {
                 notices = WebHelper.init().getInformation();
                 handler.sendEmptyMessage(1);
+            }
+        }).start();
+    }
+
+    private void read(int id){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                WebHelper.init().readMsg(handler,id);
             }
         }).start();
     }
