@@ -1,6 +1,7 @@
 package cn.allen.warehouse;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import java.util.Map;
 import allen.frame.AllenBaseActivity;
 import allen.frame.AllenManager;
 import allen.frame.entry.Type;
+import allen.frame.tools.MsgUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -75,6 +77,11 @@ public class MainActivity extends AllenBaseActivity {
         adapter = new MenuAdapter();
         menuRv.setAdapter(adapter);
         loadMenu();
+    }
+
+    @Override
+    public void onBackPressed() {
+        actHelper.doClickTwiceExit(menuRv);
     }
 
     @Override
@@ -165,7 +172,18 @@ public class MainActivity extends AllenBaseActivity {
         v.setEnabled(false);
         switch (v.getId()){
             case R.id.back_bt:
-                AllenManager.getInstance().back2Activity(LoginActivity.class);
+                MsgUtils.showMDMessage(context, "确定退出账号？", "确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.dismiss();
+                        AllenManager.getInstance().back2Activity(LoginActivity.class);
+                    }
+                },"取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.dismiss();
+                    }
+                });
                 break;
         }
         v.setEnabled(true);
