@@ -121,7 +121,7 @@ public class MainActivity extends AllenBaseActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                map = WebHelper.init().getOrderNumber();
+                map = WebHelper.init().getOrderNumber(shared.getInt(Constants.UserId,-1));
                 handler.sendEmptyMessage(0);
             }
         }).start();

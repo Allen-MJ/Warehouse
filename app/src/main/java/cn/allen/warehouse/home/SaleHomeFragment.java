@@ -144,7 +144,7 @@ public class SaleHomeFragment extends BaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Map<String, Integer> map = WebHelper.init().getOrderNumber();
+                Map<String, Integer> map = WebHelper.init().getOrderNumber(shared.getInt(Constants.UserId,-1));
                 int num1 = map.get("1") == null ? 0 : map.get("1");
                 int num2 = map.get("2") == null ? 0 : map.get("2");
                 int num3 = map.get("3") == null ? 0 : map.get("3");
