@@ -261,7 +261,8 @@ public class ReturnedFragment extends BaseFragment {
                 if (et_count.getTag() != null && et_count.getTag() instanceof TextWatcher) {
                     et_count.removeTextChangedListener((TextWatcher) et_count.getTag());
                 }
-                et_count.setText(entity.getLoss_quantity());
+                et_count.setText(entity.getLoss_quantity()+"");
+                et_count.setSelection((entity.getLoss_quantity()+"").length());
                 TextWatcher textWatcher = new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -297,6 +298,7 @@ public class ReturnedFragment extends BaseFragment {
                     et_count.removeTextChangedListener((TextWatcher) et_count.getTag());
                 }
                 et_count.setText(entity.getLoss_quantity()+"");
+                et_count.setSelection((entity.getLoss_quantity()+"").length());
                 TextWatcher textWatcher = new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
