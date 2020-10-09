@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/frame_eight_distance"
                     android:gravity="center_vertical"
-                    android:text="代配送"
+                    android:text=""
                     android:textColor="@color/order_text_red"
                     android:textSize="@dimen/frame_text_normal_size" />
 

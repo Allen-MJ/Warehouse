@@ -110,7 +110,7 @@ public class WarehouseOutXsFragment extends BaseFragment {
                     tvPhone.setText(orderInfoEntity.getCustomer_phone());
                     tvDate1.setText(orderInfoEntity.getWedding_dates());
                     tvRemark.setText(orderInfoEntity.getRemark());
-                    int statu = orderInfoEntity.getCollect_status();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
+                    int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
                             orderState.setText("待配货");

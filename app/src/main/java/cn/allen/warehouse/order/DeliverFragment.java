@@ -102,7 +102,7 @@ public class DeliverFragment extends BaseFragment {
                     orderName.setText(orderInfoEntity.getCustomer_name());
                     tvOrderOutTime.setText(orderInfoEntity.getDelivery_times());
                     tvOrderBackTime.setText(orderInfoEntity.getRecovery_dates());
-                    int statu = orderInfoEntity.getCollect_status();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
+                    int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
                             orderState.setText("待配货");
@@ -301,8 +301,29 @@ public class DeliverFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_submit:
-                actHelper.showProgressDialog("");
-                submit();
+
+                boolean isAllConfirm = true;
+                if (mainList != null) {
+                    for (OrderInfoEntity.MainchildrenBean entity : mainList) {
+                        if (entity.getId_check() == 0) {
+                            isAllConfirm = false;
+                        }
+                    }
+                }
+                if (childrenList != null) {
+                    for (OrderInfoEntity.ChildrenBean entity : childrenList) {
+                        if (entity.getId_check() == 0) {
+                            isAllConfirm = false;
+                        }
+                    }
+                }
+                if (isAllConfirm) {
+                    actHelper.showProgressDialog("");
+                    submit();
+                } else {
+                    MsgUtils.showMDMessage(getContext(), "还有未确认的商品,请确认后提交！");
+                }
+
                 break;
             case R.id.back_bt:
                 backPreFragment();
