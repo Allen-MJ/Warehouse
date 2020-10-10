@@ -10,6 +10,7 @@ public class Notice implements Serializable {
     private String order_id;
     private String createtime;
     private String addtimes;
+    private int order_process;
 
     public Notice() {
     }
@@ -63,5 +64,13 @@ public class Notice implements Serializable {
 
     public void setAddtimes(String addtimes) {
         this.addtimes = StringUtils.null2Empty(addtimes).replaceAll("T"," ");
+    }
+
+    public int getOrder_process() {
+        return order_process;
+    }
+
+    public void setOrder_process(int order_process) {
+        this.order_process = order_process;
     }
 }

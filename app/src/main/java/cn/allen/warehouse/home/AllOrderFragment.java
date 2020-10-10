@@ -35,6 +35,8 @@ import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Order;
 import cn.allen.warehouse.order.DeliverFragment;
 import cn.allen.warehouse.order.DeliverXsFragment;
+import cn.allen.warehouse.order.InventoryFragment;
+import cn.allen.warehouse.order.InventoryXsFragment;
 import cn.allen.warehouse.order.ReturnedFragment;
 import cn.allen.warehouse.order.ReturnedXsFragment;
 import cn.allen.warehouse.order.ToBeReturnedFragment;
@@ -192,6 +194,13 @@ public class AllOrderFragment extends BaseFragment {
                         onStartFragment(ReturnedFragment.newInstance(id));
                     } else if (type == 1) {
                         onStartFragment(ReturnedXsFragment.newInstance(id));
+                    }
+                    break;
+                case 5:
+                    if (type == 0) {
+                        onStartFragment(InventoryFragment.newInstance(id));
+                    } else if (type == 1) {
+                        onStartFragment(InventoryXsFragment.newInstance(id));
                     }
                     break;
             }

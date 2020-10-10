@@ -227,6 +227,27 @@ public class WebHelper {
     }
 
     /**
+     * 信息已读
+     * @param handler
+     * @param id
+     */
+    public void readMsg(Handler handler, int id){
+        Object[] objects = new Object[]{
+                "id", id
+        };
+        Response response = service.getWebservice(Api.GetRed, objects, WebService.Get);
+        Message msg = new Message();
+        if (response.isSuccess("200")) {
+                msg.what = 10;
+                msg.obj = response.getMessage();
+        }else{
+            msg.what = -1;
+            msg.obj = response.getMessage();
+        }
+        handler.sendMessage(msg);
+    }
+
+    /**
      * 数量统计
      *
      * @return
@@ -237,6 +258,38 @@ public class WebHelper {
         };
         Map<String, Integer> map = new HashMap<>();
         Response response = service.getWebservice(Api.GetState, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            try {
+                JSONObject object = new JSONObject(response.getData());
+                map.put("1", object.optInt("daipeihuo"));
+                map.put("2", object.optInt("daichuku"));
+                map.put("3", object.optInt("daihuishou"));
+                map.put("4", object.optInt("yihuishou"));
+                map.put("5", object.optInt("wancheng"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                map.put("1", 0);
+                map.put("2", 0);
+                map.put("3", 0);
+                map.put("4", 0);
+                map.put("5", 0);
+            }
+        } else {
+            map.put("1", 0);
+            map.put("2", 0);
+            map.put("3", 0);
+            map.put("4", 0);
+            map.put("5", 0);
+        }
+        return map;
+    }
+
+    public Map<String, Integer> getOrderNumber(int id, String starttime, String endtime) {
+        Object[] objects = new Object[]{
+                "id",id,"starttime",starttime,"endtime",endtime
+        };
+        Map<String, Integer> map = new HashMap<>();
+        Response response = service.getWebservice(Api.GetStates, objects, WebService.Get);
         if (response.isSuccess("200")) {
             try {
                 JSONObject object = new JSONObject(response.getData());

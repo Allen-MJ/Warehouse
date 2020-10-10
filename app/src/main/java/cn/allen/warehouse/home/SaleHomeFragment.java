@@ -39,6 +39,16 @@ import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Notice;
 import cn.allen.warehouse.entry.ShowOrder;
 import cn.allen.warehouse.flower.XsOrderFragment;
+import cn.allen.warehouse.order.DeliverFragment;
+import cn.allen.warehouse.order.DeliverXsFragment;
+import cn.allen.warehouse.order.InventoryFragment;
+import cn.allen.warehouse.order.InventoryXsFragment;
+import cn.allen.warehouse.order.ReturnedFragment;
+import cn.allen.warehouse.order.ReturnedXsFragment;
+import cn.allen.warehouse.order.ToBeReturnedFragment;
+import cn.allen.warehouse.order.ToBeReturnedXsFragment;
+import cn.allen.warehouse.order.WarehouseOutFragment;
+import cn.allen.warehouse.order.WarehouseOutXsFragment;
 import cn.allen.warehouse.utils.Constants;
 import cn.allen.warehouse.widget.SearchEditText;
 
@@ -68,6 +78,7 @@ public class SaleHomeFragment extends BaseFragment {
     private List<Notice> notices;
     private Calendar c;
     private int type;
+    private String start,end;
 
     public static SaleHomeFragment init() {
         SaleHomeFragment fragment = new SaleHomeFragment();
@@ -146,13 +157,58 @@ public class SaleHomeFragment extends BaseFragment {
                 return true;
             }
         });
+        noticeAdapter.setOnItemClickListener(new NoticeAdapter.OnItemClickListener() {
+            @Override
+            public void itemClick(View v, Notice entry) {
+                read(entry.getId());
+                int statu = entry.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
+                String id = entry.getOrder_id();
+                switch (statu) {
+                    case 1:
+                        if (type == 0) {
+                            onStartFragment(DeliverFragment.newInstance(id));
+                        } else if (type == 1) {
+                            onStartFragment(DeliverXsFragment.newInstance(id));
+                        }
+                        break;
+                    case 2:
+                        if (type == 0) {
+                            onStartFragment(WarehouseOutFragment.newInstance(id));
+                        } else if (type == 1) {
+                            onStartFragment(WarehouseOutXsFragment.newInstance(id));
+                        }
+                        break;
+                    case 3:
+                        if (type == 0) {
+                            onStartFragment(ToBeReturnedFragment.newInstance(id));
+                        } else if (type == 1) {
+                            onStartFragment(ToBeReturnedXsFragment.newInstance(id));
+                        }
+                        break;
+                    case 4:
+                        if (type == 0) {
+                            onStartFragment(ReturnedFragment.newInstance(id));
+                        } else if (type == 1) {
+                            onStartFragment(ReturnedXsFragment.newInstance(id));
+                        }
+                        break;
+                    case 5:
+                        if (type == 0) {
+                            onStartFragment(InventoryFragment.newInstance(id));
+                        } else if (type == 1) {
+                            onStartFragment(InventoryXsFragment.newInstance(id));
+                        }
+                        break;
+                }
+            }
+        });
     }
 
     private void loadcount() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Map<String, Integer> map = WebHelper.init().getOrderNumber(shared.getInt(Constants.UserId,-1));
+                Map<String, Integer> map = WebHelper.init().getOrderNumber(shared.getInt(Constants.UserId,-1),start,end);
                 int num1 = map.get("1") == null ? 0 : map.get("1");
                 int num2 = map.get("2") == null ? 0 : map.get("2");
                 int num3 = map.get("3") == null ? 0 : map.get("3");
@@ -180,6 +236,15 @@ public class SaleHomeFragment extends BaseFragment {
         }).start();
     }
 
+    private void read(int id){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                WebHelper.init().readMsg(handler,id);
+            }
+        }).start();
+    }
+
     @OnClick({R.id.bar_notice, R.id.start_date, R.id.end_date, R.id.oder_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -187,26 +252,30 @@ public class SaleHomeFragment extends BaseFragment {
 
                 break;
             case R.id.start_date:
-                DatePickerDialog start = new DatePickerDialog(getActivity(),
+                DatePickerDialog mstart = new DatePickerDialog(getActivity(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                startDate.setText(year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth));
+                                start = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
+                                startDate.setText(start);
+                                loadcount();
                             }
                         },
                         c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-                start.show();
+                mstart.show();
                 break;
             case R.id.end_date:
-                DatePickerDialog end = new DatePickerDialog(getActivity(),
+                DatePickerDialog mend = new DatePickerDialog(getActivity(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                endDate.setText(year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth));
+                                end = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
+                                endDate.setText(end);
+                                loadcount();
                             }
                         },
                         c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-                end.show();
+                mend.show();
                 break;
             case R.id.oder_bt:
                 onStartFragment(XsOrderFragment.init());
