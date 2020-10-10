@@ -269,18 +269,6 @@ public class WarehouseOutXsFragment extends BaseFragment {
     }
 
 
-    private CommonAdapter.OnItemClickListener listener = new CommonAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-
-        }
-
-        @Override
-        public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
-            return false;
-        }
-    };
-
     @OnClick({R.id.tv_submit, R.id.back_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {

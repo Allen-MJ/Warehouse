@@ -301,7 +301,6 @@ public class ToBeReturnedFragment extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, ImageEntity entity, int position) {
                 holder.setImageByUrl(R.id.image, entity.getMess(), R.drawable.mis_default_error);
-                ImageView view=holder.getView(R.id.image);
 
             }
         };
