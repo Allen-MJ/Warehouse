@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import allen.frame.tools.Logger;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
@@ -140,9 +141,11 @@ public class OrderFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        Logger.e("debug","OrderFragment:onResume");
     }
 
     private void initUi(View view) {
+        Logger.e("debug","OrderFragment:initUi");
         shared = AllenManager.getInstance().getStoragePreference();
         type = shared.getInt(Constants.UserType, -1);
         uid = shared.getInt(Constants.UserId, -1);
