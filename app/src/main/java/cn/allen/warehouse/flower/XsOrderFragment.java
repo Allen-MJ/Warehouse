@@ -171,7 +171,12 @@ public class XsOrderFragment extends BaseFragment {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                orderDateCk.setText(year+"-"+(month+1>9?month+1:"0"+(month+1))+"-"+(dayOfMonth>9?dayOfMonth:"0"+dayOfMonth));
+                                deliveryTime = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
+                                if(CheckUtils.timeIsBefore(deliveryTime,recoveryDate)){
+                                    orderDateCk.setText(deliveryTime);
+                                }else{
+                                    MsgUtils.showMDMessage(getActivity(),"出库时间不能晚于回收时间!");
+                                }
                             }
                         },
                         c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -182,7 +187,12 @@ public class XsOrderFragment extends BaseFragment {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                orderDateHs.setText(year+"-"+(month+1>9?month+1:"0"+(month+1))+"-"+(dayOfMonth>9?dayOfMonth:"0"+dayOfMonth));
+                                recoveryDate = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
+                                if(CheckUtils.timeIsAfter(deliveryTime,recoveryDate)){
+                                    orderDateHs.setText(recoveryDate);
+                                }else{
+                                    MsgUtils.showMDMessage(getActivity(),"回收时间不能早于出库时间!");
+                                }
                             }
                         },
                         c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
