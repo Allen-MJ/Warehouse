@@ -147,24 +147,24 @@ public class ReturnedFragment extends BaseFragment {
                             break;
                     }
                     childrenList = orderInfoEntity.getChildren();
-                    int childrensize=childrenList==null?0:childrenList.size();
-                    if (childrensize==0) {
+                    int childrensize = childrenList == null ? 0 : childrenList.size();
+                    if (childrensize == 0) {
                         layoutChildren.setVisibility(View.GONE);
                     } else {
                         layoutChildren.setVisibility(View.VISIBLE);
                         childrenAdapter.setDatas(childrenList);
                     }
                     mainList = orderInfoEntity.getMainchildren();
-                    int mainsize=mainList==null?0:mainList.size();
-                    if (mainsize==0) {
+                    int mainsize = mainList == null ? 0 : mainList.size();
+                    if (mainsize == 0) {
                         layoutMain.setVisibility(View.GONE);
                     } else {
                         layoutMain.setVisibility(View.VISIBLE);
                         mainAdapter.setDatas(mainList);
                     }
                     imageList = orderInfoEntity.getImages();
-                    int imagesize=imageList==null?0:imageList.size();
-                    if (imagesize>0) {
+                    int imagesize = imageList == null ? 0 : imageList.size();
+                    if (imagesize > 0) {
                         imageAdapter.setDatas(imageList);
                     }
 
@@ -264,8 +264,8 @@ public class ReturnedFragment extends BaseFragment {
                 if (et_count.getTag() != null && et_count.getTag() instanceof TextWatcher) {
                     et_count.removeTextChangedListener((TextWatcher) et_count.getTag());
                 }
-                et_count.setText(entity.getLoss_quantity()+"");
-                et_count.setSelection((entity.getLoss_quantity()+"").length());
+                et_count.setText(entity.getLoss_quantity() + "");
+                et_count.setSelection((entity.getLoss_quantity() + "").length());
                 TextWatcher textWatcher = new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -280,14 +280,14 @@ public class ReturnedFragment extends BaseFragment {
                     @Override
                     public void afterTextChanged(Editable s) {
                         if (!s.toString().equals("")) {
-                            int loss_count=Integer.parseInt(s.toString());
-                            int count=childrenList.get(position).getScheduled_quantity();
-                            if (loss_count>count){
-                                loss_count=count;
+                            int loss_count = Integer.parseInt(s.toString());
+                            int count = childrenList.get(position).getScheduled_quantity();
+                            if (loss_count > count) {
+                                loss_count = count;
                             }
                             childrenList.get(position).setLoss_quantity(loss_count);
                             notifyItemChanged(position);
-                        }else {
+                        } else {
                             childrenList.get(position).setLoss_quantity(0);
                             notifyItemChanged(position);
                         }
@@ -310,8 +310,8 @@ public class ReturnedFragment extends BaseFragment {
                 if (et_count.getTag() != null && et_count.getTag() instanceof TextWatcher) {
                     et_count.removeTextChangedListener((TextWatcher) et_count.getTag());
                 }
-                et_count.setText(entity.getLoss_quantity()+"");
-                et_count.setSelection((entity.getLoss_quantity()+"").length());
+                et_count.setText(entity.getLoss_quantity() + "");
+                et_count.setSelection((entity.getLoss_quantity() + "").length());
                 TextWatcher textWatcher = new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -325,15 +325,15 @@ public class ReturnedFragment extends BaseFragment {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        if (!s.toString().equals("")){
-                            int loss_count=Integer.parseInt(s.toString());
-                            int count=mainList.get(position).getScheduled_quantity();
-                            if (loss_count>count){
-                                loss_count=count;
+                        if (!s.toString().equals("")) {
+                            int loss_count = Integer.parseInt(s.toString());
+                            int count = mainList.get(position).getScheduled_quantity();
+                            if (loss_count > count) {
+                                loss_count = count;
                             }
                             mainList.get(position).setLoss_quantity(loss_count);
                             notifyItemChanged(position);
-                        }else {
+                        } else {
                             mainList.get(position).setLoss_quantity(0);
                             notifyItemChanged(position);
                         }
@@ -360,23 +360,27 @@ public class ReturnedFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_submit,R.id.back_bt})
+    @OnClick({R.id.tv_submit, R.id.back_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_submit:
-                JSONArray array=new JSONArray();
-                for (int i = 0; i < mainList.size(); i++) {
-                    try {
-                        OrderInfoEntity.MainchildrenBean mainchildrenBean = mainList.get(i);
-                        JSONObject object = new JSONObject();
-                        object.put("id", mainchildrenBean.getId());
-                        object.put("count",mainchildrenBean.getLoss_quantity());
-                        array.put(object);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                JSONArray array = new JSONArray();
+                int mainsize = mainList == null ? 0 : mainList.size();
+                if (mainsize > 0) {
+                    for (int i = 0; i < mainList.size(); i++) {
+                        try {
+                            OrderInfoEntity.MainchildrenBean mainchildrenBean = mainList.get(i);
+                            JSONObject object = new JSONObject();
+                            object.put("id", mainchildrenBean.getId());
+                            object.put("count", mainchildrenBean.getLoss_quantity());
+                            array.put(object);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-                if (childrenList!=null&&!childrenList.isEmpty()) {
+                int childrensize = childrenList == null ? 0 : childrenList.size();
+                if (childrensize > 0) {
                     for (int i = 0; i < childrenList.size(); i++) {
                         try {
                             OrderInfoEntity.ChildrenBean childrenBean = childrenList.get(i);

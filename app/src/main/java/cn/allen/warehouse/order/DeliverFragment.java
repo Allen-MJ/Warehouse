@@ -121,14 +121,16 @@ public class DeliverFragment extends BaseFragment {
                             break;
                     }
                     childrenList = orderInfoEntity.getChildren();
-                    if (childrenList == null || childrenList.isEmpty()) {
+                    int chrildrensize = childrenList == null ? 0 : childrenList.size();
+                    if (chrildrensize == 0) {
                         layoutChildren.setVisibility(View.GONE);
                     } else {
                         layoutChildren.setVisibility(View.VISIBLE);
                         childrenAdapter.setDatas(childrenList);
                     }
                     mainList = orderInfoEntity.getMainchildren();
-                    if (mainList == null || mainList.isEmpty()) {
+                    int mainsize = mainList == null ? 0 : mainList.size();
+                    if (mainsize == 0) {
                         layoutMain.setVisibility(View.GONE);
                     } else {
                         layoutMain.setVisibility(View.VISIBLE);
@@ -301,16 +303,17 @@ public class DeliverFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_submit:
-
                 boolean isAllConfirm = true;
-                if (mainList != null) {
+                int mainsize = mainList == null ? 0 : mainList.size();
+                if (mainsize > 0) {
                     for (OrderInfoEntity.MainchildrenBean entity : mainList) {
                         if (entity.getId_check() == 0) {
                             isAllConfirm = false;
                         }
                     }
                 }
-                if (childrenList != null) {
+                int childrensize = childrenList == null ? 0 : childrenList.size();
+                if (childrensize > 0) {
                     for (OrderInfoEntity.ChildrenBean entity : childrenList) {
                         if (entity.getId_check() == 0) {
                             isAllConfirm = false;

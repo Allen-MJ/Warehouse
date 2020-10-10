@@ -154,14 +154,16 @@ public class ToBeReturnedFragment extends BaseFragment {
                             break;
                     }
                     childrenList = orderInfoEntity.getChildren();
-                    if (childrenList == null || childrenList.isEmpty()) {
+                    int chrildrensize=childrenList==null?0:childrenList.size();
+                    if (chrildrensize==0) {
                         layoutChildren.setVisibility(View.GONE);
                     } else {
                         layoutChildren.setVisibility(View.VISIBLE);
                         childrenAdapter.setDatas(childrenList);
                     }
                     mainList = orderInfoEntity.getMainchildren();
-                    if (mainList == null || mainList.isEmpty()) {
+                    int mainsize=mainList==null?0:mainList.size();
+                    if (mainsize==0) {
                         layoutMain.setVisibility(View.GONE);
                     } else {
                         layoutMain.setVisibility(View.VISIBLE);
@@ -347,7 +349,8 @@ public class ToBeReturnedFragment extends BaseFragment {
             case R.id.tv_submit:
 
                 JSONArray array = new JSONArray();
-                if (imageEntityList!=null&&!imageEntityList.isEmpty()) {
+                int imagesize=imageEntityList==null?0:imageEntityList.size();
+                if (imagesize>0) {
                     for (int i = 0; i < imageEntityList.size(); i++) {
                         try {
                            ImageEntity imageEntity = imageEntityList.get(i);
