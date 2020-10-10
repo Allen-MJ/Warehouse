@@ -200,7 +200,12 @@ public class XGOrderFragment extends BaseFragment {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                orderDateHl.setText(year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth));
+                                weddingDate = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
+                                orderDateHl.setText(weddingDate);
+                                deliveryTime = "";
+                                orderDateCk.setText(deliveryTime);
+                                recoveryDate = "";
+                                orderDateHs.setText(recoveryDate);
                             }
                         },
                         c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -212,10 +217,11 @@ public class XGOrderFragment extends BaseFragment {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 deliveryTime = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
-                                if(CheckUtils.timeIsBefore(deliveryTime,recoveryDate)){
+                                if(CheckUtils.timeIsBefore(deliveryTime,recoveryDate)&&CheckUtils.timeIsBefore(deliveryTime,weddingDate)){
                                     orderDateCk.setText(deliveryTime);
                                 }else{
-                                    MsgUtils.showMDMessage(getActivity(),"出库时间不能晚于回收时间!");
+                                    deliveryTime = orderDateCk.getText().toString().trim();
+                                    MsgUtils.showMDMessage(getActivity(),"出库时间不能晚于回收时间以及婚礼时间!");
                                 }
                             }
                         },
@@ -228,10 +234,11 @@ public class XGOrderFragment extends BaseFragment {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 recoveryDate = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
-                                if(CheckUtils.timeIsAfter(deliveryTime,recoveryDate)){
+                                if(CheckUtils.timeIsAfter(recoveryDate,deliveryTime)&&CheckUtils.timeIsAfter(recoveryDate,weddingDate)){
                                     orderDateHs.setText(recoveryDate);
                                 }else{
-                                    MsgUtils.showMDMessage(getActivity(),"回收时间不能早于出库时间!");
+                                    recoveryDate = orderDateHs.getText().toString().trim();
+                                    MsgUtils.showMDMessage(getActivity(),"回收时间不能早于出库时间以及婚礼时间!");
                                 }
                             }
                         },

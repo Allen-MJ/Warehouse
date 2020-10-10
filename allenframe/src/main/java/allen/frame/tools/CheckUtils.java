@@ -210,22 +210,22 @@ public class CheckUtils {
 	}
 
 	/**
-	 * 第二个时间是不是在第一个时间之后
+	 * 第一个时间在第二个时间之后
 	 * @param start
 	 * @param end 不能为空
 	 * @return
 	 */
 	public static boolean timeIsAfter(String start,String end){
 		if(StringUtils.notEmpty(start)){
-			return timeCompare(start,end)>=2;
+			return timeCompare(start,end)<=2;
 		}
 		return true;
 	}
 
 	/**
-	 * 第二个时间是不是在第一个时间之后
-	 * @param start 不能为空
-	 * @param end
+	 * 第一个时间在第二个之前
+	 * @param start
+	 * @param end 不能为空
 	 * @return
 	 */
 	public static boolean timeIsBefore(String start,String end){
@@ -245,7 +245,7 @@ public class CheckUtils {
 	public static int timeCompare(String startTime, String endTime){
 		int i=0;
 		//注意：传过来的时间格式必须要和这里填入的时间格式相同
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			Date date1 = dateFormat.parse(startTime);//开始时间
 			Date date2 = dateFormat.parse(endTime);//结束时间

@@ -105,7 +105,6 @@ public class MainActivity extends AllenBaseActivity {
                 adapter.setCheck(String.valueOf(order.getId()));
                 startNextFragment(AllOrderFragment.init(""));
             }
-            loadNum();
         }
     };
 
@@ -139,6 +138,7 @@ public class MainActivity extends AllenBaseActivity {
         @Override
         public void itemClick(View v, Type entry) {
             bindFragment(entry.getId());
+            loadNum();
         }
     };
 
