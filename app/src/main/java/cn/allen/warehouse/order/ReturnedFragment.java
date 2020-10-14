@@ -54,6 +54,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
+import cn.allen.warehouse.ShowPicActivity;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.ImageEntity;
 import cn.allen.warehouse.entry.OrderInfoEntity;
@@ -357,6 +358,19 @@ public class ReturnedFragment extends BaseFragment {
     }
 
     private void addEvent(View view) {
+        imageAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent intent=new Intent(getActivity(), ShowPicActivity.class);
+                intent.putExtra("url",imageList.get(position).getImg());
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
     }
 
 
