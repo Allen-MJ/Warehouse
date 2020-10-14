@@ -39,6 +39,9 @@ public class ShowPicActivity extends AllenIMBaseActivity {
     @Override
     protected void initUI(@Nullable Bundle savedInstanceState) {
         url = getIntent().getStringExtra("url");
+        pic.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        pic.enable();
+        pic.enableRotate();
         Glide.with(context).load(url).into(pic);
     }
 
