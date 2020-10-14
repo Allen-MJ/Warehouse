@@ -41,6 +41,10 @@
             android:screenOrientation="landscape">
         </activity>
         <activity
+            android:name=".ShowPicActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
             android:name=".flower.FlowerChoiceActivity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.SwipeBack.Translucent">

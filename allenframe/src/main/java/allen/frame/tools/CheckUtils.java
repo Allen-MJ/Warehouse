@@ -266,4 +266,15 @@ public class CheckUtils {
 		return  i;
 	}
 
+	public static long timeSpan(String time){
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			Date date = dateFormat.parse(time);//开始时间
+			return date.getTime();
+		} catch (Exception e) {
+
+		}
+		return 0;
+	}
+
 }

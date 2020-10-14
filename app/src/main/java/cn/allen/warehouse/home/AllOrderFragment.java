@@ -103,6 +103,7 @@ public class AllOrderFragment extends BaseFragment {
 
     private void initUi(View view) {
         no = getArguments().getString("no");
+        barSearch.setHint("输入客户名字或订单号");
         barSearch.setText(no);
         shared = AllenManager.getInstance().getStoragePreference();
         uid = shared.getInt(Constants.UserId, -1);

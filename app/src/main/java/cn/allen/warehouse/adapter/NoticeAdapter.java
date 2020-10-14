@@ -1,5 +1,6 @@
 package cn.allen.warehouse.adapter;
 
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import allen.frame.tools.CheckUtils;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -64,8 +66,9 @@ public class NoticeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         public void bind(final Notice entry){
             if(entry!=null){
-                title.setText(entry.getContent()+",订单号:"+entry.getOrder_id());
-                date.setText(entry.getCreatetime().substring(0,10));
+                title.setText(entry.getContent()+"\n客户:"+entry.getCustomer_name()+",订单号:"+entry.getOrder_id());
+//                date.setText(entry.getCreatetime().substring(0,10));
+                date.setText(DateUtils.getRelativeTimeSpanString(CheckUtils.timeSpan(entry.getAddtimes())).toString());
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

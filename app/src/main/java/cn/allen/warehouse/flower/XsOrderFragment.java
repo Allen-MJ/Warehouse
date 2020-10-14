@@ -3,6 +3,7 @@ package cn.allen.warehouse.flower;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 import org.json.JSONArray;
 
@@ -45,6 +47,7 @@ import cn.allen.warehouse.adapter.ChoiceFlowerAdapter;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Flower;
 import cn.allen.warehouse.utils.Constants;
+import cn.allen.warehouse.utils.DateTimePickerDialog;
 
 public class XsOrderFragment extends BaseFragment {
     Unbinder unbinder;
@@ -156,44 +159,42 @@ public class XsOrderFragment extends BaseFragment {
                 backPreFragment();
                 break;
             case R.id.order_date_hl:
-                DatePickerDialog hl = new DatePickerDialog(getActivity(),
-                        new DatePickerDialog.OnDateSetListener() {
+                DateTimePickerDialog hl = new DateTimePickerDialog(getActivity(),
+                        new DateTimePickerDialog.OnDateTimeChangeListener() {
                             @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                weddingDate = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
+                            public void onDateTimeSet(int year, int month, int day, int hour, int minute, int second) {
+                                weddingDate = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (day > 9 ? day : "0" + day);
                                 orderDateHl.setText(weddingDate);
                                 deliveryTime = "";
                                 orderDateCk.setText(deliveryTime);
                                 recoveryDate = "";
                                 orderDateHs.setText(recoveryDate);
                             }
-                        },
-                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                        },0);
                 hl.show();
                 break;
             case R.id.order_date_ck:
-                DatePickerDialog ck = new DatePickerDialog(getActivity(),
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                deliveryTime = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
-                                if(CheckUtils.timeIsBefore(deliveryTime,recoveryDate)&&CheckUtils.timeIsBefore(deliveryTime,weddingDate)){
-                                    orderDateCk.setText(deliveryTime);
-                                }else{
-                                    deliveryTime = orderDateCk.getText().toString().trim();
-                                    MsgUtils.showMDMessage(getActivity(),"出库时间不能晚于回收时间以及婚礼时间!");
-                                }
-                            }
-                        },
-                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                DateTimePickerDialog ck = new DateTimePickerDialog(getActivity(), new DateTimePickerDialog.OnDateTimeChangeListener() {
+                    @Override
+                    public void onDateTimeSet(int year, int month, int day, int hour, int minute, int second) {
+                        deliveryTime = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (day > 9 ? day : "0" + day)
+                                +" "+(hour>9?hour:"0"+hour)+":"+(minute>9?minute:"0"+minute)+":"+(second>9?second:"0"+second);
+                        if(CheckUtils.timeIsBefore(deliveryTime,recoveryDate)&&CheckUtils.timeIsBefore(deliveryTime,weddingDate)){
+                            orderDateCk.setText(deliveryTime);
+                        }else{
+                            deliveryTime = orderDateCk.getText().toString().trim();
+                            MsgUtils.showMDMessage(getActivity(),"出库时间不能晚于回收时间以及婚礼时间!");
+                        }
+                    }
+                },1);
                 ck.show();
                 break;
             case R.id.order_date_hs:
-                DatePickerDialog hs = new DatePickerDialog(getActivity(),
-                        new DatePickerDialog.OnDateSetListener() {
+                DateTimePickerDialog hs = new DateTimePickerDialog(getActivity(),
+                        new DateTimePickerDialog.OnDateTimeChangeListener() {
                             @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                recoveryDate = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (dayOfMonth > 9 ? dayOfMonth : "0" + dayOfMonth);
+                            public void onDateTimeSet(int year, int month, int day, int hour, int minute, int second) {
+                                recoveryDate = year + "-" + (month + 1 > 9 ? month + 1 : "0" + (month + 1)) + "-" + (day > 9 ? day : "0" + day);
                                 if(CheckUtils.timeIsAfter(recoveryDate,deliveryTime)&&CheckUtils.timeIsAfter(recoveryDate,weddingDate)){
                                     orderDateHs.setText(recoveryDate);
                                 }else{
@@ -201,8 +202,7 @@ public class XsOrderFragment extends BaseFragment {
                                     MsgUtils.showMDMessage(getActivity(),"回收时间不能早于出库时间以及婚礼时间!");
                                 }
                             }
-                        },
-                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                        },0);
                 hs.show();
                 break;
             case R.id.order_commit:

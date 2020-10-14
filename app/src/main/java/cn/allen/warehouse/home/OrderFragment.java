@@ -164,8 +164,8 @@ public class OrderFragment extends BaseFragment {
                 holder.setText(R.id.order_id, "订单号" + entity.getOrder_number());
                 holder.setText(R.id.order_name, entity.getCustomer_name());
                 holder.setText(R.id.tv_order_address, entity.getHotel_address());
-                holder.setText(R.id.tv_order_out_time, entity.getDelivery_time());
-                holder.setText(R.id.tv_order_back_time, entity.getRecovery_date());
+                holder.setText(R.id.tv_order_out_time, entity.getDelivery_times().substring(0,10));
+                holder.setText(R.id.tv_order_back_time, entity.getRecovery_dates().substring(0,10));
                 holder.setText(R.id.tv_salesman, entity.getNumber_name());
                 int statu = entity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                 switch (statu) {

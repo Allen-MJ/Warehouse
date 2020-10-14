@@ -8,6 +8,7 @@ public class Notice implements Serializable {
     private int id;
     private String content;
     private String order_id;
+    private String customer_name;
     private String createtime;
     private String addtimes;
     private int order_process;
@@ -21,8 +22,10 @@ public class Notice implements Serializable {
                 "id=" + id +
                 ", content='" + content + '\'' +
                 ", order_id='" + order_id + '\'' +
+                ", customer_name='" + customer_name + '\'' +
                 ", createtime='" + createtime + '\'' +
                 ", addtimes='" + addtimes + '\'' +
+                ", order_process=" + order_process +
                 '}';
     }
 
@@ -72,5 +75,13 @@ public class Notice implements Serializable {
 
     public void setOrder_process(int order_process) {
         this.order_process = order_process;
+    }
+
+    public String getCustomer_name() {
+        return customer_name;
+    }
+
+    public void setCustomer_name(String customer_name) {
+        this.customer_name = customer_name;
     }
 }

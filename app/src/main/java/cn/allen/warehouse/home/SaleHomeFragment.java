@@ -107,6 +107,7 @@ public class SaleHomeFragment extends BaseFragment {
     }
 
     private void initUi(View view) {
+        barSearch.setHint("输入客户名字或订单号");
         c = Calendar.getInstance();
         shared = AllenManager.getInstance().getStoragePreference();
         type = shared.getInt(Constants.UserType,-1);
