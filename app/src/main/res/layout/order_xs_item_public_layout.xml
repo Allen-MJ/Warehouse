@@ -116,11 +116,21 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_order_address"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                     android:textColor="@color/text_normal_color"
+                    android:textSize="@dimen/frame_text_normal_size" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_to_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="查看详情>"
+                    android:visibility="gone"
+                    android:textColor="@color/order_text_red"
                     android:textSize="@dimen/frame_text_normal_size" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>

@@ -2,15 +2,11 @@ package cn.allen.warehouse.order;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,23 +19,16 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import allen.frame.ActivityHelper;
 import allen.frame.AllenManager;
 import allen.frame.adapter.CommonAdapter;
 import allen.frame.adapter.ViewHolder;
-import allen.frame.tools.FileUtils;
 import allen.frame.tools.MsgUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,8 +39,6 @@ import cn.allen.warehouse.R;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.ImageEntity;
 import cn.allen.warehouse.entry.OrderInfoEntity;
-import cn.allen.warehouse.flower.XGOrderFragment;
-import cn.allen.warehouse.flower.XsOrderFragment;
 import cn.allen.warehouse.flower.ZjOrderFragment;
 import cn.allen.warehouse.utils.Constants;
 
@@ -105,6 +92,8 @@ public class ToBeReturnedXsFragment extends BaseFragment {
     AppCompatTextView tvDate1;
     @BindView(R.id.tv_remark)
     AppCompatTextView tvRemark;
+    @BindView(R.id.tv_to_info)
+    AppCompatTextView tvToInfo;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -150,16 +139,16 @@ public class ToBeReturnedXsFragment extends BaseFragment {
                             break;
                     }
                     childrenList = orderInfoEntity.getChildren();
-                    int chrildrensize=childrenList==null?0:childrenList.size();
-                    if (chrildrensize==0) {
+                    int chrildrensize = childrenList == null ? 0 : childrenList.size();
+                    if (chrildrensize == 0) {
                         layoutChildren.setVisibility(View.GONE);
                     } else {
                         layoutChildren.setVisibility(View.VISIBLE);
                         childrenAdapter.setDatas(childrenList);
                     }
                     mainList = orderInfoEntity.getMainchildren();
-                    int mainsize=mainList==null?0:mainList.size();
-                    if (mainsize==0) {
+                    int mainsize = mainList == null ? 0 : mainList.size();
+                    if (mainsize == 0) {
                         layoutMain.setVisibility(View.GONE);
                     } else {
                         layoutMain.setVisibility(View.VISIBLE);
@@ -219,6 +208,7 @@ public class ToBeReturnedXsFragment extends BaseFragment {
     }
 
     private void initUi(View view) {
+        tvToInfo.setVisibility(View.VISIBLE);
         shared = AllenManager.getInstance().getStoragePreference();
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
         initAdapter();
@@ -277,9 +267,12 @@ public class ToBeReturnedXsFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.tv_submit, R.id.image,R.id.back_bt})
+    @OnClick({R.id.tv_submit, R.id.image, R.id.back_bt,R.id.tv_to_info})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tv_to_info:
+                onStartFragment(OrderInfoFragment.init(numberID));
+                break;
             case R.id.image:
                 break;
             case R.id.tv_submit:
@@ -291,7 +284,6 @@ public class ToBeReturnedXsFragment extends BaseFragment {
         }
 
     }
-
 
 
 }

@@ -16,7 +16,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,7 +35,6 @@ import cn.allen.warehouse.R;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.OrderInfoEntity;
 import cn.allen.warehouse.flower.XGOrderFragment;
-import cn.allen.warehouse.flower.XsOrderFragment;
 import cn.allen.warehouse.utils.Constants;
 
 public class DeliverXsFragment extends BaseFragment {
@@ -85,6 +83,8 @@ public class DeliverXsFragment extends BaseFragment {
     AppCompatTextView tvDate1;
     @BindView(R.id.tv_remark)
     AppCompatTextView tvRemark;
+    @BindView(R.id.tv_to_info)
+    AppCompatTextView tvToInfo;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -129,16 +129,16 @@ public class DeliverXsFragment extends BaseFragment {
                             break;
                     }
                     childrenList = orderInfoEntity.getChildren();
-                    int chrildrensize=childrenList==null?0:childrenList.size();
-                    if (chrildrensize==0) {
+                    int chrildrensize = childrenList == null ? 0 : childrenList.size();
+                    if (chrildrensize == 0) {
                         layoutChildren.setVisibility(View.GONE);
                     } else {
                         layoutChildren.setVisibility(View.VISIBLE);
                         childrenAdapter.setDatas(childrenList);
                     }
                     mainList = orderInfoEntity.getMainchildren();
-                    int mainsize=mainList==null?0:mainList.size();
-                    if (mainsize==0) {
+                    int mainsize = mainList == null ? 0 : mainList.size();
+                    if (mainsize == 0) {
                         layoutMain.setVisibility(View.GONE);
                     } else {
                         layoutMain.setVisibility(View.VISIBLE);
@@ -198,6 +198,7 @@ public class DeliverXsFragment extends BaseFragment {
     }
 
     private void initUi(View view) {
+        tvToInfo.setVisibility(View.VISIBLE);
         shared = AllenManager.getInstance().getStoragePreference();
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
         initAdapter();
@@ -280,9 +281,12 @@ public class DeliverXsFragment extends BaseFragment {
         }
     };
 
-    @OnClick({R.id.tv_submit,R.id.back_bt})
+    @OnClick({R.id.tv_submit, R.id.back_bt,R.id.tv_to_info})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tv_to_info:
+                onStartFragment(OrderInfoFragment.init(numberID));
+                break;
             case R.id.tv_submit:
                 onStartFragment(XGOrderFragment.init(numberID));
                 break;

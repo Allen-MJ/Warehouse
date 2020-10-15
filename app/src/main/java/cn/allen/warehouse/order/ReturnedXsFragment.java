@@ -21,7 +21,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,8 +42,6 @@ import cn.allen.warehouse.ShowPicActivity;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.ImageEntity;
 import cn.allen.warehouse.entry.OrderInfoEntity;
-import cn.allen.warehouse.flower.XGOrderFragment;
-import cn.allen.warehouse.flower.XsOrderFragment;
 import cn.allen.warehouse.utils.Constants;
 
 public class ReturnedXsFragment extends BaseFragment {
@@ -101,6 +98,8 @@ public class ReturnedXsFragment extends BaseFragment {
     AppCompatTextView tvTotal;
     @BindView(R.id.tv_sh_total)
     AppCompatTextView tvShTotal;
+    @BindView(R.id.tv_to_info)
+    AppCompatTextView tvToInfo;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -148,47 +147,47 @@ public class ReturnedXsFragment extends BaseFragment {
                             orderState.setText("完成清点");
                             break;
                     }
-                    double total=0;
-                    double loss_total=0;
+                    double total = 0;
+                    double loss_total = 0;
                     childrenList = orderInfoEntity.getChildren();
-                    int childrensize=childrenList==null?0:childrenList.size();
-                    if (childrensize==0) {
+                    int childrensize = childrenList == null ? 0 : childrenList.size();
+                    if (childrensize == 0) {
                         layoutChildren.setVisibility(View.GONE);
                     } else {
                         layoutChildren.setVisibility(View.VISIBLE);
                         childrenAdapter.setDatas(childrenList);
-                        for (OrderInfoEntity.ChildrenBean childrenBean:childrenList) {
-                            int count=childrenBean.getScheduled_quantity();
-                            int loss_count=childrenBean.getLoss_quantity();
-                            double rent=childrenBean.getRent();
-                            double loss_rent=childrenBean.getLoss_rent();
-                            total=total+count*rent;
-                            loss_total=loss_total+loss_count*loss_rent;
+                        for (OrderInfoEntity.ChildrenBean childrenBean : childrenList) {
+                            int count = childrenBean.getScheduled_quantity();
+                            int loss_count = childrenBean.getLoss_quantity();
+                            double rent = childrenBean.getRent();
+                            double loss_rent = childrenBean.getLoss_rent();
+                            total = total + count * rent;
+                            loss_total = loss_total + loss_count * loss_rent;
 
                         }
                     }
                     mainList = orderInfoEntity.getMainchildren();
-                    int mainsize=mainList==null?0:mainList.size();
-                    if (mainsize==0) {
+                    int mainsize = mainList == null ? 0 : mainList.size();
+                    if (mainsize == 0) {
                         layoutMain.setVisibility(View.GONE);
                     } else {
                         layoutMain.setVisibility(View.VISIBLE);
                         mainAdapter.setDatas(mainList);
-                        for (OrderInfoEntity.MainchildrenBean mainchildrenBean:mainList) {
-                            int count=mainchildrenBean.getScheduled_quantity();
-                            int loss_count=mainchildrenBean.getLoss_quantity();
-                            double rent=mainchildrenBean.getRent();
-                            double loss_rent=mainchildrenBean.getLoss_rent();
-                            total=total+count*rent;
-                            loss_total=loss_total+loss_count*loss_rent;
+                        for (OrderInfoEntity.MainchildrenBean mainchildrenBean : mainList) {
+                            int count = mainchildrenBean.getScheduled_quantity();
+                            int loss_count = mainchildrenBean.getLoss_quantity();
+                            double rent = mainchildrenBean.getRent();
+                            double loss_rent = mainchildrenBean.getLoss_rent();
+                            total = total + count * rent;
+                            loss_total = loss_total + loss_count * loss_rent;
 
                         }
                     }
-                    tvTotal.setText("￥"+total);
-                    tvShTotal.setText("￥"+loss_total);
+                    tvTotal.setText("￥" + total);
+                    tvShTotal.setText("￥" + loss_total);
                     imageList = orderInfoEntity.getImages();
-                    int imagesize=imageList==null?0:imageList.size();
-                    if (imagesize>0) {
+                    int imagesize = imageList == null ? 0 : imageList.size();
+                    if (imagesize > 0) {
                         imageAdapter.setDatas(imageList);
                     }
 
@@ -250,6 +249,7 @@ public class ReturnedXsFragment extends BaseFragment {
     }
 
     private void initUi(View view) {
+        tvToInfo.setVisibility(View.VISIBLE);
         shared = AllenManager.getInstance().getStoragePreference();
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
         initAdapter();
@@ -279,8 +279,8 @@ public class ReturnedXsFragment extends BaseFragment {
                 if (et_count.getTag() != null && et_count.getTag() instanceof TextWatcher) {
                     et_count.removeTextChangedListener((TextWatcher) et_count.getTag());
                 }
-                et_count.setText(entity.getLoss_quantity()+"");
-                et_count.setSelection((entity.getLoss_quantity()+"").length());
+                et_count.setText(entity.getLoss_quantity() + "");
+                et_count.setSelection((entity.getLoss_quantity() + "").length());
                 TextWatcher textWatcher = new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -295,14 +295,14 @@ public class ReturnedXsFragment extends BaseFragment {
                     @Override
                     public void afterTextChanged(Editable s) {
                         if (!s.toString().equals("")) {
-                            int loss_count=Integer.parseInt(s.toString());
-                            int count=childrenList.get(position).getScheduled_quantity();
-                            if (loss_count>count){
-                                loss_count=count;
+                            int loss_count = Integer.parseInt(s.toString());
+                            int count = childrenList.get(position).getScheduled_quantity();
+                            if (loss_count > count) {
+                                loss_count = count;
                             }
                             childrenList.get(position).setLoss_quantity(loss_count);
                             notifyItemChanged(position);
-                        }else {
+                        } else {
                             childrenList.get(position).setLoss_quantity(0);
                             notifyItemChanged(position);
                         }
@@ -344,8 +344,8 @@ public class ReturnedXsFragment extends BaseFragment {
         imageAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(getActivity(), ShowPicActivity.class);
-                intent.putExtra("url",imageList.get(position).getImg());
+                Intent intent = new Intent(getActivity(), ShowPicActivity.class);
+                intent.putExtra("url", imageList.get(position).getImg());
                 startActivity(intent);
             }
 
@@ -357,12 +357,15 @@ public class ReturnedXsFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_submit,R.id.back_bt})
+    @OnClick({R.id.tv_submit, R.id.back_bt,R.id.tv_to_info})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tv_to_info:
+                onStartFragment(OrderInfoFragment.init(numberID));
+                break;
             case R.id.tv_submit:
-               actHelper.showProgressDialog("");
-               returnOrder();
+                actHelper.showProgressDialog("");
+                returnOrder();
                 break;
             case R.id.back_bt:
                 backPreFragment();
@@ -375,7 +378,7 @@ public class ReturnedXsFragment extends BaseFragment {
         new Thread() {
             @Override
             public void run() {
-                WebHelper.init().returnOrder(handler,numberID,""+orderInfoEntity.getRent(),""+orderInfoEntity.getActual_loss_rent());
+                WebHelper.init().returnOrder(handler, numberID, "" + orderInfoEntity.getRent(), "" + orderInfoEntity.getActual_loss_rent());
             }
         }.start();
     }

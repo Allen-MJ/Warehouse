@@ -26,6 +26,7 @@ import cn.allen.warehouse.entry.ImageEntity;
 import cn.allen.warehouse.entry.Notice;
 import cn.allen.warehouse.entry.Order;
 import cn.allen.warehouse.entry.OrderInfoEntity;
+import cn.allen.warehouse.entry.OrderInfoXsEntity;
 import cn.allen.warehouse.entry.Response;
 import cn.allen.warehouse.entry.User;
 import cn.allen.warehouse.utils.Constants;
@@ -629,6 +630,24 @@ public class WebHelper {
         Response response = service.getWebservice(Api.ReturnOrder, objects, WebService.Get);
         if (response.isSuccess("200")) {
             order = gson.fromJson(response.getData(), new TypeToken<Order>() {}.getType());
+        }
+        return order;
+    }
+
+    /**
+     * 销售端  根据订单号获取订单详情
+     * @param handler
+     * @param no
+     * @return
+     */
+    public OrderInfoXsEntity getOrderInfoXsByNo(Handler handler, String no){
+        OrderInfoXsEntity order = null;
+        Object[] objects = new Object[]{
+                "ordernumber", no
+        };
+        Response response = service.getWebservice(Api.GetDetail, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            order = gson.fromJson(response.getData(), new TypeToken<OrderInfoXsEntity>() {}.getType());
         }
         return order;
     }
