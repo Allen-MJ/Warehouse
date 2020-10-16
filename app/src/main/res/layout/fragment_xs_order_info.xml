@@ -10,33 +10,96 @@
 
     <include layout="@layout/bar_back" />
 
-    <include layout="@layout/alen_progress_layout"
-        android:visibility="gone"/>
+    <include
+        layout="@layout/alen_progress_layout"
+        android:visibility="gone" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/frame_edge_distance">
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_name"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/frame_edge_distance"
-            android:text="客户名字:"
-            android:textColor="@color/text_gray_color"
-            android:textSize="@dimen/frame_text_middle_size"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:padding="@dimen/frame_edge_distance">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/frame_edge_distance"
-            android:text="地址:"
-            android:textColor="@color/text_gray_color"
-            android:textSize="@dimen/frame_text_normal_size" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                >
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/frame_edge_distance"
+                    android:text="客户名字:"
+                    android:textColor="@color/text_gray_color"
+                    android:textSize="@dimen/frame_text_middle_size"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/frame_edge_distance"
+                    android:text="地址:"
+                    android:textColor="@color/text_gray_color"
+                    android:textSize="@dimen/frame_text_normal_size" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_total"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/frame_edge_distance"
+                    android:text="租金总额:"
+                    android:textColor="@color/text_gray_color"
+                    android:textSize="@dimen/frame_text_normal_size"
+                     />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/frame_edge_distance"
+                    android:text="￥5000"
+                    android:textColor="@color/order_text_red"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/frame_text_middle_size" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_xh_total"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/frame_edge_distance"
+                    android:text="消耗总额:"
+                    android:textColor="@color/text_gray_color"
+                    android:textSize="@dimen/frame_text_normal_size"
+                    />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_xh_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/frame_edge_distance"
+                    android:text="￥3000"
+                    android:textColor="@color/order_text_red"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/frame_text_middle_size" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/item_layout"
@@ -108,4 +171,5 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.cardview.widget.CardView>
     </androidx.appcompat.widget.LinearLayoutCompat>
+
 </androidx.appcompat.widget.LinearLayoutCompat>
