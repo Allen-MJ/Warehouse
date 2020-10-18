@@ -76,7 +76,7 @@
                     android:textSize="@dimen/frame_text_middle_size" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/layout_xh_total"
+                android:id="@+id/layout_sh_total"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -90,7 +90,7 @@
                     />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_xh_total"
+                    android:id="@+id/tv_sh_total"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/frame_edge_distance"
@@ -159,6 +159,26 @@
                         android:gravity="center"
                         android:padding="@dimen/frame_eight_distance"
                         android:text="小计"
+                        android:textSize="@dimen/frame_text_middle_size"
+                        android:textStyle="bold" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_sh_count"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="@dimen/frame_eight_distance"
+                        android:text="损耗数量"
+                        android:textSize="@dimen/frame_text_middle_size"
+                        android:textStyle="bold" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_sh_rent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="@dimen/frame_eight_distance"
+                        android:text="损耗小计"
                         android:textSize="@dimen/frame_text_middle_size"
                         android:textStyle="bold" />
                 </androidx.appcompat.widget.LinearLayoutCompat>

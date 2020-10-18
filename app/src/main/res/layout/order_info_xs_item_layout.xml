@@ -62,6 +62,24 @@
                     android:padding="@dimen/frame_eight_distance"
                     android:text="小计"
                     android:textSize="@dimen/frame_text_normal_size" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_sh_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="@dimen/frame_eight_distance"
+                    android:text="损耗数量"
+                    android:textSize="@dimen/frame_text_normal_size" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_sh_rent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="@dimen/frame_eight_distance"
+                    android:text="损耗小计"
+                    android:textSize="@dimen/frame_text_normal_size" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
 

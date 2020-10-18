@@ -13,7 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,8 +26,6 @@ import allen.frame.AllenManager;
 import allen.frame.adapter.CommonAdapter;
 import allen.frame.adapter.ViewHolder;
 import allen.frame.tools.Logger;
-import allen.frame.widget.MaterialRefreshLayout;
-import allen.frame.widget.MaterialRefreshListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,7 +33,6 @@ import butterknife.Unbinder;
 import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
 import cn.allen.warehouse.data.WebHelper;
-import cn.allen.warehouse.entry.Order;
 import cn.allen.warehouse.entry.OrderInfoXsEntity;
 import cn.allen.warehouse.utils.Constants;
 
@@ -56,11 +54,25 @@ public class OrderInfoFragment extends BaseFragment {
     @BindView(R.id.tv_address)
     AppCompatTextView tvAddress;
 
-    public static final String ORDER_NUMBER="orderNumber";
+    public static final String ORDER_NUMBER = "orderNumber";
+    @BindView(R.id.tv_total)
+    AppCompatTextView tvTotal;
+    @BindView(R.id.layout_total)
+    LinearLayoutCompat layoutTotal;
+    @BindView(R.id.tv_sh_total)
+    AppCompatTextView tvShTotal;
+    @BindView(R.id.layout_sh_total)
+    LinearLayoutCompat layoutShTotal;
+    @BindView(R.id.tv_sh_count)
+    AppCompatTextView tvShCount;
+    @BindView(R.id.tv_sh_rent)
+    AppCompatTextView tvShRent;
+    @BindView(R.id.item_layout)
+    CardView itemLayout;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoXsEntity.ChildrenBean> adapter;
-    private List<OrderInfoXsEntity.ChildrenBean> list=new ArrayList<>();
+    private List<OrderInfoXsEntity.ChildrenBean> list = new ArrayList<>();
     private OrderInfoXsEntity orderInfoXsEntity;
     private boolean isRefresh = false;
     private int page = 1;
@@ -68,6 +80,7 @@ public class OrderInfoFragment extends BaseFragment {
     private int uid;
     private int type;//0为仓库管理员  1为销售员
     private String orderNo;
+    private int state=0;
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
@@ -75,10 +88,22 @@ public class OrderInfoFragment extends BaseFragment {
             switch (msg.what) {
                 case 0:
                     actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_SUCCES, "");
-                    list=orderInfoXsEntity.getChildren();
-                    tvAddress.setText("地址:"+orderInfoXsEntity.getHotel_address());
-                    tvName.setText("客户姓名:"+orderInfoXsEntity.getCustomer_name());
-                    int len=list==null?0:list.size();
+                    state = orderInfoXsEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
+                    if (state == 5) {
+                        layoutShTotal.setVisibility(View.VISIBLE);
+                        tvShCount.setVisibility(View.VISIBLE);
+                        tvShRent.setVisibility(View.VISIBLE);
+                        tvShTotal.setText("￥"+orderInfoXsEntity.getActual_loss_rent());
+                    }else {
+                        layoutShTotal.setVisibility(View.GONE);
+                        tvShCount.setVisibility(View.GONE);
+                        tvShRent.setVisibility(View.GONE);
+                    }
+                    tvTotal.setText("￥"+orderInfoXsEntity.getRent());
+                    list = orderInfoXsEntity.getChildren();
+                    tvAddress.setText("地址:" + orderInfoXsEntity.getHotel_address());
+                    tvName.setText("客户姓名:" + orderInfoXsEntity.getCustomer_name());
+                    int len = list == null ? 0 : list.size();
                     if (len == 0) {
                         actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_FAIL, "");
                     }
@@ -142,17 +167,26 @@ public class OrderInfoFragment extends BaseFragment {
     }
 
     private void initAdapter() {
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         adapter = new CommonAdapter<OrderInfoXsEntity.ChildrenBean>(getContext(), R.layout.order_info_xs_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoXsEntity.ChildrenBean entity, int position) {
-                holder.setText(R.id.tv_name,entity.getFlower_name());
-                double price=entity.getRent();
-                holder.setText(R.id.tv_price,price+"");
-                int count=entity.getScheduled_quantity();
-                holder.setText(R.id.tv_count,count+"");
-                double total=price*count;
-                holder.setText(R.id.tv_total,total+"");
+                holder.setText(R.id.tv_name, entity.getFlower_name());
+                double price = entity.getRent();
+                holder.setText(R.id.tv_price, price + "");
+                int count = entity.getScheduled_quantity();
+                holder.setText(R.id.tv_count, count + "");
+                double total = price * count;
+                holder.setText(R.id.tv_total, total + "");
+                if (state == 5) {
+                   holder.setVisible(R.id.tv_sh_count,true);
+                   holder.setVisible(R.id.tv_sh_rent,true);
+                   holder.setText(R.id.tv_sh_count,entity.getLoss_quantity()+"");
+                   holder.setText(R.id.tv_sh_rent,entity.getLoss_rent()*entity.getLoss_quantity()+"");
+                }else {
+                    holder.setVisible(R.id.tv_sh_count,false);
+                    holder.setVisible(R.id.tv_sh_rent,false);
+                }
 
             }
         };
@@ -167,14 +201,14 @@ public class OrderInfoFragment extends BaseFragment {
         new Thread() {
             @Override
             public void run() {
-                orderInfoXsEntity = WebHelper.init().getOrderInfoXsByNo(handler,orderNo);
+                orderInfoXsEntity = WebHelper.init().getOrderInfoXsByNo(handler, orderNo);
                 handler.sendEmptyMessage(0);
             }
         }.start();
 
     }
 
-    @OnClick({R.id.bar_notice, R.id.bar_name,R.id.back_bt})
+    @OnClick({R.id.bar_notice, R.id.bar_name, R.id.back_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_bt:
