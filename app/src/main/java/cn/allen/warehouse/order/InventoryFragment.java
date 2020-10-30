@@ -267,6 +267,21 @@ public class InventoryFragment extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ImagesBean entity, int position) {
                 holder.setImageByUrl(R.id.image, entity.getImg(), R.drawable.mis_default_error);
+                if (entity.getPan()==1){
+                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color1);
+                    holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.chuku_icon));
+                    holder.setText(R.id.tv_state,"出库");
+                }else if (entity.getPan()==2){
+                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color2);
+                    holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.huiku_icon));
+                    holder.setText(R.id.tv_state,"回库");
+                }else if (entity.getPan()==-1){
+                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color3);
+                    holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.shangchuan_icon));
+                    holder.setText(R.id.tv_state,"待上传");
+                }else {
+                    holder.setVisible(R.id.tv_state,false);
+                }
             }
         };
         recyclerviewImage.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));

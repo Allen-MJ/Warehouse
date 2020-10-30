@@ -108,6 +108,23 @@ public class FlowerChoiceActivity extends AllenIMBaseActivity {
                 sendBroadcast(new Intent("add_flower").putExtra("flower", flower));
             }
         });
+        barSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                name = barSearch.getText().toString().trim();
+                loadFlowers();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     private void loadFlowers() {

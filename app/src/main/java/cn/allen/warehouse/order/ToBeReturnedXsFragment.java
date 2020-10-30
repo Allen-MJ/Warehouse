@@ -98,8 +98,10 @@ public class ToBeReturnedXsFragment extends BaseFragment {
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
     private CommonAdapter<OrderInfoEntity.MainchildrenBean> mainAdapter;
+    private CommonAdapter<OrderInfoEntity.ImagesBean> imageAdapter;
     private List<OrderInfoEntity.ChildrenBean> childrenList;
     private List<OrderInfoEntity.MainchildrenBean> mainList;
+    private List<OrderInfoEntity.ImagesBean> imageList;
     private String numberID;
     private OrderInfoEntity orderInfoEntity;
     private List<ImageEntity> imageEntityList = new ArrayList<>();
@@ -154,6 +156,12 @@ public class ToBeReturnedXsFragment extends BaseFragment {
                         layoutMain.setVisibility(View.VISIBLE);
                         mainAdapter.setDatas(mainList);
                     }
+                    imageList = orderInfoEntity.getImages();
+                    int imagesize = imageList == null ? 0 : imageList.size();
+                    if (imagesize > 0) {
+                        imageAdapter.setDatas(imageList);
+                    }
+
 
                     break;
                 case 101:
@@ -255,6 +263,29 @@ public class ToBeReturnedXsFragment extends BaseFragment {
         };
         recyclerviewMain.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerviewMain.setAdapter(mainAdapter);
+        imageAdapter = new CommonAdapter<OrderInfoEntity.ImagesBean>(getContext(), R.layout.order_image_item_layout) {
+            @Override
+            public void convert(ViewHolder holder, OrderInfoEntity.ImagesBean entity, int position) {
+                holder.setImageByUrl(R.id.image, entity.getImg(), R.drawable.mis_default_error);
+                if (entity.getPan()==1){
+                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color1);
+                    holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.chuku_icon));
+                    holder.setText(R.id.tv_state,"出库");
+                }else if (entity.getPan()==2){
+                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color2);
+                    holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.huiku_icon));
+                    holder.setText(R.id.tv_state,"回库");
+                }else if (entity.getPan()==-1){
+                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color3);
+                    holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.shangchuan_icon));
+                    holder.setText(R.id.tv_state,"待上传");
+                }else {
+                    holder.setVisible(R.id.tv_state,false);
+                }
+            }
+        };
+        recyclerviewImage.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerviewImage.setAdapter(imageAdapter);
     }
 
     private void addEvent(View view) {

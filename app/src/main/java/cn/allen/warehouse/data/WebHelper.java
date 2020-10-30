@@ -444,15 +444,15 @@ public class WebHelper {
      * @param handler
      * @param orderId
      */
-    public void warehouseOut(Handler handler,String orderId) {
+    public void warehouseOut(Handler handler,String orderId,String customer_name,JSONArray imags) {
         Object[] objects = new Object[]{
-                "order", orderId
+                "order", orderId,"customer_name",customer_name,"list",imags
         };
-        Response response = service.getWebservice(Api.WarehouseOut, objects, WebService.Get);
+        Response response = service.getWebservice(Api.WarehouseOut, objects, WebService.Post);
         if (response.isSuccess("200")) {
             Message msg=new Message();
             msg.obj=response.getMessage();
-            msg.what=102;
+            msg.what=103;
             handler.sendMessage(msg);
         }else {
             Message msg=new Message();

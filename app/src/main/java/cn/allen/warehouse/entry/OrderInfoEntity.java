@@ -669,6 +669,15 @@ public class OrderInfoEntity implements Serializable {
         private String createtime;
         private String addtimes;
         private String customer_name;
+        private int pan;
+
+        public int getPan() {
+            return pan;
+        }
+
+        public void setPan(int pan) {
+            this.pan = pan;
+        }
 
         public int getId() {
             return id;

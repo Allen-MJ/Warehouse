@@ -118,6 +118,7 @@ public class ToBeReturnedFragment extends BaseFragment {
     private CommonAdapter<OrderInfoEntity.MainchildrenBean> mainAdapter;
     private List<OrderInfoEntity.ChildrenBean> childrenList;
     private List<OrderInfoEntity.MainchildrenBean> mainList;
+    private List<OrderInfoEntity.ImagesBean> imageList;
     private String numberID;
     private OrderInfoEntity orderInfoEntity;
     private List<ImageEntity> imageEntityList = new ArrayList<>();
@@ -170,13 +171,25 @@ public class ToBeReturnedFragment extends BaseFragment {
                         layoutMain.setVisibility(View.VISIBLE);
                         mainAdapter.setDatas(mainList);
                     }
-
+                    imageList = orderInfoEntity.getImages();
+                    int imagesize = imageList == null ? 0 : imageList.size();
+                    if (imagesize > 0) {
+                        for (OrderInfoEntity.ImagesBean image:imageList
+                             ) {
+                            ImageEntity imageEntity=new ImageEntity();
+                            imageEntity.setMess(image.getImg());
+                            imageEntity.setPan(image.getPan());
+                            imageEntityList.add(imageEntity);
+                        }
+                        imageAdapter.setDatas(imageEntityList);
+                    }
                     break;
                 case 102:
                     actHelper.dismissProgressDialog();
                     String url=(String)msg.obj;
                     ImageEntity imageEntity=new ImageEntity();
                     imageEntity.setMess(url);
+                    imageEntity.setPan(-1);
                     imageEntityList.add(imageEntity);
                     imageAdapter.setDatas(imageEntityList);
                     break;
@@ -302,7 +315,21 @@ public class ToBeReturnedFragment extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, ImageEntity entity, int position) {
                 holder.setImageByUrl(R.id.image, entity.getMess(), R.drawable.mis_default_error);
-
+                if (entity.getPan()==1){
+                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color1);
+                    holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.chuku_icon));
+                    holder.setText(R.id.tv_state,"出库");
+                }else if (entity.getPan()==2){
+                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color2);
+                    holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.huiku_icon));
+                    holder.setText(R.id.tv_state,"回库");
+                }else if (entity.getPan()==-1){
+                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color3);
+                    holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.shangchuan_icon));
+                    holder.setText(R.id.tv_state,"待上传");
+                }else {
+                    holder.setVisible(R.id.tv_state,false);
+                }
             }
         };
         recyclerviewImage.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -367,9 +394,11 @@ public class ToBeReturnedFragment extends BaseFragment {
                     for (int i = 0; i < imageEntityList.size(); i++) {
                         try {
                            ImageEntity imageEntity = imageEntityList.get(i);
-                            JSONObject object = new JSONObject();
-                            object.put("imgs", imageEntity.getMess());
-                            array.put(object);
+                           if (imageEntity.getPan()==-1) {
+                               JSONObject object = new JSONObject();
+                               object.put("imgs", imageEntity.getMess());
+                               array.put(object);
+                           }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

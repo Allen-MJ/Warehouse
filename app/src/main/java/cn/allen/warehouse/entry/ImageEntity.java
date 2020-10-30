@@ -12,6 +12,23 @@ public class ImageEntity implements Serializable {
 
     private boolean isImg;
     private String mess;
+    private int pan;
+
+    public int getPan() {
+        return pan;
+    }
+
+    public void setPan(int pan) {
+        this.pan = pan;
+    }
+
+    public boolean isImg() {
+        return isImg;
+    }
+
+    public void setImg(boolean img) {
+        isImg = img;
+    }
 
     public File getFile() {
         return file;

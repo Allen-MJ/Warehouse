@@ -93,6 +93,17 @@
                         </androidx.appcompat.widget.LinearLayoutCompat>
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/frame_eight_distance">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerview_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.core.widget.NestedScrollView>
 
@@ -136,10 +147,7 @@
                                 android:src="@mipmap/ic_logo_14" />
                         </androidx.cardview.widget.CardView>
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerview_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
