@@ -133,13 +133,11 @@ public class FlowerFragment extends BaseFragment {
                     view.setEnabled(true);
                     return true;
                 }else if(i==KeyEvent.KEYCODE_DEL){
-                    view.setEnabled(false);
                     name = barSearch.getText().toString().trim();
                     int len = StringUtils.empty(name)?0:name.length();
                     if(len>0){
                         barSearch.setText(name.substring(0,len-1));
                     }
-                    view.setEnabled(true);
                 }
                 return true;
             }

@@ -174,21 +174,23 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        String num = StringUtils.empty(charSequence.toString())?"1":charSequence.toString();
-                        int count = Integer.parseInt(num);
-                        if(count>entry.getStock()){
-                            MsgUtils.showShortToast(view.getContext(),"库存不足!");
-                            list.get(position).setScheduled_quantity(entry.getStock());
-                            rent.setText(""+entry.getStock());
-                        }else if(count==0){
-                            MsgUtils.showShortToast(view.getContext(),"预定数不能为!");
-                            list.get(position).setScheduled_quantity(1);
-                            rent.setText("1");
-                        }else{
-                            list.get(position).setScheduled_quantity(count);
-                        }
-                        if(listener!=null){
-                            listener.numEdit(view);
+                        if(position<list.size()){
+                            String num = StringUtils.empty(charSequence.toString())?"1":charSequence.toString();
+                            int count = Integer.parseInt(num);
+                            if(count>entry.getStock()){
+                                MsgUtils.showShortToast(view.getContext(),"库存不足!");
+                                list.get(position).setScheduled_quantity(entry.getStock());
+                                rent.setText(""+entry.getStock());
+                            }else if(count==0){
+                                MsgUtils.showShortToast(view.getContext(),"预定数不能为!");
+                                list.get(position).setScheduled_quantity(1);
+                                rent.setText("1");
+                            }else{
+                                list.get(position).setScheduled_quantity(count);
+                            }
+                            if(listener!=null){
+                                listener.numEdit(view);
+                            }
                         }
                     }
 

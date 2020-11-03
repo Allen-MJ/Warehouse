@@ -144,13 +144,11 @@ public class AllOrderFragment extends BaseFragment {
                     view.setEnabled(true);
                     return true;
                 }else if(i==KeyEvent.KEYCODE_DEL){
-                    view.setEnabled(false);
                     no = barSearch.getText().toString().trim();
                     int len = StringUtils.empty(no)?0:no.length();
                     if(len>0){
                         barSearch.setText(no.substring(0,len-1));
                     }
-                    view.setEnabled(true);
                 }
                 return true;
             }
