@@ -56,6 +56,14 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyDataSetChanged();
     }
 
+    public boolean checkIsOk(){
+        boolean isok = true;
+        for(Flower flower:list){
+            isok = isok&&flower.getScheduled_quantity()!=0;
+        }
+        return true;
+    }
+
     public String getChoice(){
         StringBuffer sb = new StringBuffer();
         sb.append("[");
@@ -175,17 +183,16 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                         if(position<list.size()){
-                            if(!String.valueOf(list.get(position).getScheduled_quantity()).equals(charSequence.toString())){
-                                String num = StringUtils.empty(charSequence.toString())?"1":charSequence.toString();
+                            if(!String.valueOf(list.get(position).getScheduled_quantity()==0?"":list.get(position).getScheduled_quantity()).equals(charSequence.toString())){
+                                String num = StringUtils.empty(charSequence.toString())?"0":charSequence.toString();
                                 int count = Integer.parseInt(num);
                                 if(count>entry.getStock()){
                                     MsgUtils.showShortToast(view.getContext(),"库存不足!");
                                     list.get(position).setScheduled_quantity(entry.getStock());
                                     rent.setText(""+entry.getStock());
                                 }else if(count==0){
-                                    MsgUtils.showShortToast(view.getContext(),"预定数不能为空!");
-                                    list.get(position).setScheduled_quantity(1);
-                                    rent.setText("1");
+                                    list.get(position).setScheduled_quantity(0);
+                                    rent.setText("");
                                 }else{
                                     list.get(position).setScheduled_quantity(count);
                                     rent.setText(String.valueOf(count));

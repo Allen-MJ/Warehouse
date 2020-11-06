@@ -328,7 +328,10 @@ public class XGOrderFragment extends BaseFragment {
             MsgUtils.showMDMessage(getActivity(), "请选择鲜花!");
             return false;
         }
-
+        if(!adapter.checkIsOk()){
+            MsgUtils.showMDMessage(getActivity(),"预定数量还有未填的鲜花!");
+            return false;
+        }
         return true;
     }
 
