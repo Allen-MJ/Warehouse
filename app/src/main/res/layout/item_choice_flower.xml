@@ -17,16 +17,30 @@
         android:layout_margin="@dimen/frame_four_distance"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/frame_four_distance">
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/choice_item_name"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_black_color"
-            android:textSize="@dimen/frame_text_small_size"
-            android:singleLine="true"
-            android:paddingTop="@dimen/frame_eight_distance"
-            android:paddingBottom="@dimen/frame_eight_distance"
-            android:gravity="center"/>
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/choice_item_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black_color"
+                android:textSize="@dimen/frame_text_small_size"
+                android:singleLine="true"
+                android:padding="@dimen/frame_eight_distance"
+                android:gravity="center"/>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/choice_item_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black_color"
+                android:textSize="@dimen/frame_text_small_size"
+                android:singleLine="true"
+                android:paddingTop="@dimen/frame_eight_distance"
+                android:paddingBottom="@dimen/frame_eight_distance"
+                android:gravity="center"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"

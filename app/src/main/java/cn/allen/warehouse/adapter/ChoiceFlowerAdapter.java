@@ -145,12 +145,13 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class ObjectHolder extends RecyclerView.ViewHolder{
 
-        private AppCompatTextView name,stock;
+        private AppCompatTextView name,stock,sort;
         private AppCompatImageView delete;
         private AppCompatEditText rent;
         private View view,deleteView;
         public ObjectHolder(@NonNull View itemView) {
             super(itemView);
+            sort = itemView.findViewById(R.id.choice_item_sort);
             name = itemView.findViewById(R.id.choice_item_name);
             rent = itemView.findViewById(R.id.choice_item_rent);
             stock = itemView.findViewById(R.id.choice_item_stock);
@@ -160,9 +161,9 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         public void bind(final Flower entry,int position){
             if(entry!=null){
+                sort.setText(""+(position+1));
                 name.setText(entry.getFlower_id()>0?entry.getFlower_name():entry.getName());
                 stock.setText(String.valueOf(entry.getStock()));
-                rent.setText(String.valueOf(entry.getScheduled_quantity()));
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -174,7 +175,11 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         view.setEnabled(true);
                     }
                 });
-                rent.addTextChangedListener(new TextWatcher() {
+                if(rent.getTag() instanceof TextWatcher){
+                    rent.removeTextChangedListener((TextWatcher) rent.getTag());
+                }
+                rent.setText(String.valueOf(entry.getScheduled_quantity()));
+                TextWatcher watcher =new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -209,7 +214,9 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     public void afterTextChanged(Editable editable) {
 
                     }
-                });
+                };
+                rent.addTextChangedListener(watcher);
+                rent.setTag(watcher);
             }
         }
     }
