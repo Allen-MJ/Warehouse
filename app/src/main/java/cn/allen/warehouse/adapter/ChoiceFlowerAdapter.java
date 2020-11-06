@@ -187,6 +187,7 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                 rent.setText("1");
                             }else{
                                 list.get(position).setScheduled_quantity(count);
+                                rent.setText(count);
                             }
                             if(listener!=null){
                                 listener.numEdit(view);
