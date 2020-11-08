@@ -45,12 +45,14 @@ import allen.frame.adapter.CommonAdapter;
 import allen.frame.adapter.ViewHolder;
 import allen.frame.tools.FileUtils;
 import allen.frame.tools.MsgUtils;
+import allen.frame.tools.StringUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
+import cn.allen.warehouse.ShowPicActivity;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.ImageEntity;
 import cn.allen.warehouse.entry.OrderInfoEntity;
@@ -102,6 +104,10 @@ public class WarehouseOutFragment extends BaseFragment {
     RecyclerView recyclerviewImage;
     @BindView(R.id.image)
     ImageView image;
+    @BindView(R.id.tv_order_remark)
+    AppCompatTextView tvOrderRemark;
+    @BindView(R.id.layout_remark)
+    LinearLayoutCompat layoutRemark;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -126,6 +132,8 @@ public class WarehouseOutFragment extends BaseFragment {
                     orderName.setText(orderInfoEntity.getCustomer_name());
                     tvOrderOutTime.setText(orderInfoEntity.getDelivery_times());
                     tvOrderBackTime.setText(orderInfoEntity.getRecovery_dates());
+                    layoutRemark.setVisibility(View.VISIBLE);
+                    tvOrderRemark.setText(StringUtils.notEmpty(orderInfoEntity.getRemark())?orderInfoEntity.getRemark():"");
                     int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
@@ -248,7 +256,7 @@ public class WarehouseOutFragment extends BaseFragment {
         new Thread() {
             @Override
             public void run() {
-                WebHelper.init().warehouseOut(handler, numberID,orderInfoEntity.getCustomer_name(),array);
+                WebHelper.init().warehouseOut(handler, numberID, orderInfoEntity.getCustomer_name(), array);
             }
         }.start();
     }
@@ -315,20 +323,20 @@ public class WarehouseOutFragment extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, ImageEntity entity, int position) {
                 holder.setImageByUrl(R.id.image, entity.getMess(), R.drawable.mis_default_error);
-                if (entity.getPan()==1){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color1);
+                if (entity.getPan() == 1) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color1);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.chuku_icon));
-                    holder.setText(R.id.tv_state,"出库");
-                }else if (entity.getPan()==2){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color2);
+                    holder.setText(R.id.tv_state, "出库");
+                } else if (entity.getPan() == 2) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color2);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.huiku_icon));
-                    holder.setText(R.id.tv_state,"回库");
-                }else if (entity.getPan()==-1){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color3);
+                    holder.setText(R.id.tv_state, "回库");
+                } else if (entity.getPan() == -1) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color3);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.shangchuan_icon));
-                    holder.setText(R.id.tv_state,"待上传");
-                }else {
-                    holder.setVisible(R.id.tv_state,false);
+                    holder.setText(R.id.tv_state, "待上传");
+                } else {
+                    holder.setVisible(R.id.tv_state, false);
                 }
 
             }
@@ -338,6 +346,19 @@ public class WarehouseOutFragment extends BaseFragment {
     }
 
     private void addEvent(View view) {
+        imageAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent intent = new Intent(getActivity(), ShowPicActivity.class);
+                intent.putExtra("url", imageEntityList.get(position).getMess());
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -368,7 +389,7 @@ public class WarehouseOutFragment extends BaseFragment {
         upload();
     }
 
-    @OnClick({R.id.tv_submit, R.id.back_bt,R.id.image})
+    @OnClick({R.id.tv_submit, R.id.back_bt, R.id.image})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image:
@@ -377,8 +398,8 @@ public class WarehouseOutFragment extends BaseFragment {
             case R.id.tv_submit:
 
                 JSONArray array = new JSONArray();
-                int imagesize=imageEntityList==null?0:imageEntityList.size();
-                if (imagesize>0) {
+                int imagesize = imageEntityList == null ? 0 : imageEntityList.size();
+                if (imagesize > 0) {
                     for (int i = 0; i < imageEntityList.size(); i++) {
                         try {
                             ImageEntity imageEntity = imageEntityList.get(i);

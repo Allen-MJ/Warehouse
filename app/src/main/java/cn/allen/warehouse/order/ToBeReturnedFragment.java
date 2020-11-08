@@ -2,20 +2,16 @@ package cn.allen.warehouse.order;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +19,12 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,9 +33,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,6 +45,7 @@ import allen.frame.adapter.CommonAdapter;
 import allen.frame.adapter.ViewHolder;
 import allen.frame.tools.FileUtils;
 import allen.frame.tools.MsgUtils;
+import allen.frame.tools.StringUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -112,6 +104,10 @@ public class ToBeReturnedFragment extends BaseFragment {
     ImageView image;
     @BindView(R.id.recyclerview_image)
     RecyclerView recyclerviewImage;
+    @BindView(R.id.tv_order_remark)
+    AppCompatTextView tvOrderRemark;
+    @BindView(R.id.layout_remark)
+    LinearLayoutCompat layoutRemark;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -137,6 +133,8 @@ public class ToBeReturnedFragment extends BaseFragment {
                     orderName.setText(orderInfoEntity.getCustomer_name());
                     tvOrderOutTime.setText(orderInfoEntity.getDelivery_times());
                     tvOrderBackTime.setText(orderInfoEntity.getRecovery_dates());
+                    layoutRemark.setVisibility(View.VISIBLE);
+                    tvOrderRemark.setText(StringUtils.notEmpty(orderInfoEntity.getRemark()) ? orderInfoEntity.getRemark() : "");
                     int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
@@ -156,16 +154,16 @@ public class ToBeReturnedFragment extends BaseFragment {
                             break;
                     }
                     childrenList = orderInfoEntity.getChildren();
-                    int chrildrensize=childrenList==null?0:childrenList.size();
-                    if (chrildrensize==0) {
+                    int chrildrensize = childrenList == null ? 0 : childrenList.size();
+                    if (chrildrensize == 0) {
                         layoutChildren.setVisibility(View.GONE);
                     } else {
                         layoutChildren.setVisibility(View.VISIBLE);
                         childrenAdapter.setDatas(childrenList);
                     }
                     mainList = orderInfoEntity.getMainchildren();
-                    int mainsize=mainList==null?0:mainList.size();
-                    if (mainsize==0) {
+                    int mainsize = mainList == null ? 0 : mainList.size();
+                    if (mainsize == 0) {
                         layoutMain.setVisibility(View.GONE);
                     } else {
                         layoutMain.setVisibility(View.VISIBLE);
@@ -174,9 +172,9 @@ public class ToBeReturnedFragment extends BaseFragment {
                     imageList = orderInfoEntity.getImages();
                     int imagesize = imageList == null ? 0 : imageList.size();
                     if (imagesize > 0) {
-                        for (OrderInfoEntity.ImagesBean image:imageList
-                             ) {
-                            ImageEntity imageEntity=new ImageEntity();
+                        for (OrderInfoEntity.ImagesBean image : imageList
+                        ) {
+                            ImageEntity imageEntity = new ImageEntity();
                             imageEntity.setMess(image.getImg());
                             imageEntity.setPan(image.getPan());
                             imageEntityList.add(imageEntity);
@@ -186,8 +184,8 @@ public class ToBeReturnedFragment extends BaseFragment {
                     break;
                 case 102:
                     actHelper.dismissProgressDialog();
-                    String url=(String)msg.obj;
-                    ImageEntity imageEntity=new ImageEntity();
+                    String url = (String) msg.obj;
+                    ImageEntity imageEntity = new ImageEntity();
                     imageEntity.setMess(url);
                     imageEntity.setPan(-1);
                     imageEntityList.add(imageEntity);
@@ -315,20 +313,20 @@ public class ToBeReturnedFragment extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, ImageEntity entity, int position) {
                 holder.setImageByUrl(R.id.image, entity.getMess(), R.drawable.mis_default_error);
-                if (entity.getPan()==1){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color1);
+                if (entity.getPan() == 1) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color1);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.chuku_icon));
-                    holder.setText(R.id.tv_state,"出库");
-                }else if (entity.getPan()==2){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color2);
+                    holder.setText(R.id.tv_state, "出库");
+                } else if (entity.getPan() == 2) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color2);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.huiku_icon));
-                    holder.setText(R.id.tv_state,"回库");
-                }else if (entity.getPan()==-1){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color3);
+                    holder.setText(R.id.tv_state, "回库");
+                } else if (entity.getPan() == -1) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color3);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.shangchuan_icon));
-                    holder.setText(R.id.tv_state,"待上传");
-                }else {
-                    holder.setVisible(R.id.tv_state,false);
+                    holder.setText(R.id.tv_state, "待上传");
+                } else {
+                    holder.setVisible(R.id.tv_state, false);
                 }
             }
         };
@@ -340,8 +338,8 @@ public class ToBeReturnedFragment extends BaseFragment {
         imageAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(getActivity(), ShowPicActivity.class);
-                intent.putExtra("url",imageEntityList.get(position).getMess());
+                Intent intent = new Intent(getActivity(), ShowPicActivity.class);
+                intent.putExtra("url", imageEntityList.get(position).getMess());
                 startActivity(intent);
             }
 
@@ -360,9 +358,9 @@ public class ToBeReturnedFragment extends BaseFragment {
                 // 拍照并进行裁剪
                 case REQUEST_TAKE_PHOTO:
                     Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    if (isAndroidQ){
+                    if (isAndroidQ) {
                         intent.setData(imgUri);
-                    }else {
+                    } else {
                         intent.setData(Uri.fromFile(imgFile));
                     }
                     getActivity().sendBroadcast(intent);
@@ -389,16 +387,16 @@ public class ToBeReturnedFragment extends BaseFragment {
             case R.id.tv_submit:
 
                 JSONArray array = new JSONArray();
-                int imagesize=imageEntityList==null?0:imageEntityList.size();
-                if (imagesize>0) {
+                int imagesize = imageEntityList == null ? 0 : imageEntityList.size();
+                if (imagesize > 0) {
                     for (int i = 0; i < imageEntityList.size(); i++) {
                         try {
-                           ImageEntity imageEntity = imageEntityList.get(i);
-                           if (imageEntity.getPan()==-1) {
-                               JSONObject object = new JSONObject();
-                               object.put("imgs", imageEntity.getMess());
-                               array.put(object);
-                           }
+                            ImageEntity imageEntity = imageEntityList.get(i);
+                            if (imageEntity.getPan() == -1) {
+                                JSONObject object = new JSONObject();
+                                object.put("imgs", imageEntity.getMess());
+                                array.put(object);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -418,7 +416,7 @@ public class ToBeReturnedFragment extends BaseFragment {
     private File imgFile;// 拍照保存的图片文件
     private static final int REQUEST_TAKE_PHOTO = 0;// 拍照
     /**
-     *  是否是Android 10以上手机
+     * 是否是Android 10以上手机
      */
     private boolean isAndroidQ = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
 
@@ -447,15 +445,17 @@ public class ToBeReturnedFragment extends BaseFragment {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
         startActivityForResult(intent, REQUEST_TAKE_PHOTO);
     }
+
     /**
      * 创建图片地址uri,用于保存拍照后的照片 Android 10以后使用这种方法
+     *
      * @return 图片的uri
      */
     private Uri createImageUri() {
         //设置保存参数到ContentValues中
         ContentValues contentValues = new ContentValues();
         //设置文件名
-        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, System.currentTimeMillis()+"");
+        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, System.currentTimeMillis() + "");
         //兼容Android Q和以下版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             //android Q中不再使用DATA字段，而用RELATIVE_PATH代替

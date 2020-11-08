@@ -1,16 +1,11 @@
 package cn.allen.warehouse.order;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,8 +21,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,19 +28,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import allen.frame.ActivityHelper;
 import allen.frame.AllenManager;
 import allen.frame.adapter.CommonAdapter;
 import allen.frame.adapter.ViewHolder;
-import allen.frame.tools.FileUtils;
 import allen.frame.tools.MsgUtils;
+import allen.frame.tools.StringUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -104,6 +93,12 @@ public class ReturnedFragment extends BaseFragment {
     LinearLayoutCompat layoutBottom;
     @BindView(R.id.recyclerview_image)
     RecyclerView recyclerviewImage;
+    @BindView(R.id.tv_order_remark)
+    AppCompatTextView tvOrderRemark;
+    @BindView(R.id.layout_remark)
+    LinearLayoutCompat layoutRemark;
+    @BindView(R.id.image)
+    ImageView image;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -129,6 +124,8 @@ public class ReturnedFragment extends BaseFragment {
                     orderName.setText(orderInfoEntity.getCustomer_name());
                     tvOrderOutTime.setText(orderInfoEntity.getDelivery_times());
                     tvOrderBackTime.setText(orderInfoEntity.getRecovery_dates());
+                    layoutRemark.setVisibility(View.VISIBLE);
+                    tvOrderRemark.setText(StringUtils.notEmpty(orderInfoEntity.getRemark()) ? orderInfoEntity.getRemark() : "");
                     int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
@@ -351,20 +348,20 @@ public class ReturnedFragment extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ImagesBean entity, int position) {
                 holder.setImageByUrl(R.id.image, entity.getImg(), R.drawable.mis_default_error);
-                if (entity.getPan()==1){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color1);
+                if (entity.getPan() == 1) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color1);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.chuku_icon));
-                    holder.setText(R.id.tv_state,"出库");
-                }else if (entity.getPan()==2){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color2);
+                    holder.setText(R.id.tv_state, "出库");
+                } else if (entity.getPan() == 2) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color2);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.huiku_icon));
-                    holder.setText(R.id.tv_state,"回库");
-                }else if (entity.getPan()==-1){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color3);
+                    holder.setText(R.id.tv_state, "回库");
+                } else if (entity.getPan() == -1) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color3);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.shangchuan_icon));
-                    holder.setText(R.id.tv_state,"待上传");
-                }else {
-                    holder.setVisible(R.id.tv_state,false);
+                    holder.setText(R.id.tv_state, "待上传");
+                } else {
+                    holder.setVisible(R.id.tv_state, false);
                 }
             }
         };
@@ -376,8 +373,8 @@ public class ReturnedFragment extends BaseFragment {
         imageAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(getActivity(), ShowPicActivity.class);
-                intent.putExtra("url",imageList.get(position).getImg());
+                Intent intent = new Intent(getActivity(), ShowPicActivity.class);
+                intent.putExtra("url", imageList.get(position).getImg());
                 startActivity(intent);
             }
 

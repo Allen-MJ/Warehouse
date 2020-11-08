@@ -6,11 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,10 +22,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +30,7 @@ import allen.frame.AllenManager;
 import allen.frame.adapter.CommonAdapter;
 import allen.frame.adapter.ViewHolder;
 import allen.frame.tools.MsgUtils;
+import allen.frame.tools.StringUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -91,6 +87,12 @@ public class InventoryFragment extends BaseFragment {
     LinearLayoutCompat layoutBottom;
     @BindView(R.id.recyclerview_image)
     RecyclerView recyclerviewImage;
+    @BindView(R.id.tv_order_remark)
+    AppCompatTextView tvOrderRemark;
+    @BindView(R.id.layout_remark)
+    LinearLayoutCompat layoutRemark;
+    @BindView(R.id.image)
+    ImageView image;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -116,6 +118,8 @@ public class InventoryFragment extends BaseFragment {
                     orderName.setText(orderInfoEntity.getCustomer_name());
                     tvOrderOutTime.setText(orderInfoEntity.getDelivery_times());
                     tvOrderBackTime.setText(orderInfoEntity.getRecovery_dates());
+                    layoutRemark.setVisibility(View.VISIBLE);
+                    tvOrderRemark.setText(StringUtils.notEmpty(orderInfoEntity.getRemark()) ? orderInfoEntity.getRemark() : "");
                     int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
@@ -135,24 +139,24 @@ public class InventoryFragment extends BaseFragment {
                             break;
                     }
                     childrenList = orderInfoEntity.getChildren();
-                    int chrildrensize=childrenList==null?0:childrenList.size();
-                    if (chrildrensize==0) {
+                    int chrildrensize = childrenList == null ? 0 : childrenList.size();
+                    if (chrildrensize == 0) {
                         layoutChildren.setVisibility(View.GONE);
                     } else {
                         layoutChildren.setVisibility(View.VISIBLE);
                         childrenAdapter.setDatas(childrenList);
                     }
                     mainList = orderInfoEntity.getMainchildren();
-                    int mainsize=mainList==null?0:mainList.size();
-                    if (mainsize==0) {
+                    int mainsize = mainList == null ? 0 : mainList.size();
+                    if (mainsize == 0) {
                         layoutMain.setVisibility(View.GONE);
                     } else {
                         layoutMain.setVisibility(View.VISIBLE);
                         mainAdapter.setDatas(mainList);
                     }
                     imageList = orderInfoEntity.getImages();
-                    int imagesize=imageList==null?0:imageList.size();
-                    if (imagesize>0) {
+                    int imagesize = imageList == null ? 0 : imageList.size();
+                    if (imagesize > 0) {
                         imageAdapter.setDatas(imageList);
                     }
 
@@ -240,7 +244,7 @@ public class InventoryFragment extends BaseFragment {
                 holder.setText(R.id.tv_name, entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 AppCompatEditText et_count = holder.getView(R.id.et_sunhao);
-                et_count.setText(entity.getLoss_quantity()+"");
+                et_count.setText(entity.getLoss_quantity() + "");
                 et_count.setFocusable(false);
                 et_count.setFocusableInTouchMode(false);
 
@@ -255,7 +259,7 @@ public class InventoryFragment extends BaseFragment {
                 holder.setText(R.id.tv_name, entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 AppCompatEditText et_count = holder.getView(R.id.et_sunhao);
-                et_count.setText(entity.getLoss_quantity()+"");
+                et_count.setText(entity.getLoss_quantity() + "");
                 et_count.setFocusable(false);
                 et_count.setFocusableInTouchMode(false);
             }
@@ -267,20 +271,20 @@ public class InventoryFragment extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ImagesBean entity, int position) {
                 holder.setImageByUrl(R.id.image, entity.getImg(), R.drawable.mis_default_error);
-                if (entity.getPan()==1){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color1);
+                if (entity.getPan() == 1) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color1);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.chuku_icon));
-                    holder.setText(R.id.tv_state,"出库");
-                }else if (entity.getPan()==2){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color2);
+                    holder.setText(R.id.tv_state, "出库");
+                } else if (entity.getPan() == 2) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color2);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.huiku_icon));
-                    holder.setText(R.id.tv_state,"回库");
-                }else if (entity.getPan()==-1){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color3);
+                    holder.setText(R.id.tv_state, "回库");
+                } else if (entity.getPan() == -1) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color3);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.shangchuan_icon));
-                    holder.setText(R.id.tv_state,"待上传");
-                }else {
-                    holder.setVisible(R.id.tv_state,false);
+                    holder.setText(R.id.tv_state, "待上传");
+                } else {
+                    holder.setVisible(R.id.tv_state, false);
                 }
             }
         };
@@ -292,8 +296,8 @@ public class InventoryFragment extends BaseFragment {
         imageAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(getActivity(), ShowPicActivity.class);
-                intent.putExtra("url",imageList.get(position).getImg());
+                Intent intent = new Intent(getActivity(), ShowPicActivity.class);
+                intent.putExtra("url", imageList.get(position).getImg());
                 startActivity(intent);
 
             }
@@ -306,7 +310,7 @@ public class InventoryFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_submit,R.id.back_bt})
+    @OnClick({R.id.tv_submit, R.id.back_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_submit:
