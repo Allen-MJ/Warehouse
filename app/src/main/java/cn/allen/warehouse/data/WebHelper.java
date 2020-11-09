@@ -215,8 +215,9 @@ public class WebHelper {
      *
      * @return
      */
-    public List<Notice> getInformation() {
+    public List<Notice> getInformation(int id) {
         Object[] objects = new Object[]{
+                "id",id
         };
         List<Notice> list = new ArrayList<>();
         Response response = service.getWebservice(Api.GetInformation, objects, WebService.Get);
@@ -586,6 +587,7 @@ public class WebHelper {
         Message msg = new Message();
         if(response.isSuccess("200")){
             msg.what = 0;
+            msg.arg1=Integer.valueOf(response.getData());
         }else{
             msg.what = -1;
         }
@@ -611,6 +613,27 @@ public class WebHelper {
             msg.what = 0;
         }else{
             msg.what = -1;
+        }
+        msg.obj = response.getMessage();
+        handler.sendMessage(msg);
+    }
+
+    /**
+     * 删除订单中的花
+     * @param handler
+     * @param ordernumber （订单号）
+     * @param id 花id）
+     */
+    public void delete(Handler handler, String ordernumber, int id){
+        Object[] objects = new Object[]{
+                "Order",ordernumber,"id",id
+        };
+        Response response = service.getWebservice(Api.Delete,objects,WebService.Get);
+        Message msg = new Message();
+        if(response.isSuccess("200")){
+            msg.what = 2;
+        }else{
+            msg.what = -2;
         }
         msg.obj = response.getMessage();
         handler.sendMessage(msg);

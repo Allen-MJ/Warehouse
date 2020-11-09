@@ -81,6 +81,24 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return sb.toString().replaceFirst(",","");
     }
 
+    public String getXGChoice(){
+        StringBuffer sb = new StringBuffer();
+        sb.append("[");
+        for(Flower flower:list){
+            sb.append(",{");
+            sb.append("\"id\":");
+            sb.append((flower.getFlower_id()!=0?flower.getFlower_id():flower.getId())+",");
+            sb.append("\"name\":");
+            sb.append("\""+(flower.getFlower_id()>0?flower.getFlower_name():flower.getName())+"\",");
+            sb.append("\"count\":");
+            sb.append(flower.getScheduled_quantity());
+            sb.append("}");
+        }
+        sb.append("]");
+        return sb.toString().replaceFirst(",","");
+    }
+
+
     public ArrayList<Flower> getList(){
         return (ArrayList<Flower>)list;
     }
@@ -90,7 +108,8 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         for(Flower flower:list){
             money = money + flower.getRent()*flower.getScheduled_quantity();
         }
-        return money;
+        String s=String.format("%.1f",money);
+        return Float.valueOf(s);
     }
 
     @NonNull

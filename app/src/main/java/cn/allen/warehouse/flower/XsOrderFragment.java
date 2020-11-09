@@ -261,7 +261,7 @@ public class XsOrderFragment extends BaseFragment {
             MsgUtils.showMDMessage(getActivity(),"请输入回收日期!");
             return false;
         }
-        if(list.length()==2){
+        if(list.length()<=2){
             MsgUtils.showMDMessage(getActivity(),"请选择鲜花!");
             return false;
         }

@@ -226,11 +226,13 @@ public class WarehouseOutXsFragment extends BaseFragment {
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 int status = entity.getId_check();
                 if (status == 0) {
-                    holder.setVisible(R.id.btn_submit, true);
-                    holder.setVisible(R.id.tv_submit, false);
+                    holder.setVisible(R.id.btn_submit, false);
+                    holder.setVisible(R.id.tv_submit, true);
+                    holder.setText(R.id.tv_submit, "未配货");
                 } else {
                     holder.setVisible(R.id.btn_submit, false);
                     holder.setVisible(R.id.tv_submit, true);
+                    holder.setText(R.id.tv_submit, "已成功配货");
                 }
                 holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
                     @Override
@@ -249,11 +251,13 @@ public class WarehouseOutXsFragment extends BaseFragment {
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 int status = entity.getId_check();
                 if (status == 0) {
-                    holder.setVisible(R.id.btn_submit, true);
-                    holder.setVisible(R.id.tv_submit, false);
+                    holder.setVisible(R.id.btn_submit, false);
+                    holder.setVisible(R.id.tv_submit, true);
+                    holder.setText(R.id.tv_submit, "未配货");
                 } else {
                     holder.setVisible(R.id.btn_submit, false);
                     holder.setVisible(R.id.tv_submit, true);
+                    holder.setText(R.id.tv_submit, "已成功配货");
                 }
                 holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
                     @Override

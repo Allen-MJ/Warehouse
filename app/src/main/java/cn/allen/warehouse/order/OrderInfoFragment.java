@@ -69,6 +69,8 @@ public class OrderInfoFragment extends BaseFragment {
     AppCompatTextView tvShRent;
     @BindView(R.id.item_layout)
     CardView itemLayout;
+    @BindView(R.id.tv_sh_price)
+    AppCompatTextView tvShPrice;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoXsEntity.ChildrenBean> adapter;
@@ -80,7 +82,7 @@ public class OrderInfoFragment extends BaseFragment {
     private int uid;
     private int type;//0为仓库管理员  1为销售员
     private String orderNo;
-    private int state=0;
+    private int state = 0;
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
@@ -93,13 +95,15 @@ public class OrderInfoFragment extends BaseFragment {
                         layoutShTotal.setVisibility(View.VISIBLE);
                         tvShCount.setVisibility(View.VISIBLE);
                         tvShRent.setVisibility(View.VISIBLE);
-                        tvShTotal.setText("￥"+orderInfoXsEntity.getActual_loss_rent());
-                    }else {
+                        tvShPrice.setVisibility(View.VISIBLE);
+                        tvShTotal.setText("￥" + orderInfoXsEntity.getActual_loss_rent());
+                    } else {
                         layoutShTotal.setVisibility(View.GONE);
                         tvShCount.setVisibility(View.GONE);
                         tvShRent.setVisibility(View.GONE);
+                        tvShPrice.setVisibility(View.GONE);
                     }
-                    tvTotal.setText("￥"+orderInfoXsEntity.getRent());
+                    tvTotal.setText("￥" + orderInfoXsEntity.getRent());
                     list = orderInfoXsEntity.getChildren();
                     tvAddress.setText("地址:" + orderInfoXsEntity.getHotel_address());
                     tvName.setText("客户姓名:" + orderInfoXsEntity.getCustomer_name());
@@ -177,15 +181,19 @@ public class OrderInfoFragment extends BaseFragment {
                 int count = entity.getScheduled_quantity();
                 holder.setText(R.id.tv_count, count + "");
                 double total = price * count;
-                holder.setText(R.id.tv_total, total + "");
+                holder.setText(R.id.tv_total, String.format("%.1f", total));
                 if (state == 5) {
-                   holder.setVisible(R.id.tv_sh_count,true);
-                   holder.setVisible(R.id.tv_sh_rent,true);
-                   holder.setText(R.id.tv_sh_count,entity.getLoss_quantity()+"");
-                   holder.setText(R.id.tv_sh_rent,entity.getLoss_rent()*entity.getLoss_quantity()+"");
-                }else {
-                    holder.setVisible(R.id.tv_sh_count,false);
-                    holder.setVisible(R.id.tv_sh_rent,false);
+                    holder.setVisible(R.id.tv_sh_count, true);
+                    holder.setVisible(R.id.tv_sh_rent, true);
+                    holder.setVisible(R.id.tv_sh_price, true);
+                    holder.setText(R.id.tv_sh_count, entity.getLoss_quantity() + "");
+                    holder.setText(R.id.tv_sh_price, entity.getLoss_rent() + "");
+                    double r = entity.getLoss_rent() * entity.getLoss_quantity();
+                    holder.setText(R.id.tv_sh_rent, String.format("%.1f", r));
+                } else {
+                    holder.setVisible(R.id.tv_sh_count, false);
+                    holder.setVisible(R.id.tv_sh_rent, false);
+                    holder.setVisible(R.id.tv_sh_price, false);
                 }
 
             }

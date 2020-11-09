@@ -36,6 +36,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.allen.warehouse.BaseFragment;
 import cn.allen.warehouse.R;
+import cn.allen.warehouse.ShowPicActivity;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.ImageEntity;
 import cn.allen.warehouse.entry.OrderInfoEntity;
@@ -241,10 +242,15 @@ public class ToBeReturnedXsFragment extends BaseFragment {
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
                 holder.setText(R.id.tv_name, entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
-                holder.setText(R.id.tv_submit, "已出库");
-                int status = entity.getId_check();
                 holder.setVisible(R.id.btn_submit, false);
                 holder.setVisible(R.id.tv_submit, true);
+                int status = entity.getId_check();
+                if (status == 0) {
+                    holder.setText(R.id.tv_submit, "未配货");
+                } else {
+                    holder.setText(R.id.tv_submit, "已出库");
+                }
+
             }
         };
         recyclerviewChildren.setLayoutManager(manager);
@@ -255,10 +261,14 @@ public class ToBeReturnedXsFragment extends BaseFragment {
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
                 holder.setText(R.id.tv_name, entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
-                holder.setText(R.id.tv_submit, "已出库");
-                int status = entity.getId_check();
                 holder.setVisible(R.id.btn_submit, false);
                 holder.setVisible(R.id.tv_submit, true);
+                int status = entity.getId_check();
+                if (status == 0) {
+                    holder.setText(R.id.tv_submit, "未配货");
+                } else {
+                    holder.setText(R.id.tv_submit, "已出库");
+                }
             }
         };
         recyclerviewMain.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -289,6 +299,19 @@ public class ToBeReturnedXsFragment extends BaseFragment {
     }
 
     private void addEvent(View view) {
+        imageAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent intent = new Intent(getActivity(), ShowPicActivity.class);
+                intent.putExtra("url", orderInfoEntity.getImages().get(position).getImg());
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
     }
 
     @Override

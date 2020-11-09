@@ -80,6 +80,7 @@ public class SaleHomeFragment extends BaseFragment {
     private Calendar c;
     private int type;
     private String start,end;
+    private int uid;
 
     public static SaleHomeFragment init() {
         SaleHomeFragment fragment = new SaleHomeFragment();
@@ -112,6 +113,7 @@ public class SaleHomeFragment extends BaseFragment {
         c = Calendar.getInstance();
         shared = AllenManager.getInstance().getStoragePreference();
         type = shared.getInt(Constants.UserType,-1);
+        uid = shared.getInt(Constants.UserId,-1);
         if(type==1){
             oderBt.setVisibility(View.VISIBLE);
         }else{
@@ -238,7 +240,7 @@ public class SaleHomeFragment extends BaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                notices = WebHelper.init().getInformation();
+                notices = WebHelper.init().getInformation(uid);
                 handler.sendEmptyMessage(1);
             }
         }).start();

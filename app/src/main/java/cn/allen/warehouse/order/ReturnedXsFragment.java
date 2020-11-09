@@ -111,6 +111,7 @@ public class ReturnedXsFragment extends BaseFragment {
     private String numberID;
     private OrderInfoEntity orderInfoEntity;
     private List<ImageEntity> imageEntityList = new ArrayList<>();
+    private double total=0,loss_total=0;
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -147,8 +148,8 @@ public class ReturnedXsFragment extends BaseFragment {
                             orderState.setText("完成清点");
                             break;
                     }
-                    double total = 0;
-                    double loss_total = 0;
+                     total = 0;
+                     loss_total = 0;
                     childrenList = orderInfoEntity.getChildren();
                     int childrensize = childrenList == null ? 0 : childrenList.size();
                     if (childrensize == 0) {
@@ -183,8 +184,9 @@ public class ReturnedXsFragment extends BaseFragment {
 
                         }
                     }
-                    tvTotal.setText("￥" + total);
-                    tvShTotal.setText("￥" + loss_total);
+
+                    tvTotal.setText("￥" + String.format("%.1f",total));
+                    tvShTotal.setText("￥" + String.format("%.1f",loss_total));
                     imageList = orderInfoEntity.getImages();
                     int imagesize = imageList == null ? 0 : imageList.size();
                     if (imagesize > 0) {
@@ -393,7 +395,7 @@ public class ReturnedXsFragment extends BaseFragment {
         new Thread() {
             @Override
             public void run() {
-                WebHelper.init().returnOrder(handler, numberID, "" + orderInfoEntity.getRent(), "" + orderInfoEntity.getActual_loss_rent());
+                WebHelper.init().returnOrder(handler, numberID,  String.format("%.1f",total),  String.format("%.1f",loss_total));
             }
         }.start();
     }

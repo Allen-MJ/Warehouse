@@ -222,6 +222,7 @@ public class OrderFragment extends BaseFragment {
             Order order = list.get(position);
             int statu = order.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
             String id = order.getOrder_number();
+            Logger.e("type:",type+"");
             switch (statu) {
                 case 1:
                     if (type == 0) {

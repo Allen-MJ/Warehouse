@@ -181,8 +181,8 @@ public class InventoryXsFragment extends BaseFragment {
 
                         }
                     }
-                    tvTotal.setText("￥" + total);
-                    tvShTotal.setText("￥" + loss_total);
+                    tvTotal.setText("￥" +  String.format("%.1f",total));
+                    tvShTotal.setText("￥" +  String.format("%.1f",loss_total));
                     imageList = orderInfoEntity.getImages();
                     int imagesize = imageList == null ? 0 : imageList.size();
                     if (imagesize > 0) {

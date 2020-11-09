@@ -43,6 +43,11 @@ import cn.allen.warehouse.adapter.ChoiceFlowerAdapter;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Flower;
 import cn.allen.warehouse.entry.Order;
+import cn.allen.warehouse.order.DeliverXsFragment;
+import cn.allen.warehouse.order.ToBeReturnedFragment;
+import cn.allen.warehouse.order.ToBeReturnedXsFragment;
+import cn.allen.warehouse.order.WarehouseOutFragment;
+import cn.allen.warehouse.order.WarehouseOutXsFragment;
 import cn.allen.warehouse.utils.Constants;
 import cn.allen.warehouse.utils.DateTimePickerDialog;
 
@@ -174,10 +179,15 @@ public class XGOrderFragment extends BaseFragment {
         adapter.setOnItemClickListener(listener);
     }
 
+    private Flower deleteFlower;
     ChoiceFlowerAdapter.OnItemClickListener listener = new ChoiceFlowerAdapter.OnItemClickListener() {
         @Override
         public void deleteClick(View v, int position) {
+            actHelper.showProgressDialog("");
+            deleteFlower=order.getMainchildren().get(position);
+            delete(deleteFlower.getFlower_id());
             orderMoney.setText("¥" + adapter.getMonney());
+
         }
 
         @Override
@@ -264,6 +274,15 @@ public class XGOrderFragment extends BaseFragment {
         }
     }
 
+    private void delete(int id){
+        new Thread(){
+            @Override
+            public void run() {
+                WebHelper.init().delete(handler,no,id);
+            }
+        }.start();
+    }
+
     private void updateOrder() {
         new Thread(new Runnable() {
             @Override
@@ -294,7 +313,7 @@ public class XGOrderFragment extends BaseFragment {
         deliveryTime = orderDateCk.getText().toString().trim();
         recoveryDate = orderDateHs.getText().toString().trim();
         remark = orderRemark.getText().toString().trim();
-        list = adapter.getChoice();
+        list = adapter.getXGChoice();
         money = adapter.getMonney();
         if (StringUtils.empty(customerName)) {
             MsgUtils.showMDMessage(getActivity(), "请输入客户姓名!");
@@ -343,7 +362,12 @@ public class XGOrderFragment extends BaseFragment {
                 case 0:
                     actHelper.dismissProgressDialog();
                     MsgUtils.showShortToast(getActivity(), (String) msg.obj);
-                    backPreFragment();
+                    Logger.e(".....",msg.arg1+"");
+                    if (msg.arg1==1){
+                        onStartFragment(DeliverXsFragment.newInstance(no));
+                    }else {
+                        backPreFragment();
+                    }
                     break;
                 case -1:
                     actHelper.dismissProgressDialog();
@@ -365,6 +389,15 @@ public class XGOrderFragment extends BaseFragment {
                         MsgUtils.showMDMessage(getActivity(),"数据查询失败!");
                         backPreFragment();
                     }
+                    break;
+                case 2:
+                    actHelper.dismissProgressDialog();
+                    MsgUtils.showLongToast(getActivity(), (String) msg.obj);
+                    break;
+                case -2:
+                    actHelper.dismissProgressDialog();
+                    MsgUtils.showLongToast(getActivity(), (String) msg.obj);
+                    adapter.addList(deleteFlower);
                     break;
             }
         }
