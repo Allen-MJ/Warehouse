@@ -286,10 +286,21 @@ public class ToBeReturnedFragment extends BaseFragment {
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
                 holder.setText(R.id.tv_name, entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
-                holder.setText(R.id.tv_submit, "已出库");
                 int status = entity.getId_check();
-                holder.setVisible(R.id.btn_submit, false);
-                holder.setVisible(R.id.tv_submit, true);
+                if (status == 0) {
+                    holder.setVisible(R.id.btn_submit, true);
+                    holder.setVisible(R.id.tv_submit, false);
+                } else {
+                    holder.setText(R.id.tv_submit, "配货出库" );
+                    holder.setVisible(R.id.btn_submit, false);
+                    holder.setVisible(R.id.tv_submit, true);
+                }
+                holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        MsgUtils.showMDMessage(getContext(),"请到待配货里对相应追加订单进行配货！");
+                    }
+                });
             }
         };
         recyclerviewChildren.setLayoutManager(manager);
@@ -300,10 +311,21 @@ public class ToBeReturnedFragment extends BaseFragment {
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
                 holder.setText(R.id.tv_name, entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
-                holder.setText(R.id.tv_submit, "已出库");
+                holder.setText(R.id.tv_submit, "已出库" );
                 int status = entity.getId_check();
-                holder.setVisible(R.id.btn_submit, false);
-                holder.setVisible(R.id.tv_submit, true);
+                if (status == 0) {
+                    holder.setVisible(R.id.btn_submit, true);
+                    holder.setVisible(R.id.tv_submit, false);
+                } else {
+                    holder.setVisible(R.id.btn_submit, false);
+                    holder.setVisible(R.id.tv_submit, true);
+                }
+                holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        MsgUtils.showMDMessage(getContext(),"请到待配货里对相应订单进行配货！");
+                    }
+                });
             }
         };
         recyclerviewMain.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -385,25 +407,46 @@ public class ToBeReturnedFragment extends BaseFragment {
                 takePhone();
                 break;
             case R.id.tv_submit:
-
-                JSONArray array = new JSONArray();
-                int imagesize = imageEntityList == null ? 0 : imageEntityList.size();
-                if (imagesize > 0) {
-                    for (int i = 0; i < imageEntityList.size(); i++) {
-                        try {
-                            ImageEntity imageEntity = imageEntityList.get(i);
-                            if (imageEntity.getPan() == -1) {
-                                JSONObject object = new JSONObject();
-                                object.put("imgs", imageEntity.getMess());
-                                array.put(object);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                boolean isAllConfirm = true;
+                int mainsize = mainList == null ? 0 : mainList.size();
+                if (mainsize > 0) {
+                    for (OrderInfoEntity.MainchildrenBean entity : mainList) {
+                        if (entity.getId_check() == 0) {
+                            isAllConfirm = false;
                         }
                     }
                 }
-                actHelper.showProgressDialog("");
-                submit(array);
+                int childrensize = childrenList == null ? 0 : childrenList.size();
+                if (childrensize > 0) {
+                    for (OrderInfoEntity.ChildrenBean entity : childrenList) {
+                        if (entity.getId_check() == 0) {
+                            isAllConfirm = false;
+                        }
+                    }
+                }
+                if (isAllConfirm) {
+                    JSONArray array = new JSONArray();
+                    int imagesize = imageEntityList == null ? 0 : imageEntityList.size();
+                    if (imagesize > 0) {
+                        for (int i = 0; i < imageEntityList.size(); i++) {
+                            try {
+                                ImageEntity imageEntity = imageEntityList.get(i);
+                                if (imageEntity.getPan() == -1) {
+                                    JSONObject object = new JSONObject();
+                                    object.put("imgs", imageEntity.getMess());
+                                    array.put(object);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    actHelper.showProgressDialog("");
+                    submit(array);
+                } else {
+                    MsgUtils.showMDMessage(getContext(), "还有未确认的商品,请确认后提交！");
+                }
+
                 break;
             case R.id.back_bt:
                 backPreFragment();
