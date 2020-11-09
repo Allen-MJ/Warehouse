@@ -1,2 +1,2 @@
 configurations.maybeCreate("default")
-artifacts.add("default", file('online_techain_3-1-6-1-402_0824.aar'))
+artifacts.add("default", file('lib-techain-release-3.5.4.0.aar'))
