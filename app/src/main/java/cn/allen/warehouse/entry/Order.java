@@ -17,10 +17,10 @@ public class Order implements Serializable {
     private float rent;//租金
     private String order_number;
     private String order_createtime;
-    private int actual_rent;//实际收的租金
-    private int actual_loss_rent;//实际损耗金额
-    private int collect_ornot;
-    private int collect_amount;//收款金额
+    private float actual_rent;//实际收的租金
+    private float actual_loss_rent;//实际损耗金额
+    private float collect_ornot;
+    private float collect_amount;//收款金额
     private String collect_date;//收款金额
     private int collect_status;//收款状态
     private String img;//
@@ -194,7 +194,7 @@ public class Order implements Serializable {
         this.order_createtime = StringUtils.null2Empty(order_createtime).replaceAll("T"," ");
     }
 
-    public int getActual_rent() {
+    public float getActual_rent() {
         return actual_rent;
     }
 
@@ -202,7 +202,7 @@ public class Order implements Serializable {
         this.actual_rent = actual_rent;
     }
 
-    public int getActual_loss_rent() {
+    public float getActual_loss_rent() {
         return actual_loss_rent;
     }
 
@@ -210,7 +210,7 @@ public class Order implements Serializable {
         this.actual_loss_rent = actual_loss_rent;
     }
 
-    public int getCollect_ornot() {
+    public float getCollect_ornot() {
         return collect_ornot;
     }
 
@@ -218,7 +218,7 @@ public class Order implements Serializable {
         this.collect_ornot = collect_ornot;
     }
 
-    public int getCollect_amount() {
+    public float getCollect_amount() {
         return collect_amount;
     }
 

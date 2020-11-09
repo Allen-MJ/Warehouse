@@ -22,7 +22,7 @@ public class Flower implements Serializable {
     private int state;
     private int zd1;
     private String zd2;
-    private int unit_price;
+    private float unit_price;
     private String addtimes;
     private String typename;
     private String warehousename;
@@ -190,7 +190,7 @@ public class Flower implements Serializable {
         this.zd2 = zd2;
     }
 
-    public int getUnit_price() {
+    public float getUnit_price() {
         return unit_price;
     }
 

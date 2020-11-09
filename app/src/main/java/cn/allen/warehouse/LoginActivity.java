@@ -100,6 +100,7 @@ public class LoginActivity extends AllenIMBaseActivity {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA_PERMISSION);
             return;
         }
+        TH.setAgreePolicy(context, true);
         loginAccount.setText(shared.getString(Constants.UserAccount,""));
         loginPsw.setText(shared.getString(Constants.UserPsw,""));
     }
