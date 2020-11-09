@@ -75,7 +75,20 @@ public class LoginActivity extends AllenIMBaseActivity {
         switch (requestCode) {
             case REQUEST_CAMERA_PERMISSION: {
                 if(checkIsOk(grantResults)){
+                    TH.setAgreePolicy(context, true);
+                    TH.init(this,"700000372","d760569b53d23f3f5873be66ef169faf",100028,100019);
+                    TH.tinvoke(100019, "isPushEnabled",new Callback() {
+                        @Override
+                        public Object onEnd(Object...arg0) {
+                            return null;
+                        }
 
+                        @Override
+                        public Object onError(Object...arg0) {
+                            return null;
+                        }
+                    });
+                    TH.tinvoke(100019, "setDebug", new Class[] { boolean.class }, true);
                 }else{
                     finish();
                 }
@@ -101,6 +114,19 @@ public class LoginActivity extends AllenIMBaseActivity {
             return;
         }
         TH.setAgreePolicy(context, true);
+        TH.init(this,"700000372","d760569b53d23f3f5873be66ef169faf",100028,100019);
+        TH.tinvoke(100019, "isPushEnabled",new Callback() {
+            @Override
+            public Object onEnd(Object...arg0) {
+                return null;
+            }
+
+            @Override
+            public Object onError(Object...arg0) {
+                return null;
+            }
+        });
+        TH.tinvoke(100019, "setDebug", new Class[] { boolean.class }, true);
         loginAccount.setText(shared.getString(Constants.UserAccount,""));
         loginPsw.setText(shared.getString(Constants.UserPsw,""));
     }
@@ -148,6 +174,7 @@ public class LoginActivity extends AllenIMBaseActivity {
     }
 
     private void setAlias(int id){
+        Logger.e("debug","id->"+id);
         TH.tinvoke(100019,"setAlias",new Callback(){
                     @Override
                     public Object onEnd(Object... objects) {

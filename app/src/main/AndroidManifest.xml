@@ -75,7 +75,7 @@
 
         <provider android:authorities="cn.allen.warehouse.techain.ac.provider"
             android:name="com.baidu.techain.TechainProvider"
-            android:exported="true"/>
+            android:exported="false"/>
 
         <service
             android:name="com.baidu.techain.TechainService"
