@@ -240,7 +240,7 @@ public class ToBeReturnedXsFragment extends BaseFragment {
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 holder.setVisible(R.id.btn_submit, false);
                 holder.setVisible(R.id.tv_submit, true);
@@ -259,7 +259,7 @@ public class ToBeReturnedXsFragment extends BaseFragment {
         mainAdapter = new CommonAdapter<OrderInfoEntity.MainchildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 holder.setVisible(R.id.btn_submit, false);
                 holder.setVisible(R.id.tv_submit, true);

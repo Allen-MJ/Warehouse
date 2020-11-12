@@ -275,12 +275,18 @@ public class ReturnedXsFragment extends BaseFragment {
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_return_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 AppCompatEditText et_count = holder.getView(R.id.et_sunhao);
                 if (et_count.getTag() != null && et_count.getTag() instanceof TextWatcher) {
                     et_count.removeTextChangedListener((TextWatcher) et_count.getTag());
                 }
+                holder.setOnClickListener(R.id.tv_name, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        holder.setDrawable(R.id.tv_name,0,0,R.mipmap.ic_logo_suo,0);
+                    }
+                });
                 et_count.setText(entity.getLoss_quantity() + "");
                 et_count.setSelection((entity.getLoss_quantity() + "").length());
                 TextWatcher textWatcher = new TextWatcher() {
@@ -321,12 +327,18 @@ public class ReturnedXsFragment extends BaseFragment {
         mainAdapter = new CommonAdapter<OrderInfoEntity.MainchildrenBean>(getContext(), R.layout.order_return_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 AppCompatEditText et_count = holder.getView(R.id.et_sunhao);
                 et_count.setText(entity.getLoss_quantity() + "");
                 et_count.setFocusable(false);
                 et_count.setFocusableInTouchMode(false);
+                holder.setOnClickListener(R.id.tv_name, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        holder.setDrawable(R.id.tv_name,0,0,R.mipmap.ic_logo_suo,0);
+                    }
+                });
             }
         };
         recyclerviewMain.setLayoutManager(new LinearLayoutManager(getActivity()));

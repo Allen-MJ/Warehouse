@@ -37,6 +37,9 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             this.list = list;
         }
         notifyDataSetChanged();
+        if(listener!=null){
+            listener.numEdit();
+        }
     }
 
     public void addList(List<Flower> list){
@@ -44,16 +47,25 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             this.list.addAll(list);
         }
         notifyDataSetChanged();
+        if(listener!=null){
+            listener.numEdit();
+        }
     }
     public void addList(Flower entry){
         entry.setScheduled_quantity(1);
         list.add(entry);
         notifyDataSetChanged();
+        if(listener!=null){
+            listener.numEdit();
+        }
     }
 
     public void delete(int index){
         list.remove(index);
         notifyDataSetChanged();
+        if(listener!=null){
+            listener.numEdit();
+        }
     }
 
     public boolean checkIsOk(){
@@ -194,9 +206,9 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         view.setEnabled(true);
                     }
                 });
-                if(rent.getTag() instanceof TextWatcher){
+                /*if(rent.getTag() instanceof TextWatcher){
                     rent.removeTextChangedListener((TextWatcher) rent.getTag());
-                }
+                }*/
                 rent.setText(String.valueOf(entry.getScheduled_quantity()));
                 TextWatcher watcher =new TextWatcher() {
                     @Override
@@ -207,6 +219,23 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                         if(position<list.size()){
+//                            String num = StringUtils.empty(charSequence.toString())?"0":charSequence.toString();
+//                            int count = Integer.parseInt(num);
+//                            if(count>entry.getStock()){
+//                                MsgUtils.showShortToast(view.getContext(),"库存不足!");
+//                                list.get(position).setScheduled_quantity(entry.getStock());
+//                                rent.setText(""+entry.getStock());
+//                            }else if(count==0){
+//                                list.get(position).setScheduled_quantity(0);
+//                                rent.setText("");
+//                            }else{
+//                                list.get(position).setScheduled_quantity(count);
+//                                rent.setText(String.valueOf(count));
+//                            }
+//                            rent.setSelection(rent.getText().length());
+//                            if(listener!=null){
+//                                listener.numEdit();
+//                            }
                             if(!String.valueOf(list.get(position).getScheduled_quantity()==0?"":list.get(position).getScheduled_quantity()).equals(charSequence.toString())){
                                 String num = StringUtils.empty(charSequence.toString())?"0":charSequence.toString();
                                 int count = Integer.parseInt(num);
@@ -223,7 +252,7 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                 }
                                 rent.setSelection(rent.getText().length());
                                 if(listener!=null){
-                                    listener.numEdit(view);
+                                    listener.numEdit();
                                 }
                             }
                         }
@@ -234,8 +263,19 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     }
                 };
-                rent.addTextChangedListener(watcher);
-                rent.setTag(watcher);
+                rent.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
+                        AppCompatEditText v = (AppCompatEditText) view;
+                        if(b){
+                            v.addTextChangedListener(watcher);
+                        }else{
+                            v.removeTextChangedListener(watcher);
+                        }
+                    }
+                });
+//                rent.addTextChangedListener(watcher);
+//                rent.setTag(watcher);
             }
         }
     }
@@ -266,6 +306,6 @@ public class ChoiceFlowerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public interface OnItemClickListener{
         void deleteClick(View v,int position);
         void addClick(View v);
-        void numEdit(View v);
+        void numEdit();
     }
 }

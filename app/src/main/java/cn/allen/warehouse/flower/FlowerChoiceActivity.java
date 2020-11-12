@@ -89,10 +89,12 @@ public class FlowerChoiceActivity extends AllenIMBaseActivity {
                     view.setEnabled(true);
                     return true;
                 }else if(i==KeyEvent.KEYCODE_DEL){
-                    name = barSearch.getText().toString().trim();
-                    int len = StringUtils.empty(name)?0:name.length();
-                    if(len>0){
-                        barSearch.setText(name.substring(0,len-1));
+                    int index = barSearch.getSelectionStart();
+                    if(index>0){
+                        Editable editable = barSearch.getText();
+                        if(editable!=null){
+                            editable.delete(index-1, index);
+                        }
                     }
                 }
                 return true;

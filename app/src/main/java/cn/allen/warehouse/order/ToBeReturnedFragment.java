@@ -284,7 +284,7 @@ public class ToBeReturnedFragment extends BaseFragment {
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 int status = entity.getId_check();
                 if (status == 0) {
@@ -295,6 +295,12 @@ public class ToBeReturnedFragment extends BaseFragment {
                     holder.setVisible(R.id.btn_submit, false);
                     holder.setVisible(R.id.tv_submit, true);
                 }
+                holder.setOnClickListener(R.id.tv_name, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        holder.setDrawable(R.id.tv_name,0,0,R.mipmap.ic_logo_suo,0);
+                    }
+                });
                 holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -309,7 +315,7 @@ public class ToBeReturnedFragment extends BaseFragment {
         mainAdapter = new CommonAdapter<OrderInfoEntity.MainchildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 holder.setText(R.id.tv_submit, "已出库" );
                 int status = entity.getId_check();
@@ -320,6 +326,12 @@ public class ToBeReturnedFragment extends BaseFragment {
                     holder.setVisible(R.id.btn_submit, false);
                     holder.setVisible(R.id.tv_submit, true);
                 }
+                holder.setOnClickListener(R.id.tv_name, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        holder.setDrawable(R.id.tv_name,0,0,R.mipmap.ic_logo_suo,0);
+                    }
+                });
                 holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

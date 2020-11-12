@@ -143,6 +143,7 @@ public class XGOrderFragment extends BaseFragment {
         shared = AllenManager.getInstance().getStoragePreference();
         uid = shared.getInt(Constants.UserId, -1);
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
+        barTitle.setText("请注意：修改订单必须在出库之前");
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         adapter = new ChoiceFlowerAdapter();
@@ -196,7 +197,7 @@ public class XGOrderFragment extends BaseFragment {
         }
 
         @Override
-        public void numEdit(View v) {
+        public void numEdit() {
             orderMoney.setText("¥" + adapter.getMonney());
         }
     };

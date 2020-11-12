@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -144,11 +145,18 @@ public class AllOrderFragment extends BaseFragment {
                     view.setEnabled(true);
                     return true;
                 }else if(i==KeyEvent.KEYCODE_DEL){
-                    no = barSearch.getText().toString().trim();
-                    int len = StringUtils.empty(no)?0:no.length();
-                    if(len>0){
-                        barSearch.setText(no.substring(0,len-1));
+//                    no = barSearch.getText().toString().trim();
+//                    int len = StringUtils.empty(no)?0:no.length();
+                    int index = barSearch.getSelectionStart();
+                    if(index>0){
+                        Editable editable = barSearch.getText();
+                        if(editable!=null){
+                            editable.delete(index-1, index);
+                        }
                     }
+                    /*if(len>0){
+                        barSearch.setText(no.substring(0,len-1));
+                    }*/
                 }
                 return true;
             }

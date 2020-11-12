@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -18,12 +19,15 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 
 import java.io.FileFilter;
 import java.util.Calendar;
 
 import allen.frame.tools.CheckUtils;
+import allen.frame.tools.Logger;
 import allen.frame.tools.MsgUtils;
 import allen.frame.tools.StringUtils;
 import androidx.annotation.NonNull;
@@ -46,6 +50,7 @@ import cn.allen.warehouse.R;
 import cn.allen.warehouse.adapter.ChoiceFlowerAdapter;
 import cn.allen.warehouse.data.WebHelper;
 import cn.allen.warehouse.entry.Flower;
+import cn.allen.warehouse.entry.Order;
 import cn.allen.warehouse.utils.Constants;
 import cn.allen.warehouse.utils.DateTimePickerDialog;
 
@@ -106,6 +111,12 @@ public class XsOrderFragment extends BaseFragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        save();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
@@ -119,9 +130,11 @@ public class XsOrderFragment extends BaseFragment {
         addEvent(view);
     }
 
+    private String preOrder;
     private void initUi(View view) {
         c = Calendar.getInstance();
         shared = AllenManager.getInstance().getStoragePreference();
+        preOrder = shared.getString("preOrder","");
         uid = shared.getInt(Constants.UserId, -1);
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -133,6 +146,27 @@ public class XsOrderFragment extends BaseFragment {
 
     private void addEvent(View view) {
         adapter.setOnItemClickListener(listener);
+        if(StringUtils.notEmpty(preOrder)){
+            MsgUtils.showMDMessage(getActivity(), "提示", "上次下单还未提交，是否继续?", "取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int i) {
+                    dialog.dismiss();
+                }
+            }, "继续", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int i) {
+                    Order order = new Gson().fromJson(preOrder,Order.class);
+                    orderKhName.setText(order.getCustomer_name());
+                    orderKhAddress.setText(order.getHotel_address());
+                    orderKhPhone.setText(order.getCustomer_phone());
+                    orderDateHl.setText(order.getWedding_date());
+                    orderDateCk.setText(order.getDelivery_times());
+                    orderDateHs.setText(order.getRecovery_date());
+                    orderRemark.setText(order.getRemark());
+                    adapter.addList(order.getMainchildren());
+                }
+            });
+        }
     }
 
     ChoiceFlowerAdapter.OnItemClickListener listener = new ChoiceFlowerAdapter.OnItemClickListener() {
@@ -147,7 +181,7 @@ public class XsOrderFragment extends BaseFragment {
         }
 
         @Override
-        public void numEdit(View v) {
+        public void numEdit() {
             orderMoney.setText("¥"+adapter.getMonney());
         }
     };
@@ -273,6 +307,42 @@ public class XsOrderFragment extends BaseFragment {
         return true;
     }
 
+    private void save(){
+        customerName = orderKhName.getText().toString().trim();
+        hotelAddress = orderKhAddress.getText().toString().trim();
+        customerPhone = orderKhPhone.getText().toString().trim();
+        weddingDate = orderDateHl.getText().toString().trim();
+        deliveryTime = orderDateCk.getText().toString().trim();
+        recoveryDate = orderDateHs.getText().toString().trim();
+        remark = orderRemark.getText().toString().trim();
+        list = adapter.getChoice();
+        money = adapter.getMonney();
+        boolean isNochange = true;
+        isNochange = isNochange&&StringUtils.empty(customerName);
+        isNochange = isNochange&&StringUtils.empty(hotelAddress);
+        isNochange = isNochange&&StringUtils.empty(customerPhone);
+        isNochange = isNochange&&StringUtils.empty(weddingDate);
+        isNochange = isNochange&&StringUtils.empty(deliveryTime);
+        isNochange = isNochange&&StringUtils.empty(recoveryDate);
+        isNochange = isNochange&&(list.length()<=2);
+        if(!isNochange){
+            Order order = new Order();
+            order.setCustomer_name(customerName);
+            order.setHotel_address(hotelAddress);
+            order.setCustomer_phone(customerPhone);
+            order.setWedding_date(weddingDate);
+            order.setDelivery_times(deliveryTime);
+            order.setRecovery_date(recoveryDate);
+            order.setRemark(remark);
+            order.setMainchildren(adapter.getList());
+            String save = new Gson().toJson(order);
+            Logger.e("debug","save:"+save);
+            shared.edit().putString("preOrder",save).apply();
+        }else{
+            shared.edit().putString("preOrder","").apply();
+        }
+    }
+
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
         @Override
@@ -281,6 +351,7 @@ public class XsOrderFragment extends BaseFragment {
                 case 0:
                     actHelper.dismissProgressDialog();
                     MsgUtils.showShortToast(getActivity(), (String) msg.obj);
+                    shared.edit().putString("preOrder","").apply();
                     backPreFragment();
                     break;
                 case -1:
