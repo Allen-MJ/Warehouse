@@ -251,17 +251,35 @@ public class ReturnedFragment extends BaseFragment {
         }.start();
     }
 
+    private void SetSign(int id,int number){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                WebHelper.init().SetSign(handler,id,1,number);
+            }
+        }).start();
+    }
+
     private void initAdapter() {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_return_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
                 holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setDrawable(R.id.tv_name,0,0,entity.getSign()==1?R.mipmap.ic_logo_suo:0,0);
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 AppCompatEditText et_count = holder.getView(R.id.et_sunhao);
                 if (et_count.getTag() != null && et_count.getTag() instanceof TextWatcher) {
                     et_count.removeTextChangedListener((TextWatcher) et_count.getTag());
                 }
+                holder.setOnClickListener(R.id.tv_name, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        childrenList.get(position).setSign(1);
+                        holder.setDrawable(R.id.tv_name,0,0,R.mipmap.ic_logo_suo,0);
+                        SetSign(entity.getId(),childrenList.get(position).getLoss_quantity());
+                    }
+                });
                 et_count.setText(entity.getLoss_quantity() + "");
                 et_count.setSelection((entity.getLoss_quantity() + "").length());
                 TextWatcher textWatcher = new TextWatcher() {
@@ -303,11 +321,20 @@ public class ReturnedFragment extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
                 holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setDrawable(R.id.tv_name,0,0,entity.getSign()==1?R.mipmap.ic_logo_suo:0,0);
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 AppCompatEditText et_count = holder.getView(R.id.et_sunhao);
                 if (et_count.getTag() != null && et_count.getTag() instanceof TextWatcher) {
                     et_count.removeTextChangedListener((TextWatcher) et_count.getTag());
                 }
+                holder.setOnClickListener(R.id.tv_name, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mainList.get(position).setSign(1);
+                        holder.setDrawable(R.id.tv_name,0,0,R.mipmap.ic_logo_suo,0);
+                        SetSign(entity.getId(),mainList.get(position).getLoss_quantity());
+                    }
+                });
                 et_count.setText(entity.getLoss_quantity() + "");
                 et_count.setSelection((entity.getLoss_quantity() + "").length());
                 TextWatcher textWatcher = new TextWatcher() {

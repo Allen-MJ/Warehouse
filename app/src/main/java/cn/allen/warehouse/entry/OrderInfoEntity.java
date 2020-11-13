@@ -357,6 +357,7 @@ public class OrderInfoEntity implements Serializable {
         private Object order_number;
         private int id_check;
         private int flower_id;
+        private int sign;
 
         public int getId() {
             return id;
@@ -485,6 +486,14 @@ public class OrderInfoEntity implements Serializable {
         public void setFlower_id(int flower_id) {
             this.flower_id = flower_id;
         }
+
+        public int getSign() {
+            return sign;
+        }
+
+        public void setSign(int sign) {
+            this.sign = sign;
+        }
     }
 
     public static class MainchildrenBean implements Serializable{
@@ -523,6 +532,7 @@ public class OrderInfoEntity implements Serializable {
         private Object order_number;
         private int id_check;
         private int flower_id;
+        private int sign;
 
         public int getId() {
             return id;
@@ -650,6 +660,14 @@ public class OrderInfoEntity implements Serializable {
 
         public void setFlower_id(int flower_id) {
             this.flower_id = flower_id;
+        }
+
+        public int getSign() {
+            return sign;
+        }
+
+        public void setSign(int sign) {
+            this.sign = sign;
         }
     }
 

@@ -674,4 +674,20 @@ public class WebHelper {
         }
         return order;
     }
+
+    public void SetSign(Handler handler,int id,int sign,int number){
+        Object[] objects = new Object[]{
+                "id", id,"sign",sign,"count",number
+        };
+        Response response = service.getWebservice(Api.SetSign, objects, WebService.Get);
+        Message message = new Message();
+        if(response.isSuccess("200")){
+            message.what = 10;
+        }else{
+            message.what = -1;
+        }
+        message.obj = response.getMessage();
+        handler.sendMessage(message);
+
+    }
 }

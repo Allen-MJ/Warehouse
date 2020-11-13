@@ -28,4 +28,5 @@ public class Api {
     public static final String GetRed = "GetRed";//二十二、	获取各订单状态数量之和（仓库端：get）
     public static final String GetDetail = "GetDetail";//	获取订单详情（销售端）
     public static final String Delete = "Delete";//	删除订单中的花（销售端）
+    public static final String SetSign = "SetSign";//	标记（仓库端）
 }

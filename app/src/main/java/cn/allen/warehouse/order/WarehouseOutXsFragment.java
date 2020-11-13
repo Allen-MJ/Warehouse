@@ -222,7 +222,7 @@ public class WarehouseOutXsFragment extends BaseFragment {
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 int status = entity.getId_check();
                 if (status == 0) {
@@ -247,7 +247,7 @@ public class WarehouseOutXsFragment extends BaseFragment {
         mainAdapter = new CommonAdapter<OrderInfoEntity.MainchildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 int status = entity.getId_check();
                 if (status == 0) {

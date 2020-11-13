@@ -248,6 +248,7 @@ public class XsOrderFragment extends BaseFragment {
     }
 
     private void placingOrder(){
+        actHelper.showProgressDialog("正在提交，请稍等...");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -325,7 +326,7 @@ public class XsOrderFragment extends BaseFragment {
         isNochange = isNochange&&StringUtils.empty(deliveryTime);
         isNochange = isNochange&&StringUtils.empty(recoveryDate);
         isNochange = isNochange&&(list.length()<=2);
-        if(!isNochange){
+        if(!isOK&&!isNochange){
             Order order = new Order();
             order.setCustomer_name(customerName);
             order.setHotel_address(hotelAddress);
@@ -343,6 +344,7 @@ public class XsOrderFragment extends BaseFragment {
         }
     }
 
+    private boolean isOK = false;
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
         @Override
@@ -351,7 +353,7 @@ public class XsOrderFragment extends BaseFragment {
                 case 0:
                     actHelper.dismissProgressDialog();
                     MsgUtils.showShortToast(getActivity(), (String) msg.obj);
-                    shared.edit().putString("preOrder","").apply();
+                    isOK = true;
                     backPreFragment();
                     break;
                 case -1:

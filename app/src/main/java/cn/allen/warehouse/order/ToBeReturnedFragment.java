@@ -295,12 +295,6 @@ public class ToBeReturnedFragment extends BaseFragment {
                     holder.setVisible(R.id.btn_submit, false);
                     holder.setVisible(R.id.tv_submit, true);
                 }
-                holder.setOnClickListener(R.id.tv_name, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        holder.setDrawable(R.id.tv_name,0,0,R.mipmap.ic_logo_suo,0);
-                    }
-                });
                 holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -326,12 +320,6 @@ public class ToBeReturnedFragment extends BaseFragment {
                     holder.setVisible(R.id.btn_submit, false);
                     holder.setVisible(R.id.tv_submit, true);
                 }
-                holder.setOnClickListener(R.id.tv_name, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        holder.setDrawable(R.id.tv_name,0,0,R.mipmap.ic_logo_suo,0);
-                    }
-                });
                 holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
