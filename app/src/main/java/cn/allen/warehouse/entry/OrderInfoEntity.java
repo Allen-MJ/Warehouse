@@ -49,6 +49,7 @@ public class OrderInfoEntity implements Serializable {
     private String delivery_time;
     private String recovery_date;
     private String remark;
+    private String cremark;
     private double rent;
     private String order_number;
     private String order_createtime;
@@ -72,6 +73,14 @@ public class OrderInfoEntity implements Serializable {
     private List<ChildrenBean> children;
     private List<MainchildrenBean> mainchildren;
     private List<ImagesBean> Images;
+
+    public String getCremark() {
+        return cremark;
+    }
+
+    public void setCremark(String cremark) {
+        this.cremark = cremark;
+    }
 
     public int getId() {
         return id;

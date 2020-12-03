@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -181,14 +182,15 @@
                         android:textSize="@dimen/frame_text_smaller_size" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/layout_remark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="gone"
-                android:padding="@dimen/frame_four_distance">
+                android:padding="@dimen/frame_four_distance"
+                android:visibility="gone">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
@@ -204,9 +206,16 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/frame_eight_distance"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:padding="@dimen/frame_eight_distance">
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="销售备注:"
+                    android:textColor="@color/text_gray_color"
+                    android:textSize="@dimen/frame_text_normal_size" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_order_remark"
@@ -214,9 +223,39 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="备注xxxxxxxxxxxxxxx"
-                    android:textColor="@color/text_normal_color"
-                    android:textSize="@dimen/frame_text_normal_size" />
+                    android:padding="@dimen/frame_eight_distance"
+                    android:textColor="@color/text_red_color"
+                    android:textSize="@dimen/frame_text_normal_size"
+                    android:textStyle="bold" />
             </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_ck_remark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/frame_eight_distance">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="仓库备注:"
+                    android:textColor="@color/text_gray_color"
+                    android:textSize="@dimen/frame_text_normal_size" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_ck_remark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/frame_eight_distance"
+                    android:text="备注xxxxxxxxxxxxxxx"
+                    android:textColor="@color/text_red_color"
+                    android:textSize="@dimen/frame_text_normal_size"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.cardview.widget.CardView>
 

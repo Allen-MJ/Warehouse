@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -83,6 +84,14 @@ public class DeliverFragment extends BaseFragment {
     AppCompatTextView tvOrderRemark;
     @BindView(R.id.layout_remark)
     LinearLayoutCompat layoutRemark;
+    @BindView(R.id.remark_update)
+    AppCompatTextView remarkUpdate;
+    @BindView(R.id.order_remark)
+    AppCompatEditText orderRemark;
+    @BindView(R.id.tv_ck_remark)
+    AppCompatTextView tvCkRemark;
+    @BindView(R.id.layout_ck_remark)
+    LinearLayoutCompat layoutCkRemark;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -203,6 +212,7 @@ public class DeliverFragment extends BaseFragment {
     private void initUi(View view) {
         shared = AllenManager.getInstance().getStoragePreference();
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
+        layoutCkRemark.setVisibility(View.GONE);
         initAdapter();
         actHelper.setLoadUi(ActivityHelper.PROGRESS_STATE_START, "");
         loadData();
@@ -231,7 +241,7 @@ public class DeliverFragment extends BaseFragment {
         new Thread() {
             @Override
             public void run() {
-                WebHelper.init().submitDelivery(handler, numberID);
+                WebHelper.init().submitDelivery(handler, numberID, orderRemark.getText().toString());
             }
         }.start();
     }
@@ -241,7 +251,7 @@ public class DeliverFragment extends BaseFragment {
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 int status = entity.getId_check();
                 if (status == 0) {
@@ -265,7 +275,7 @@ public class DeliverFragment extends BaseFragment {
         mainAdapter = new CommonAdapter<OrderInfoEntity.MainchildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 int status = entity.getId_check();
                 if (status == 0) {
@@ -304,7 +314,7 @@ public class DeliverFragment extends BaseFragment {
         }
     };
 
-    @OnClick({R.id.tv_submit, R.id.back_bt})
+    @OnClick({R.id.tv_submit, R.id.back_bt, R.id.remark_update})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_submit:
@@ -336,6 +346,10 @@ public class DeliverFragment extends BaseFragment {
             case R.id.back_bt:
                 backPreFragment();
                 break;
+            case R.id.remark_update:
+
+                break;
         }
     }
+
 }

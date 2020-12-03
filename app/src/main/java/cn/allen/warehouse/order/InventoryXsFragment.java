@@ -30,6 +30,7 @@ import allen.frame.AllenManager;
 import allen.frame.adapter.CommonAdapter;
 import allen.frame.adapter.ViewHolder;
 import allen.frame.tools.MsgUtils;
+import allen.frame.tools.StringUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -98,6 +99,10 @@ public class InventoryXsFragment extends BaseFragment {
     AppCompatTextView tvShTotal;
     @BindView(R.id.tv_to_info)
     AppCompatTextView tvToInfo;
+    @BindView(R.id.tv_ck_remark)
+    AppCompatTextView tvCkRemark;
+    @BindView(R.id.layout_ck_remark)
+    LinearLayoutCompat layoutCkRemark;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -126,7 +131,7 @@ public class InventoryXsFragment extends BaseFragment {
                     tvPhone.setText(orderInfoEntity.getCustomer_phone());
                     tvDate1.setText(orderInfoEntity.getWedding_dates());
                     tvRemark.setText(orderInfoEntity.getRemark());
-
+                    tvCkRemark.setText(StringUtils.notEmpty(orderInfoEntity.getCremark())?orderInfoEntity.getCremark():"");
                     int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
@@ -181,8 +186,8 @@ public class InventoryXsFragment extends BaseFragment {
 
                         }
                     }
-                    tvTotal.setText("￥" +  String.format("%.1f",total));
-                    tvShTotal.setText("￥" +  String.format("%.1f",loss_total));
+                    tvTotal.setText("￥" + String.format("%.1f", total));
+                    tvShTotal.setText("￥" + String.format("%.1f", loss_total));
                     imageList = orderInfoEntity.getImages();
                     int imagesize = imageList == null ? 0 : imageList.size();
                     if (imagesize > 0) {
@@ -271,7 +276,7 @@ public class InventoryXsFragment extends BaseFragment {
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_return_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 AppCompatEditText et_count = holder.getView(R.id.et_sunhao);
                 et_count.setText(entity.getLoss_quantity() + "");
@@ -286,7 +291,7 @@ public class InventoryXsFragment extends BaseFragment {
         mainAdapter = new CommonAdapter<OrderInfoEntity.MainchildrenBean>(getContext(), R.layout.order_return_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 AppCompatEditText et_count = holder.getView(R.id.et_sunhao);
                 et_count.setText(entity.getLoss_quantity() + "");
@@ -301,20 +306,20 @@ public class InventoryXsFragment extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ImagesBean entity, int position) {
                 holder.setImageByUrl(R.id.image, entity.getImg(), R.drawable.mis_default_error);
-                if (entity.getPan()==1){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color1);
+                if (entity.getPan() == 1) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color1);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.chuku_icon));
-                    holder.setText(R.id.tv_state,"出库");
-                }else if (entity.getPan()==2){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color2);
+                    holder.setText(R.id.tv_state, "出库");
+                } else if (entity.getPan() == 2) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color2);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.huiku_icon));
-                    holder.setText(R.id.tv_state,"回库");
-                }else if (entity.getPan()==-1){
-                    holder.setTextColorRes(R.id.tv_state,R.color.state_text_color3);
+                    holder.setText(R.id.tv_state, "回库");
+                } else if (entity.getPan() == -1) {
+                    holder.setTextColorRes(R.id.tv_state, R.color.state_text_color3);
                     holder.setDrawableLeft(R.id.tv_state, getActivity().getResources().getDrawable(R.mipmap.shangchuan_icon));
-                    holder.setText(R.id.tv_state,"待上传");
-                }else {
-                    holder.setVisible(R.id.tv_state,false);
+                    holder.setText(R.id.tv_state, "待上传");
+                } else {
+                    holder.setVisible(R.id.tv_state, false);
                 }
             }
         };
@@ -339,7 +344,7 @@ public class InventoryXsFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_submit, R.id.back_bt,R.id.tv_to_info})
+    @OnClick({R.id.tv_submit, R.id.back_bt, R.id.tv_to_info})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_to_info:

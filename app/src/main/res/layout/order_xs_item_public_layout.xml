@@ -123,15 +123,16 @@
                     android:text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                     android:textColor="@color/text_normal_color"
                     android:textSize="@dimen/frame_text_normal_size" />
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_to_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="查看详情>"
-                    android:visibility="gone"
                     android:textColor="@color/order_text_red"
-                    android:textSize="@dimen/frame_text_normal_size" />
+                    android:textSize="@dimen/frame_text_normal_size"
+                    android:visibility="gone" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.cardview.widget.CardView>
@@ -273,17 +274,58 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/frame_eight_distance"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/frame_eight_distance">
 
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_remark"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="备注xxxxxxxxxxxxxxx"
-            android:textColor="@color/text_normal_color"
-            android:textSize="@dimen/frame_text_normal_size" />
+            android:orientation="horizontal"
+            android:padding="@dimen/frame_eight_distance">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="销售备注:"
+                android:textColor="@color/text_gray_color"
+                android:textSize="@dimen/frame_text_normal_size"
+                 />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_remark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="备注xxxxxxxxxxxxxxx"
+                android:padding="@dimen/frame_eight_distance"
+                android:textColor="@color/text_red_color"
+                android:textSize="@dimen/frame_text_normal_size"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/layout_ck_remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/frame_eight_distance">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="仓库备注:"
+                android:textColor="@color/text_gray_color"
+                android:textSize="@dimen/frame_text_normal_size"
+                />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_ck_remark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="备注xxxxxxxxxxxxxxx"
+                android:padding="@dimen/frame_eight_distance"
+                android:textColor="@color/text_red_color"
+                android:textSize="@dimen/frame_text_normal_size"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -85,6 +85,10 @@ public class DeliverXsFragment extends BaseFragment {
     AppCompatTextView tvRemark;
     @BindView(R.id.tv_to_info)
     AppCompatTextView tvToInfo;
+    @BindView(R.id.tv_ck_remark)
+    AppCompatTextView tvCkRemark;
+    @BindView(R.id.layout_ck_remark)
+    LinearLayoutCompat layoutCkRemark;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -199,6 +203,7 @@ public class DeliverXsFragment extends BaseFragment {
 
     private void initUi(View view) {
         tvToInfo.setVisibility(View.VISIBLE);
+        layoutCkRemark.setVisibility(View.GONE);
         shared = AllenManager.getInstance().getStoragePreference();
         barName.setText(shared.getString(Constants.UserName, "用户昵称"));
         initAdapter();
@@ -230,7 +235,7 @@ public class DeliverXsFragment extends BaseFragment {
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 holder.setVisible(R.id.btn_submit, false);
                 holder.setVisible(R.id.tv_submit, true);
@@ -248,7 +253,7 @@ public class DeliverXsFragment extends BaseFragment {
         mainAdapter = new CommonAdapter<OrderInfoEntity.MainchildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 holder.setVisible(R.id.btn_submit, false);
                 holder.setVisible(R.id.tv_submit, true);
@@ -281,7 +286,7 @@ public class DeliverXsFragment extends BaseFragment {
         }
     };
 
-    @OnClick({R.id.tv_submit, R.id.back_bt,R.id.tv_to_info})
+    @OnClick({R.id.tv_submit, R.id.back_bt, R.id.tv_to_info})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_to_info:

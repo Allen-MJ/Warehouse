@@ -26,6 +26,7 @@ import allen.frame.AllenManager;
 import allen.frame.adapter.CommonAdapter;
 import allen.frame.adapter.ViewHolder;
 import allen.frame.tools.MsgUtils;
+import allen.frame.tools.StringUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -85,6 +86,10 @@ public class WarehouseOutXsFragment extends BaseFragment {
     AppCompatTextView tvRemark;
     @BindView(R.id.tv_to_info)
     AppCompatTextView tvToInfo;
+    @BindView(R.id.tv_ck_remark)
+    AppCompatTextView tvCkRemark;
+    @BindView(R.id.layout_ck_remark)
+    LinearLayoutCompat layoutCkRemark;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -110,6 +115,7 @@ public class WarehouseOutXsFragment extends BaseFragment {
                     tvPhone.setText(orderInfoEntity.getCustomer_phone());
                     tvDate1.setText(orderInfoEntity.getWedding_dates());
                     tvRemark.setText(orderInfoEntity.getRemark());
+                    tvCkRemark.setText(StringUtils.notEmpty(orderInfoEntity.getCremark())?orderInfoEntity.getCremark():"");
                     int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
@@ -222,7 +228,7 @@ public class WarehouseOutXsFragment extends BaseFragment {
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 int status = entity.getId_check();
                 if (status == 0) {
@@ -247,7 +253,7 @@ public class WarehouseOutXsFragment extends BaseFragment {
         mainAdapter = new CommonAdapter<OrderInfoEntity.MainchildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 int status = entity.getId_check();
                 if (status == 0) {
@@ -274,7 +280,7 @@ public class WarehouseOutXsFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_submit, R.id.back_bt,R.id.tv_to_info})
+    @OnClick({R.id.tv_submit, R.id.back_bt, R.id.tv_to_info})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_to_info:

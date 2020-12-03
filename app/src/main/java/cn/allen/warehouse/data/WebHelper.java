@@ -422,9 +422,9 @@ public class WebHelper {
      * @param handler
      * @param orderId
      */
-    public void submitDelivery(Handler handler,String orderId) {
+    public void submitDelivery(Handler handler,String orderId,String remark) {
         Object[] objects = new Object[]{
-                "order", orderId
+                "order", orderId,"cremark",remark
         };
         Response response = service.getWebservice(Api.WatingSubmit, objects, WebService.Get);
         if (response.isSuccess("200")) {

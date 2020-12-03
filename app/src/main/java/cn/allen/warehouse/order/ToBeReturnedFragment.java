@@ -108,6 +108,10 @@ public class ToBeReturnedFragment extends BaseFragment {
     AppCompatTextView tvOrderRemark;
     @BindView(R.id.layout_remark)
     LinearLayoutCompat layoutRemark;
+    @BindView(R.id.tv_ck_remark)
+    AppCompatTextView tvCkRemark;
+    @BindView(R.id.layout_ck_remark)
+    LinearLayoutCompat layoutCkRemark;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -135,6 +139,7 @@ public class ToBeReturnedFragment extends BaseFragment {
                     tvOrderBackTime.setText(orderInfoEntity.getRecovery_dates());
                     layoutRemark.setVisibility(View.VISIBLE);
                     tvOrderRemark.setText(StringUtils.notEmpty(orderInfoEntity.getRemark()) ? orderInfoEntity.getRemark() : "");
+                    tvCkRemark.setText(StringUtils.notEmpty(orderInfoEntity.getCremark())?orderInfoEntity.getCremark():"");
                     int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
@@ -284,21 +289,21 @@ public class ToBeReturnedFragment extends BaseFragment {
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 int status = entity.getId_check();
                 if (status == 0) {
                     holder.setVisible(R.id.btn_submit, true);
                     holder.setVisible(R.id.tv_submit, false);
                 } else {
-                    holder.setText(R.id.tv_submit, "配货出库" );
+                    holder.setText(R.id.tv_submit, "配货出库");
                     holder.setVisible(R.id.btn_submit, false);
                     holder.setVisible(R.id.tv_submit, true);
                 }
                 holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        MsgUtils.showMDMessage(getContext(),"请到待配货里对相应追加订单进行配货！");
+                        MsgUtils.showMDMessage(getContext(), "请到待配货里对相应追加订单进行配货！");
                     }
                 });
             }
@@ -309,9 +314,9 @@ public class ToBeReturnedFragment extends BaseFragment {
         mainAdapter = new CommonAdapter<OrderInfoEntity.MainchildrenBean>(getContext(), R.layout.order_info_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
-                holder.setText(R.id.tv_submit, "已出库" );
+                holder.setText(R.id.tv_submit, "已出库");
                 int status = entity.getId_check();
                 if (status == 0) {
                     holder.setVisible(R.id.btn_submit, true);
@@ -323,7 +328,7 @@ public class ToBeReturnedFragment extends BaseFragment {
                 holder.setOnClickListener(R.id.btn_submit, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        MsgUtils.showMDMessage(getContext(),"请到待配货里对相应订单进行配货！");
+                        MsgUtils.showMDMessage(getContext(), "请到待配货里对相应订单进行配货！");
                     }
                 });
             }

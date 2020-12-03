@@ -99,6 +99,10 @@ public class ReturnedFragment extends BaseFragment {
     LinearLayoutCompat layoutRemark;
     @BindView(R.id.image)
     ImageView image;
+    @BindView(R.id.tv_ck_remark)
+    AppCompatTextView tvCkRemark;
+    @BindView(R.id.layout_ck_remark)
+    LinearLayoutCompat layoutCkRemark;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -126,6 +130,7 @@ public class ReturnedFragment extends BaseFragment {
                     tvOrderBackTime.setText(orderInfoEntity.getRecovery_dates());
                     layoutRemark.setVisibility(View.VISIBLE);
                     tvOrderRemark.setText(StringUtils.notEmpty(orderInfoEntity.getRemark()) ? orderInfoEntity.getRemark() : "");
+                    tvCkRemark.setText(StringUtils.notEmpty(orderInfoEntity.getCremark())?orderInfoEntity.getCremark():"");
                     int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
@@ -251,11 +256,11 @@ public class ReturnedFragment extends BaseFragment {
         }.start();
     }
 
-    private void SetSign(int id,int number){
+    private void SetSign(int id, int number) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                WebHelper.init().SetSign(handler,id,1,number);
+                WebHelper.init().SetSign(handler, id, 1, number);
             }
         }).start();
     }
@@ -265,8 +270,8 @@ public class ReturnedFragment extends BaseFragment {
         childrenAdapter = new CommonAdapter<OrderInfoEntity.ChildrenBean>(getContext(), R.layout.order_return_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.ChildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
-                holder.setDrawable(R.id.tv_name,0,0,entity.getSign()==1?R.mipmap.ic_logo_suo:0,0);
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
+                holder.setDrawable(R.id.tv_name, 0, 0, entity.getSign() == 1 ? R.mipmap.ic_logo_suo : 0, 0);
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 AppCompatEditText et_count = holder.getView(R.id.et_sunhao);
                 if (et_count.getTag() != null && et_count.getTag() instanceof TextWatcher) {
@@ -276,8 +281,8 @@ public class ReturnedFragment extends BaseFragment {
                     @Override
                     public void onClick(View view) {
                         childrenList.get(position).setSign(1);
-                        holder.setDrawable(R.id.tv_name,0,0,R.mipmap.ic_logo_suo,0);
-                        SetSign(entity.getId(),childrenList.get(position).getLoss_quantity());
+                        holder.setDrawable(R.id.tv_name, 0, 0, R.mipmap.ic_logo_suo, 0);
+                        SetSign(entity.getId(), childrenList.get(position).getLoss_quantity());
                     }
                 });
                 et_count.setText(entity.getLoss_quantity() + "");
@@ -320,8 +325,8 @@ public class ReturnedFragment extends BaseFragment {
         mainAdapter = new CommonAdapter<OrderInfoEntity.MainchildrenBean>(getContext(), R.layout.order_return_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoEntity.MainchildrenBean entity, int position) {
-                holder.setText(R.id.tv_name, (position+1)+"."+entity.getFlower_name());
-                holder.setDrawable(R.id.tv_name,0,0,entity.getSign()==1?R.mipmap.ic_logo_suo:0,0);
+                holder.setText(R.id.tv_name, (position + 1) + "." + entity.getFlower_name());
+                holder.setDrawable(R.id.tv_name, 0, 0, entity.getSign() == 1 ? R.mipmap.ic_logo_suo : 0, 0);
                 holder.setText(R.id.tv_count, "数量:" + entity.getScheduled_quantity());
                 AppCompatEditText et_count = holder.getView(R.id.et_sunhao);
                 if (et_count.getTag() != null && et_count.getTag() instanceof TextWatcher) {
@@ -331,8 +336,8 @@ public class ReturnedFragment extends BaseFragment {
                     @Override
                     public void onClick(View view) {
                         mainList.get(position).setSign(1);
-                        holder.setDrawable(R.id.tv_name,0,0,R.mipmap.ic_logo_suo,0);
-                        SetSign(entity.getId(),mainList.get(position).getLoss_quantity());
+                        holder.setDrawable(R.id.tv_name, 0, 0, R.mipmap.ic_logo_suo, 0);
+                        SetSign(entity.getId(), mainList.get(position).getLoss_quantity());
                     }
                 });
                 et_count.setText(entity.getLoss_quantity() + "");
