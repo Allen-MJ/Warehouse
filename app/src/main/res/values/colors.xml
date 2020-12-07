@@ -8,6 +8,7 @@
     <color name="colorbtmHs">#80000000</color>
 
     <color name="state_text_color1">#FB3E7E</color>
+    <color name="state_text_color4">#2ACE4A</color>
     <color name="state_text_color2">#3EFB6A</color>
     <color name="state_text_color3">#FB9C3E</color>
 </resources>

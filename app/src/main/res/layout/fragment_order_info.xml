@@ -232,7 +232,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:background="@drawable/frame_btn_selector"
+                android:background="@drawable/btn_selector"
                 android:text="提交"
                 android:paddingTop="@dimen/frame_eight_distance"
                 android:paddingBottom="@dimen/frame_eight_distance"

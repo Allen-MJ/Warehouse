@@ -58,7 +58,7 @@
                     android:layout_height="@dimen/frame_50_distance"
                     android:textSize="@dimen/frame_text_normal_size"
                     android:textColor="@color/text_white_color"
-                    android:background="@drawable/frame_btn_selector"
+                    android:background="@drawable/btn_selector"
                     android:layout_margin="@dimen/frame_eight_distance"
                     android:text="@string/queren_bt"/>
 

@@ -489,6 +489,29 @@ public class WebHelper {
     }
 
     /**
+     * 结账
+     * @param handler
+     * @param orderId
+     */
+    public void jiezhang(Handler handler,int orderId) {
+        Object[] objects = new Object[]{
+                "id", orderId
+        };
+        Response response = service.getWebservice(Api.jiezhang, objects, WebService.Get);
+        if (response.isSuccess("200")) {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=101;
+            handler.sendMessage(msg);
+        }else {
+            Message msg=new Message();
+            msg.obj=response.getMessage();
+            msg.what=-1;
+            handler.sendMessage(msg);
+        }
+    }
+
+    /**
      * 二十一、	填写回收损耗数据（仓库端：post）
      * @param handler
      * @param orderId

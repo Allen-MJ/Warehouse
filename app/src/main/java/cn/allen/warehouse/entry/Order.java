@@ -33,10 +33,35 @@ public class Order implements Serializable {
     private String delivery_times;//子订单号
     private String recovery_dates;//子订单号
     private int number_id;//销售id
+    private int is_ornot;//销售id
     private String number_name;
     private List<Flower> children;
     private List<Flower> mainchildren;
     private List<Image> Images;
+
+    public void setActual_rent(float actual_rent) {
+        this.actual_rent = actual_rent;
+    }
+
+    public void setActual_loss_rent(float actual_loss_rent) {
+        this.actual_loss_rent = actual_loss_rent;
+    }
+
+    public void setCollect_ornot(float collect_ornot) {
+        this.collect_ornot = collect_ornot;
+    }
+
+    public void setCollect_amount(float collect_amount) {
+        this.collect_amount = collect_amount;
+    }
+
+    public int getIs_ornot() {
+        return is_ornot;
+    }
+
+    public void setIs_ornot(int is_ornot) {
+        this.is_ornot = is_ornot;
+    }
 
     public List<Flower> getChildren() {
         return children;

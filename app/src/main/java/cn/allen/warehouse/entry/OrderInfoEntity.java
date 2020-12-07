@@ -69,10 +69,19 @@ public class OrderInfoEntity implements Serializable {
     private String delivery_times;
     private String recovery_dates;
     private int number_id;
+    private int is_ornot;
     private String number_name;
     private List<ChildrenBean> children;
     private List<MainchildrenBean> mainchildren;
     private List<ImagesBean> Images;
+
+    public int getIs_ornot() {
+        return is_ornot;
+    }
+
+    public void setIs_ornot(int is_ornot) {
+        this.is_ornot = is_ornot;
+    }
 
     public String getCremark() {
         return cremark;

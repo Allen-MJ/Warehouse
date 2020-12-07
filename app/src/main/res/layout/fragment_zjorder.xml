@@ -234,7 +234,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
                             android:textColor="@color/text_white_color"
-                            android:background="@drawable/frame_btn_selector"
+                            android:background="@drawable/btn_selector"
                             android:layout_margin="@dimen/frame_eight_distance"
                             android:text="@string/commit_bt"
                             android:gravity="center"

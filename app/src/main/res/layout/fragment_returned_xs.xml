@@ -216,6 +216,17 @@
                             android:visibility="gone" />
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/tv_jiezhang"
+                            android:layout_width="@dimen/frame_203_distance"
+                            android:layout_height="@dimen/frame_50_distance"
+                            android:layout_marginLeft="@dimen/frame_eight_distance"
+                            android:layout_marginRight="@dimen/frame_edge_distance"
+                            android:background="@drawable/btn_green_selector"
+                            android:visibility="gone"
+                            android:text="@string/jeizhang_bt"
+                            android:textColor="@color/text_white_color"
+                            android:textSize="@dimen/frame_text_normal_size" />
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/tv_submit"
                             android:layout_width="@dimen/frame_203_distance"
                             android:layout_height="@dimen/frame_50_distance"

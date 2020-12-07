@@ -1,6 +1,7 @@
 package cn.allen.warehouse.order;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +106,8 @@ public class InventoryXsFragment extends BaseFragment {
     AppCompatTextView tvCkRemark;
     @BindView(R.id.layout_ck_remark)
     LinearLayoutCompat layoutCkRemark;
+    @BindView(R.id.tv_jiezhang)
+    AppCompatButton tvJiezhang;
     private SharedPreferences shared;
     private ActivityHelper actHelper;
     private CommonAdapter<OrderInfoEntity.ChildrenBean> childrenAdapter;
@@ -131,7 +136,7 @@ public class InventoryXsFragment extends BaseFragment {
                     tvPhone.setText(orderInfoEntity.getCustomer_phone());
                     tvDate1.setText(orderInfoEntity.getWedding_dates());
                     tvRemark.setText(orderInfoEntity.getRemark());
-                    tvCkRemark.setText(StringUtils.notEmpty(orderInfoEntity.getCremark())?orderInfoEntity.getCremark():"");
+                    tvCkRemark.setText(StringUtils.notEmpty(orderInfoEntity.getCremark()) ? orderInfoEntity.getCremark() : "");
                     int statu = orderInfoEntity.getOrder_process();// 1为待配货 2为待出库 3为待回库  4为已回库  5为完成清点
                     switch (statu) {
                         case 1:
@@ -148,8 +153,17 @@ public class InventoryXsFragment extends BaseFragment {
                             break;
                         case 5:
                             orderState.setText("完成清点");
+                            if (orderInfoEntity.getIs_ornot() == 0) {
+                                tvJiezhang.setVisibility(View.VISIBLE);
+
+                            }else {
+                                orderState.setText("已结账");
+                                orderState.setTextColor(getResources().getColor(R.color.state_text_color4));
+                                tvJiezhang.setVisibility(View.GONE);
+                            }
                             break;
                     }
+
                     double total = 0;
                     double loss_total = 0;
                     childrenList = orderInfoEntity.getChildren();
@@ -344,9 +358,23 @@ public class InventoryXsFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_submit, R.id.back_bt, R.id.tv_to_info})
+    @OnClick({R.id.tv_submit, R.id.back_bt, R.id.tv_to_info,R.id.tv_jiezhang})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tv_jiezhang:
+                MsgUtils.showMDMessage(getContext(), "确定结账吗？", "确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        actHelper.showProgressDialog("");
+                        submit();
+                    }
+                }, "取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                break;
             case R.id.tv_to_info:
                 onStartFragment(OrderInfoFragment.init(numberID));
                 break;
@@ -357,5 +385,13 @@ public class InventoryXsFragment extends BaseFragment {
                 break;
         }
 
+    }
+    private void submit() {
+        new Thread() {
+            @Override
+            public void run() {
+                WebHelper.init().jiezhang(handler, orderInfoEntity.getId());
+            }
+        }.start();
     }
 }

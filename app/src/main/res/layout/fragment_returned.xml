@@ -153,7 +153,7 @@
                         android:layout_height="@dimen/frame_50_distance"
                         android:layout_marginLeft="@dimen/frame_eight_distance"
                         android:layout_marginRight="@dimen/frame_edge_distance"
-                        android:background="@drawable/frame_btn_selector"
+                        android:background="@drawable/btn_selector"
                         android:text="@string/commit_bt"
                         android:textColor="@color/text_white_color"
                         android:textSize="@dimen/frame_text_normal_size" />

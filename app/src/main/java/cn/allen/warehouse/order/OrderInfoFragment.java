@@ -175,6 +175,7 @@ public class OrderInfoFragment extends BaseFragment {
         adapter = new CommonAdapter<OrderInfoXsEntity.ChildrenBean>(getContext(), R.layout.order_info_xs_item_layout) {
             @Override
             public void convert(ViewHolder holder, OrderInfoXsEntity.ChildrenBean entity, int position) {
+                holder.setText(R.id.tv_number,position+1+"");
                 holder.setText(R.id.tv_name, entity.getFlower_name());
                 double price = entity.getRent();
                 holder.setText(R.id.tv_price, price + "");

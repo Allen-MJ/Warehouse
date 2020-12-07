@@ -188,7 +188,13 @@ public class OrderFragment extends BaseFragment {
                     case 5:
                         holder.setText(R.id.order_state, "完成清点");
                         holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_logo_16));
+                        if (entity.getIs_ornot()==1){
+                            holder.setText(R.id.order_state, "已结账");
+                            holder.setTextColor(R.id.order_state,getResources().getColor(R.color.state_text_color4));
+                            holder.setDrawableLeft(R.id.order_state, getActivity().getResources().getDrawable(R.mipmap.ic_yjz));
+                        }
                         break;
+
                 }
             }
         };
@@ -259,6 +265,7 @@ public class OrderFragment extends BaseFragment {
                         onStartFragment(InventoryXsFragment.newInstance(id));
                     }
                     break;
+
             }
         }
 

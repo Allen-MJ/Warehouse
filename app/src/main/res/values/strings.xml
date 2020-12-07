@@ -52,6 +52,7 @@
     <string name="order_add_flower">增加鲜花种类</string>
     <string name="order_money">租金总额：</string>
 
+    <string name="jeizhang_bt">结账</string>
     <string name="commit_bt">提交</string>
     <string name="queren_bt">确认</string>
     <string name="update_bt">修改</string>
