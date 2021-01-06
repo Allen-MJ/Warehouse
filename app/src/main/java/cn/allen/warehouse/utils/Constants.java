@@ -5,6 +5,7 @@ import cn.allen.warehouse.R;
 public class Constants {
 //    public static final String Url = "http://122.112.179.223:8033/api/FlowerApi/";
     public static final String Url = "http://39.108.216.58:8033/api/FlowerApi/";
+//    public static final String Url = "http://39.108.216.58:8089/api/FlowerApi/";
 
     public static final String UserId = "_User_Id";
     public static final String UserName = "_User_Name";

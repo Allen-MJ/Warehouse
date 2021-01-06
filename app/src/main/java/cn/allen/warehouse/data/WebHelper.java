@@ -55,6 +55,7 @@ public class WebHelper {
         AllenManager.getInstance().getStoragePreference().edit()
                 .putInt(Constants.UserId, user.getId())
                 .putString(Constants.UserAccount, user.getAccount())
+                .putString(Constants.UserPsw, user.getPassword())
                 .putString(Constants.UserName, user.getName())
                 .putString(Constants.UserPhone, user.getPhone())
                 .putInt(Constants.UserType, user.getType())
